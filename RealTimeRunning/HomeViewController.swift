@@ -31,8 +31,12 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         let loginButton = FBSDKLoginButton()
         
         loginButton.readPermissions = ["public_profile", "email", "user_friends"]
-        loginButton.center = self.view.center
         loginButton.delegate = self
+        
+        let x = self.view.frame.size.width - (loginButton.frame.size.width + 20)
+        let y = self.view.frame.size.height - loginButton.frame.size.height
+        
+        loginButton.center = CGPointMake(x, y)
         
         self.view.addSubview(loginButton)
         
@@ -44,24 +48,25 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         if error == nil {
             
-            print("Login complete.")
-            
             getData()
 
         } else {
             
             print(error.localizedDescription)
+            
         }
         
     }
     
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
         
-        print("User logged out...")
+        self.nameLabel.text = nil
+        self.emailLabel.text = nil
+        self.fbProfileImage.image = nil
         
     }
     
-    // MARK: User Rendering
+    // MARK: Display Data
     
     func getData() {
         

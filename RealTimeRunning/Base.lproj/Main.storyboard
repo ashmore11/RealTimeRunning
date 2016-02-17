@@ -20,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="hay-CW-lrR">
-                                <rect key="frame" x="20" y="28" width="560" height="162"/>
+                                <rect key="frame" x="20" y="70" width="560" height="162"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tN4-oA-OOS">
                                         <rect key="frame" x="230" y="0.0" width="100" height="100"/>
@@ -46,7 +46,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="hay-CW-lrR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="3LD-bb-PFl"/>
-                            <constraint firstItem="hay-CW-lrR" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="fQe-1m-Utx"/>
+                            <constraint firstItem="hay-CW-lrR" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="fQe-1m-Utx"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hay-CW-lrR" secondAttribute="trailing" id="nKj-Lc-cR6"/>
                         </constraints>
                     </view>
