@@ -18,30 +18,23 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     
-
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
-        if (FBSDKAccessToken.currentAccessToken() == nil) {
+        if (FBSDKAccessToken.currentAccessToken() != nil) {
             
-            print("Not logged in...")
-          
-            let loginButton = FBSDKLoginButton()
-          
-            loginButton.readPermissions = ["public_profile", "email", "user_friends"]
-            loginButton.center = self.view.center
-            loginButton.delegate = self
-          
-            self.view.addSubview(loginButton)
-            
-        } else {
-            
-            print("Logged in...")
-            
-            getUserData(displayUserData)
+            getData()
             
         }
+        
+        let loginButton = FBSDKLoginButton()
+        
+        loginButton.readPermissions = ["public_profile", "email", "user_friends"]
+        loginButton.center = self.view.center
+        loginButton.delegate = self
+        
+        self.view.addSubview(loginButton)
         
     }
     
@@ -53,7 +46,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             print("Login complete.")
             
-            getUserData(displayUserData)
+            getData()
 
         } else {
             
@@ -67,8 +60,10 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         print("User logged out...")
         
     }
-
-    func getUserData(callback: (String, String, String, UIImage) -> Void) {
+    
+    // MARK: User Rendering
+    
+    func getData() {
         
         let graphRequest = FBSDKGraphRequest.init(graphPath: "me", parameters: ["fields": "first_name, last_name, email, picture.type(large)"])
         
@@ -79,22 +74,16 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             let lastName: String = (result.objectForKey("last_name") as? String)!
             
             let email: String = (result.objectForKey("email") as? String)!
-
+            
             let imageURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String)!
             
             let image: UIImage = UIImage(data: NSData(contentsOfURL: NSURL(string: imageURL)!)!)!
             
-            callback(firstName, lastName, email, image)
+            self.nameLabel.text = "Name: \(firstName) \(lastName)"
+            self.emailLabel.text = "Email: \(email)"
+            self.fbProfileImage.image = image
             
         }
-        
-    }
-    
-    func displayUserData(firstName: String, lastName: String, email: String, image: UIImage) {
-        
-        self.nameLabel.text = "Name: \(firstName) \(lastName)"
-        self.emailLabel.text = "Email: \(email)"
-        self.fbProfileImage.image = image
         
     }
 
