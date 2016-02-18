@@ -25,6 +25,11 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         self.nameLabel.text = nil
         
+        fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
+        fbProfileImage.clipsToBounds = true
+        fbProfileImage.layer.borderWidth = 3
+        fbProfileImage.layer.borderColor = UIColor.whiteColor().CGColor
+        
         if let user = user {
             
             fbProfileImage.image = user.profileImage
@@ -37,10 +42,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         loginButton.readPermissions = ["public_profile", "email"]
         loginButton.delegate = self
         
-        let x = self.view.frame.size.width - (loginButton.frame.size.width + 20)
-        let y = self.view.frame.size.height - loginButton.frame.size.height
-        
-        loginButton.center = CGPointMake(x, y)
+        loginButton.center = self.view.center
         
         self.view.addSubview(loginButton)
         
@@ -82,7 +84,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     func getData() {
         
         let accessToken = FBSDKAccessToken.currentAccessToken()
-        let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
+        let parameters = ["fields": "email, first_name, last_name, picture.type(normal)"]
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: parameters, tokenString: accessToken.tokenString, version: nil, HTTPMethod: "GET")
         
         graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in

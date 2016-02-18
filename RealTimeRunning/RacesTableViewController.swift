@@ -20,7 +20,7 @@ class RacesTableViewController: UITableViewController {
     
     func loadSampleRaces() {
         
-        for index in 0..<3 {
+        for index in 0..<10 {
             
             let components: NSDateComponents = NSDateComponents()
             components.setValue(index + 1, forComponent: NSCalendarUnit.Hour);
@@ -53,13 +53,20 @@ class RacesTableViewController: UITableViewController {
         
         let race = races[indexPath.row]
         
-        cell.startTimeLabel.text = "\(race.startTime)"
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "HH, mm"
+        
+        let date = dateFormatter.stringFromDate(race.startTime)
+        let formattedDate = String(date.characters.map {
+            $0 == "," ? ":" : $0
+        })
+        
+        cell.startTimeLabel.text = formattedDate
         cell.competitorsLabel.text = "competitors: \(race.competitors!.count)"
         cell.distanceLabel.text = "\(race.distance)km"
 
-        // Configure the cell...
-
         return cell
+        
     }
 
     /*
