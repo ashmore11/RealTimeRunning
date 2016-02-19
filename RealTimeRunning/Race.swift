@@ -16,19 +16,13 @@ class Race {
     var competitors: [User]?
     var distance: Int
     
-    init?(startTime: NSDate, competitors: [User]?, distance: Int) {
+    init(startTime: NSDate, competitors: [User]?, distance: Int) {
         
         self.startTime = startTime
         self.competitors = competitors
         self.distance = distance
         
         // super.init()
-        
-        if distance == 0 {
-            
-            return nil
-            
-        }
         
     }
 

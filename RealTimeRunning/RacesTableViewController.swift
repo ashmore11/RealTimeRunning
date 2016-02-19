@@ -27,7 +27,7 @@ class RacesTableViewController: UITableViewController {
             let date: NSDate = NSDate()
             let startTime = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: NSCalendarOptions(rawValue: 0))
             
-            let race = Race(startTime: startTime!, competitors: [User](), distance: 1)!
+            let race = Race(startTime: startTime!, competitors: [User](), distance: 1)
             
             races.append(race)
             

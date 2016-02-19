@@ -15,25 +15,25 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     // MARK: Properties
     
     @IBOutlet weak var fbProfileImage: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var topViewArea: UIView!
+    @IBOutlet weak var racesButton: UIButton!
     
     var user: User?
+    
+    let gradientLayer = CAGradientLayer()
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
-        self.nameLabel.text = nil
+        setupLayout()
         
-        fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
-        fbProfileImage.clipsToBounds = true
-        fbProfileImage.layer.borderWidth = 3
-        fbProfileImage.layer.borderColor = UIColor.whiteColor().CGColor
+        navigationItem.title = "SIGN IN"
         
         if let user = user {
             
             fbProfileImage.image = user.profileImage
-            nameLabel.text = user.name
+            navigationItem.title = user.name
             
         }
         
@@ -51,6 +51,36 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             getData()
             
         }
+        
+    }
+    
+    func setupLayout() {
+        
+        self.view.backgroundColor = UIColor.greenColor()
+        
+        gradientLayer.frame = self.view.bounds
+        
+        let color1 = UIColor.yellowColor().CGColor as CGColorRef
+        let color2 = UIColor(red: 1.0, green: 0, blue: 0, alpha: 1.0).CGColor as CGColorRef
+        
+        gradientLayer.colors = [color1, color2]
+        gradientLayer.locations = [0.0, 0.75]
+        
+        self.view.layer.addSublayer(gradientLayer)
+        
+        self.view.sendSubviewToBack(gradientLayer)
+        
+        topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.5)
+        
+        racesButton.layer.shadowColor = UIColor.blackColor().CGColor
+        racesButton.layer.shadowOffset = CGSizeMake(0, 0)
+        racesButton.layer.shadowRadius = 5
+        racesButton.layer.shadowOpacity = 0.5
+        
+        fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
+        fbProfileImage.clipsToBounds = true
+        fbProfileImage.layer.borderWidth = 3
+        fbProfileImage.layer.borderColor = UIColor.whiteColor().CGColor
         
     }
     
@@ -76,7 +106,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         print("User logged out...")
         
-        self.nameLabel.text = "Not Logged in"
+        navigationItem.title = "SIGN IN"
         self.fbProfileImage.image = nil
         
     }
@@ -84,7 +114,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     func getData() {
         
         let accessToken = FBSDKAccessToken.currentAccessToken()
-        let parameters = ["fields": "email, first_name, last_name, picture.type(normal)"]
+        let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
         let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: parameters, tokenString: accessToken.tokenString, version: nil, HTTPMethod: "GET")
         
         graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
@@ -108,7 +138,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
                 name = firstName + " " + lastName
             }
             
-            self.nameLabel.text = String(format: "Logged in as: %@", name)
+            self.navigationItem.title = name
             
             // if all optionals unwrap OK then we can setup the image
             if let imageURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
