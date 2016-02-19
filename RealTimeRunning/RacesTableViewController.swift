@@ -20,12 +20,16 @@ class RacesTableViewController: UITableViewController {
     
     func loadSampleRaces() {
         
+        let components = NSCalendar.currentCalendar().components([.Day, .Month, .Year, .Hour, .Minute, .Second ], fromDate: NSDate())
+        components.minute = 0
+        components.second = 0
+        let startDate = NSCalendar.currentCalendar().dateFromComponents(components)
+        
         for index in 0..<10 {
             
-            let components: NSDateComponents = NSDateComponents()
-            components.setValue(index + 1, forComponent: NSCalendarUnit.Hour);
-            let date: NSDate = NSDate()
-            let startTime = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: date, options: NSCalendarOptions(rawValue: 0))
+            let components = NSCalendar.currentCalendar().components([.Hour], fromDate: NSDate())
+            components.setValue(index + 1, forComponent: .Hour);
+            let startTime = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: startDate!, options: NSCalendarOptions(rawValue: 0))
             
             let race = Race(startTime: startTime!, competitors: [User](), distance: 1)
             
