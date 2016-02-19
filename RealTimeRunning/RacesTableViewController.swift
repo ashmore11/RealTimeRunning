@@ -25,7 +25,7 @@ class RacesTableViewController: UITableViewController {
         components.second = 0
         let startDate = NSCalendar.currentCalendar().dateFromComponents(components)
         
-        for index in 0..<10 {
+        for index in 0...10 {
             
             let components = NSCalendar.currentCalendar().components([.Hour], fromDate: NSDate())
             components.setValue(index + 1, forComponent: .Hour);
@@ -55,15 +55,20 @@ class RacesTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! RaceTableViewCell
         
+        if indexPath.row % 2 == 0 {
+            cell.backgroundColor = UIColor(red: 0.878, green: 0.517, blue: 0.258, alpha: 1)
+        } else {
+            cell.backgroundColor = UIColor(red: 0.592, green: 0.172, blue: 0.070, alpha: 1)
+        }
+        
         let race = races[indexPath.row]
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH, mm"
         
         let date = dateFormatter.stringFromDate(race.startTime)
-        let formattedDate = String(date.characters.map {
-            $0 == "," ? ":" : $0
-        })
+        let toArray = date.componentsSeparatedByString(", ")
+        let formattedDate = toArray.joinWithSeparator(":")
         
         cell.startTimeLabel.text = formattedDate
         cell.competitorsLabel.text = "competitors: \(race.competitors!.count)"
