@@ -66,9 +66,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         gradientLayer.colors = [color1, color2]
         gradientLayer.locations = [0.0, 0.75]
         
-        self.view.layer.addSublayer(gradientLayer)
-        
-        self.view.sendSubviewToBack(gradientLayer)
+        self.view.layer.insertSublayer(gradientLayer, atIndex: 0)
         
         topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.5)
         
