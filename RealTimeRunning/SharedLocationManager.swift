@@ -8,7 +8,40 @@
 //   ***************** For GPS Background Logging to Work *******************
 // The following key must be added manually to the info.plist file
 // <key>NSLocationAlwaysUsageDescription</key> <string>Required for logging GPS data</string>
-// Also under Background Modes in Capabilities you must tick Location Updates box
+// Also under Background Modes in Capabilities you must tick Location Updates box after
+// changing allow background modes to YES
+
+// This class conformas to the Sigleton pattern so only one instance is created for the app
+
+
+// To use GPS in any class in your app just added the following lines
+
+// myLocationManager = SharedLocationManager.sharedInstance
+// NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
+
+
+/* and to get the location data add this function
+
+func receiveLocationNotification(notification:NSNotification) {
+    let userInfo:NSDictionary = notification.userInfo!
+    let location:CLLocation? = userInfo.objectForKey("Location") as? CLLocation
+    let newHeading:CLHeading? = userInfo.objectForKey("Heading") as? CLHeading
+    
+    if let loc = location  {
+        let lat = loc.coordinate.latitude
+        let lon = loc.coordinate.longitude
+        let speed = loc.speed
+        let distance = (myLocationManager?.getDistance())!
+        let durationString = (myLocationManager?.getDuration())!
+        let duration = (myLocationManager?.getDurationDouble())!
+        print("lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration)")
+    }
+    if let hdr = newHeading {
+        let heading = hdr.magneticHeading;
+        print("Heading: \(self.heading)")
+    }
+}
+*/
 
 import UIKit
 import CoreLocation
