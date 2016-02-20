@@ -64,13 +64,13 @@ class RacesTableViewController: UITableViewController {
         let race = races[indexPath.row]
         
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "HH, mm"
+        dateFormatter.dateFormat = "HH:mm"
         
         let date = dateFormatter.stringFromDate(race.startTime)
-        let toArray = date.componentsSeparatedByString(", ")
-        let formattedDate = toArray.joinWithSeparator(":")
+        //let toArray = date.componentsSeparatedByString(", ")
+        //let formattedDate = toArray.joinWithSeparator(":")
         
-        cell.startTimeLabel.text = formattedDate
+        cell.startTimeLabel.text = date
         cell.competitorsLabel.text = "competitors: \(race.competitors!.count)"
         cell.distanceLabel.text = "\(race.distance)km"
 
@@ -113,14 +113,18 @@ class RacesTableViewController: UITableViewController {
     }
     */
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "raceRecord" {
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                let race = races[indexPath.row]
+
+                if let controller = segue.destinationViewController as? RaceRecordViewController {
+                    controller.race = race
+                }
+            }
+        }
     }
-    */
     
 }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E71C78983C005AB06F /* SharedLocationManager.swift */; };
+		C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */; };
+		C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647EB1C78A593005AB06F /* MapViewController.swift */; };
 		D226B4AA1C73B28400366800 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4A91C73B28400366800 /* AppDelegate.swift */; };
 		D226B4AC1C73B28400366800 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4AB1C73B28400366800 /* HomeViewController.swift */; };
 		D226B4AF1C73B28400366800 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D226B4AD1C73B28400366800 /* Main.storyboard */; };
@@ -34,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C48647E71C78983C005AB06F /* SharedLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedLocationManager.swift; sourceTree = "<group>"; };
+		C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceRecordViewController.swift; sourceTree = "<group>"; };
+		C48647EB1C78A593005AB06F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		D226B4A61C73B28400366800 /* RealTimeRunning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealTimeRunning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D226B4A91C73B28400366800 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D226B4AB1C73B28400366800 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +107,8 @@
 				D226B4A91C73B28400366800 /* AppDelegate.swift */,
 				D226B4AB1C73B28400366800 /* HomeViewController.swift */,
 				D226B4AD1C73B28400366800 /* Main.storyboard */,
+				C48647EB1C78A593005AB06F /* MapViewController.swift */,
+				C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */,
 				D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */,
 				D226B4B01C73B28400366800 /* Assets.xcassets */,
 				D226B4B21C73B28400366800 /* LaunchScreen.storyboard */,
@@ -109,6 +117,7 @@
 				D2AFE1FF1C75EBC3009750A8 /* User.swift */,
 				D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */,
 				D2AFE2021C75F42B009750A8 /* RacesTableViewController.xib */,
+				C48647E71C78983C005AB06F /* SharedLocationManager.swift */,
 			);
 			path = RealTimeRunning;
 			sourceTree = "<group>";
@@ -180,6 +189,11 @@
 				TargetAttributes = {
 					D226B4A51C73B28400366800 = {
 						CreatedOnToolsVersion = 7.2.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					D226B4B91C73B28400366800 = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -233,7 +247,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */,
+				C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */,
 				D2AFE2001C75EBC3009750A8 /* User.swift in Sources */,
+				C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */,
+				C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */,
 				D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */,
 				D226B4AC1C73B28400366800 /* HomeViewController.swift in Sources */,
 				D226B4AA1C73B28400366800 /* AppDelegate.swift in Sources */,
