@@ -62,8 +62,8 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     var bAltitudeAvailable:Bool = false
     var distanceTravelled = 0.0
     var startTime:NSDate?
-    
-    
+    var avgSpeedQueue:[Double] = []
+    let queueSize = 20
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
             manager.startUpdatingLocation()
@@ -129,6 +129,11 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
             }
 
             self.savedLocation = locations.last
+            avgSpeedQueue.append(currentLocation.speed)
+            if avgSpeedQueue.count > queueSize {
+                avgSpeedQueue.removeAtIndex(0)
+            }
+            
             dispatch_async(dispatch_get_main_queue()) {
                 NSNotificationCenter.defaultCenter().postNotificationName("locationNotification", object:nil, userInfo:["Location":currentLocation.copy()])
             }
@@ -219,6 +224,13 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
             return duration
         }
         return 0.0
+    }
+    
+    func getStableSpeed() ->Double {
+        if avgSpeedQueue.count == 0 {
+            return 0.0
+        }
+        return avgSpeedQueue.reduce(0) { $0 + $1 } / Double(avgSpeedQueue.count)
     }
 
     func receiveBackgroundNotification(notification:NSNotification) {

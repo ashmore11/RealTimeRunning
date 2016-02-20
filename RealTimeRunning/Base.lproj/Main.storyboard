@@ -97,13 +97,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RvV-Sq-jhZ">
-                                <rect key="frame" x="20" y="158" width="560" height="20.5"/>
+                                <rect key="frame" x="20" y="199" width="560" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average Speed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S97-K6-8uq">
-                                <rect key="frame" x="20" y="209" width="560" height="20.5"/>
+                                <rect key="frame" x="20" y="229" width="560" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -133,29 +133,49 @@
                                     <segue destination="QNf-cC-SPw" kind="show" identifier="showMap" id="uEp-jZ-OYh"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D4I-aA-Vv1">
+                                <rect key="frame" x="20" y="138" width="560" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Zx-3B-szD">
+                                <rect key="frame" x="20" y="168.5" width="560" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="kkZ-wL-Qbm" firstAttribute="top" secondItem="VGJ-mG-m2L" secondAttribute="bottom" constant="20" id="0K4-cc-m8X"/>
                             <constraint firstAttribute="trailingMargin" secondItem="PRi-7g-QCn" secondAttribute="trailing" id="0ee-hW-gRj"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="D4I-aA-Vv1" secondAttribute="leading" id="26r-pP-wGn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="RvV-Sq-jhZ" secondAttribute="trailing" id="2mM-P8-fRg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="VGJ-mG-m2L" secondAttribute="trailing" id="59b-h1-8Ym"/>
+                            <constraint firstItem="9Zx-3B-szD" firstAttribute="top" secondItem="D4I-aA-Vv1" secondAttribute="bottom" constant="10" id="5ja-hG-SIP"/>
                             <constraint firstAttribute="leadingMargin" secondItem="RvV-Sq-jhZ" secondAttribute="leading" id="6Xk-Pc-JhS"/>
+                            <constraint firstItem="D4I-aA-Vv1" firstAttribute="top" secondItem="PRi-7g-QCn" secondAttribute="bottom" constant="9.5" id="Bxt-jJ-igT"/>
                             <constraint firstItem="PRi-7g-QCn" firstAttribute="top" secondItem="XU4-gF-Sbh" secondAttribute="bottom" constant="44" id="FBG-OZ-HPX"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="9Zx-3B-szD" secondAttribute="leading" id="Fhl-nc-cjl"/>
                             <constraint firstAttribute="leadingMargin" secondItem="VGJ-mG-m2L" secondAttribute="leading" id="GYM-FQ-12G"/>
+                            <constraint firstItem="38d-Zq-jbh" firstAttribute="top" secondItem="S97-K6-8uq" secondAttribute="bottom" constant="80" id="HYn-Y5-fTi"/>
                             <constraint firstItem="38d-Zq-jbh" firstAttribute="centerX" secondItem="Ttq-TP-dZu" secondAttribute="centerX" id="Y2P-p7-wuh"/>
-                            <constraint firstItem="RvV-Sq-jhZ" firstAttribute="top" secondItem="PRi-7g-QCn" secondAttribute="bottom" constant="30" id="e2c-8v-e9Y"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="D4I-aA-Vv1" secondAttribute="trailing" id="ZJ1-fu-RqP"/>
                             <constraint firstAttribute="trailingMargin" secondItem="S97-K6-8uq" secondAttribute="trailing" id="kNw-jK-ERs"/>
-                            <constraint firstItem="38d-Zq-jbh" firstAttribute="top" secondItem="S97-K6-8uq" secondAttribute="bottom" constant="100.5" id="kxw-uJ-vws"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="9Zx-3B-szD" secondAttribute="trailing" id="pqh-EV-fN0"/>
                             <constraint firstAttribute="leadingMargin" secondItem="S97-K6-8uq" secondAttribute="leading" id="q9T-HF-wdU"/>
                             <constraint firstAttribute="leadingMargin" secondItem="PRi-7g-QCn" secondAttribute="leading" id="rly-MO-Id7"/>
-                            <constraint firstItem="S97-K6-8uq" firstAttribute="top" secondItem="RvV-Sq-jhZ" secondAttribute="bottom" constant="30" id="ygG-Fe-bJb"/>
+                            <constraint firstItem="RvV-Sq-jhZ" firstAttribute="top" secondItem="9Zx-3B-szD" secondAttribute="bottom" constant="10" id="tQ1-Rd-26k"/>
+                            <constraint firstItem="S97-K6-8uq" firstAttribute="top" secondItem="RvV-Sq-jhZ" secondAttribute="bottom" constant="10" id="ygG-Fe-bJb"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="durationLabel" destination="D4I-aA-Vv1" id="ETM-Mj-9My"/>
                         <outlet property="raceAverageSpeedLabel" destination="S97-K6-8uq" id="Kdy-3h-SpP"/>
                         <outlet property="raceDistanceLabel" destination="RvV-Sq-jhZ" id="ien-ri-JNf"/>
                         <outlet property="raceStartTimeLabel" destination="PRi-7g-QCn" id="Mr6-iB-CdB"/>
+                        <outlet property="speedLabel" destination="9Zx-3B-szD" id="xuU-rj-W5X"/>
                         <outlet property="startStopButton" destination="38d-Zq-jbh" id="h8O-jr-gXB"/>
                     </connections>
                 </viewController>

@@ -24,6 +24,8 @@ class RaceRecordViewController: UIViewController {
     var endTime:NSDate?
     var myLocationManager:SharedLocationManager? = nil
 
+    @IBOutlet weak var speedLabel: UILabel!
+    @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var startStopButton: UIButton!
     
     @IBOutlet weak var raceDistanceLabel: UILabel!
@@ -65,7 +67,7 @@ class RaceRecordViewController: UIViewController {
         if let loc = location  {
             self.lat = loc.coordinate.latitude
             self.lon = loc.coordinate.longitude
-            self.speed = loc.speed
+            self.speed = (myLocationManager?.getStableSpeed())!
             self.distance = (myLocationManager?.getDistance())!
             self.durationString = (myLocationManager?.getDuration())!
             self.duration = (myLocationManager?.getDurationDouble())!
@@ -76,6 +78,8 @@ class RaceRecordViewController: UIViewController {
                 let avgSpeed = distancek / self.duration
                 self.raceAverageSpeedLabel.text =  String(format:"Average Speed:%6.2f Kph",avgSpeed)
             }
+            self.durationLabel.text = String(format:"Duration:%@",self.durationString)
+            self.speedLabel.text = String(format:"Speed:%6.2f Kph",self.speed * 3.6)
             self.raceDistanceLabel.text = String(format:"Distanced Raced:%6.2f Meters",self.distance)
             print("lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration)")
         }
