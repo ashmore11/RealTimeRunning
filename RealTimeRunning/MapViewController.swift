@@ -78,7 +78,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let polylineRenderer = MKPolylineRenderer(overlay: overlay)
             
             polylineRenderer.strokeColor = UIColor.redColor()
-            polylineRenderer.lineWidth = 5
+            polylineRenderer.lineWidth = 3.5
             
             return polylineRenderer
             

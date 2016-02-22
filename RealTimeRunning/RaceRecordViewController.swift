@@ -90,10 +90,13 @@ class RaceRecordViewController: UIViewController {
             self.lat = loc.coordinate.latitude
             self.lon = loc.coordinate.longitude
             self.accuracy = loc.horizontalAccuracy
-            self.speed = (myLocationManager?.getStableSpeed())!
-            self.distance = (myLocationManager?.getDistance())!
-            self.durationString = (myLocationManager?.getDuration())!
-            self.duration = (myLocationManager?.getDurationDouble())!
+            
+            if let lMgr = myLocationManager {
+                self.speed = lMgr.getStableSpeed()
+                self.distance = lMgr.getDistance()
+                self.durationString = lMgr.getDuration()
+                self.duration = lMgr.getDurationDouble()
+            }
             
             let x = CLLocationCoordinate2DMake(lat, lon)
             geoEvents.append(x)
