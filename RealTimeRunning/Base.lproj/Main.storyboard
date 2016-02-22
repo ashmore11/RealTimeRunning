@@ -6,6 +6,14 @@
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Oswald-Regular.ttf">
+            <string>Oswald-Regular</string>
+            <string>Oswald-Regular</string>
+            <string>Oswald-Regular</string>
+            <string>Oswald-Regular</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--RACES-->
         <scene sceneID="ebA-PL-0V8">
@@ -230,29 +238,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QEV-IN-JFc">
-                                <rect key="frame" x="0.0" y="64" width="600" height="161"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="zay-V8-KdM">
-                                        <rect key="frame" x="0.0" y="16" width="600" height="130"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tN4-oA-OOS">
-                                                <rect key="frame" x="235" y="0.0" width="130" height="130"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="tN4-oA-OOS" secondAttribute="height" multiplier="1:1" id="PoR-mP-gAK"/>
-                                                    <constraint firstAttribute="width" constant="130" id="Yfa-Lh-1SH"/>
-                                                    <constraint firstAttribute="height" constant="130" id="tBY-2v-XvK"/>
-                                                </constraints>
-                                            </imageView>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="zay-V8-KdM" firstAttribute="leading" secondItem="QEV-IN-JFc" secondAttribute="leading" id="LeA-pV-zTm"/>
-                                    <constraint firstAttribute="trailing" secondItem="zay-V8-KdM" secondAttribute="trailing" id="dMo-Fe-bWR"/>
-                                </constraints>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hVW-DM-h8V">
                                 <rect key="frame" x="20" y="520" width="560" height="60"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -267,22 +252,86 @@
                                     <segue destination="7z9-R5-Yo2" kind="show" id="lUW-y3-d57"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fYn-Cw-gaz">
+                                <rect key="frame" x="0.0" y="64" width="600" height="161"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8cv-jA-14l">
+                                        <rect key="frame" x="105" y="15" width="390" height="131"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8fx-M2-f7a">
+                                                <rect key="frame" x="0.0" y="9" width="130" height="113"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="RANK" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mXM-61-uTc">
+                                                        <rect key="frame" x="47" y="0.0" width="35" height="24"/>
+                                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="17"/>
+                                                        <color key="textColor" red="0.65490196079999996" green="0.94117647059999998" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Hf-ny-3eT">
+                                                        <rect key="frame" x="49" y="24" width="31" height="89"/>
+                                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="65"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zUv-X2-KHQ">
+                                                <rect key="frame" x="130" y="0.0" width="130" height="131"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ocz-LS-jqQ">
+                                                        <rect key="frame" x="0.0" y="0.0" width="130" height="131"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="130" id="QRh-rq-MtG"/>
+                                                            <constraint firstAttribute="width" secondItem="ocz-LS-jqQ" secondAttribute="height" multiplier="1:1" id="UdJ-hL-NND"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="ocz-LS-jqQ" firstAttribute="leading" secondItem="zUv-X2-KHQ" secondAttribute="leading" id="Gz5-sz-9zV"/>
+                                                    <constraint firstAttribute="bottom" secondItem="ocz-LS-jqQ" secondAttribute="bottom" id="YW9-TN-WDA"/>
+                                                    <constraint firstAttribute="trailing" secondItem="ocz-LS-jqQ" secondAttribute="trailing" id="c4C-jE-CdL"/>
+                                                    <constraint firstItem="ocz-LS-jqQ" firstAttribute="top" secondItem="zUv-X2-KHQ" secondAttribute="top" id="cWP-KT-11x"/>
+                                                </constraints>
+                                            </view>
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dDI-ar-0hJ">
+                                                <rect key="frame" x="260" y="9" width="130" height="113"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="POINTS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ChK-2b-FSk">
+                                                        <rect key="frame" x="42" y="0.0" width="46" height="24"/>
+                                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="17"/>
+                                                        <color key="textColor" red="0.65490196079999996" green="0.94117647059999998" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="319-Kx-n52">
+                                                        <rect key="frame" x="49" y="24" width="32" height="89"/>
+                                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="65"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="8cv-jA-14l" firstAttribute="leading" secondItem="fYn-Cw-gaz" secondAttribute="leading" id="NT8-e0-sxe"/>
+                                    <constraint firstAttribute="trailing" secondItem="8cv-jA-14l" secondAttribute="trailing" id="SOc-xb-Ma7"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="QEV-IN-JFc" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="6OO-O4-DxM"/>
-                            <constraint firstItem="QEV-IN-JFc" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="AWr-di-mpC"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="hVW-DM-h8V" secondAttribute="bottom" constant="20" id="Ctw-Ml-5HS"/>
-                            <constraint firstAttribute="trailing" secondItem="QEV-IN-JFc" secondAttribute="trailing" id="Dji-5E-guO"/>
                             <constraint firstItem="hVW-DM-h8V" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="gyI-uG-eDo"/>
                             <constraint firstItem="hVW-DM-h8V" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="wJO-CG-1EL"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="PROFILE" id="Fem-3k-9mf"/>
                     <connections>
-                        <outlet property="fbProfileImage" destination="tN4-oA-OOS" id="bBK-ee-PMC"/>
+                        <outlet property="fbProfileImage" destination="ocz-LS-jqQ" id="ccZ-84-LKX"/>
                         <outlet property="racesButton" destination="hVW-DM-h8V" id="Fpe-JN-cx8"/>
-                        <outlet property="topViewArea" destination="QEV-IN-JFc" id="ImI-oe-OYR"/>
+                        <outlet property="topViewArea" destination="fYn-Cw-gaz" id="8eB-or-8Np"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
