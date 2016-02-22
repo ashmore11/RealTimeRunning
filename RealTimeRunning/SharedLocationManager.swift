@@ -63,7 +63,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     var distanceTravelled = 0.0
     var startTime:NSDate?
     var avgSpeedQueue:[Double] = []
-    let queueSize = 20
+    let queueSize = 20 // Tthe stable speed will return the average of the last 20 speed readings
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
             manager.startUpdatingLocation()
@@ -121,19 +121,24 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         if let currentLocation = locations.last {
             let eventDate = currentLocation.timestamp
             let howRecent = eventDate.timeIntervalSinceNow
+            // if the reading from the GPS is older than 10 Seconds
+            // then I will discard it
             if fabs(howRecent) > 10.0 {
                 return
             }
+            // Calculate the distance travelled since the last reading
             if self.savedLocation != nil {
                 self.distanceTravelled += currentLocation.distanceFromLocation(self.savedLocation!)
             }
-
+            // save the current reading for the above distance travelled calculation
             self.savedLocation = locations.last
+            // Need to keep an array of the last number of speed readings so
+            // we can return the average speed
             avgSpeedQueue.append(currentLocation.speed)
             if avgSpeedQueue.count > queueSize {
                 avgSpeedQueue.removeAtIndex(0)
             }
-            
+            // Post the new location data out to all listners
             dispatch_async(dispatch_get_main_queue()) {
                 NSNotificationCenter.defaultCenter().postNotificationName("locationNotification", object:nil, userInfo:["Location":currentLocation.copy()])
             }
@@ -151,6 +156,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
                 if fabs(howRecent) > 2.0 {
                     return
                 }
+                // I calculate and keep the current variation if the user requires it
                 self.currentVariation = newHeading.magneticHeading - newHeading.trueHeading
                 if(newHeading.headingAccuracy >= 0) {
                     NSNotificationCenter.defaultCenter().postNotificationName("locationNotification", object:nil, userInfo:["Heading":newHeading])
