@@ -41,6 +41,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         loginButton.delegate = self
         
         loginButton.center = self.view.center
+        loginButton.frame.origin.y = topViewArea.frame.size.height + loginButton.frame.size.height + 50
         
         self.view.addSubview(loginButton)
         
@@ -75,6 +76,8 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
         fbProfileImage.clipsToBounds = true
+        
+        racesButton.backgroundColor = UIColor(white: 0, alpha: 0.5)
         
     }
     

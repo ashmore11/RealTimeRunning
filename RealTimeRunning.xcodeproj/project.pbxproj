@@ -21,6 +21,10 @@
 		D2AFE2041C75F42B009750A8 /* RacesTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2AFE2021C75F42B009750A8 /* RacesTableViewController.xib */; };
 		D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */; };
 		D2FA28281C77299100B3787D /* Kerning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FA28271C77299100B3787D /* Kerning.swift */; };
+		D2FA282E1C777DA000B3787D /* Oswald-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2FA282A1C777DA000B3787D /* Oswald-ExtraLight.ttf */; };
+		D2FA282F1C777DA000B3787D /* Oswald-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2FA282B1C777DA000B3787D /* Oswald-Light.ttf */; };
+		D2FA28301C777DA000B3787D /* Oswald-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2FA282C1C777DA000B3787D /* Oswald-Medium.ttf */; };
+		D2FA28311C777DA000B3787D /* Oswald-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2FA282D1C777DA000B3787D /* Oswald-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +56,10 @@
 		D2AFE2021C75F42B009750A8 /* RacesTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RacesTableViewController.xib; sourceTree = "<group>"; };
 		D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceTableViewCell.swift; sourceTree = "<group>"; };
 		D2FA28271C77299100B3787D /* Kerning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kerning.swift; sourceTree = "<group>"; };
+		D2FA282A1C777DA000B3787D /* Oswald-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-ExtraLight.ttf"; path = "../../../../Downloads/oswald/Oswald-ExtraLight.ttf"; sourceTree = "<group>"; };
+		D2FA282B1C777DA000B3787D /* Oswald-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-Light.ttf"; path = "../../../../Downloads/oswald/Oswald-Light.ttf"; sourceTree = "<group>"; };
+		D2FA282C1C777DA000B3787D /* Oswald-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-Medium.ttf"; path = "../../../../Downloads/oswald/Oswald-Medium.ttf"; sourceTree = "<group>"; };
+		D2FA282D1C777DA000B3787D /* Oswald-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-Regular.ttf"; path = "../../../../Downloads/oswald/Oswald-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +105,8 @@
 		D226B4A81C73B28400366800 /* RealTimeRunning */ = {
 			isa = PBXGroup;
 			children = (
-				D2FA28261C77297A00B3787D /* components */,
+				D2FA28291C777CE100B3787D /* Resources */,
+				D2FA28261C77297A00B3787D /* Components */,
 				D226B4A91C73B28400366800 /* AppDelegate.swift */,
 				D226B4AB1C73B28400366800 /* HomeViewController.swift */,
 				D226B4AD1C73B28400366800 /* Main.storyboard */,
@@ -122,12 +131,23 @@
 			path = RealTimeRunningTests;
 			sourceTree = "<group>";
 		};
-		D2FA28261C77297A00B3787D /* components */ = {
+		D2FA28261C77297A00B3787D /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				D2FA28271C77299100B3787D /* Kerning.swift */,
 			);
-			name = components;
+			name = Components;
+			sourceTree = "<group>";
+		};
+		D2FA28291C777CE100B3787D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D2FA282A1C777DA000B3787D /* Oswald-ExtraLight.ttf */,
+				D2FA282B1C777DA000B3787D /* Oswald-Light.ttf */,
+				D2FA282C1C777DA000B3787D /* Oswald-Medium.ttf */,
+				D2FA282D1C777DA000B3787D /* Oswald-Regular.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,9 +232,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */,
+				D2FA282E1C777DA000B3787D /* Oswald-ExtraLight.ttf in Resources */,
 				D226B4B11C73B28400366800 /* Assets.xcassets in Resources */,
+				D2FA28301C777DA000B3787D /* Oswald-Medium.ttf in Resources */,
+				D2FA282F1C777DA000B3787D /* Oswald-Light.ttf in Resources */,
 				D2AFE2041C75F42B009750A8 /* RacesTableViewController.xib in Resources */,
 				D226B4AF1C73B28400366800 /* Main.storyboard in Resources */,
+				D2FA28311C777DA000B3787D /* Oswald-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
