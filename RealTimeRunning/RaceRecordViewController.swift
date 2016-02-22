@@ -11,7 +11,6 @@ import CoreLocation
 
 class RaceRecordViewController: UIViewController {
     var race:Race?
-
     var geoEvents:[CLLocationCoordinate2D] = []
     var lat:Double = 0.0
     var lon:Double = 0.0
@@ -67,10 +66,12 @@ class RaceRecordViewController: UIViewController {
         if let loc = location  {
             self.lat = loc.coordinate.latitude
             self.lon = loc.coordinate.longitude
-            self.speed = (myLocationManager?.getStableSpeed())!
-            self.distance = (myLocationManager?.getDistance())!
-            self.durationString = (myLocationManager?.getDuration())!
-            self.duration = (myLocationManager?.getDurationDouble())!
+            if let lMgr = myLocationManager {
+                self.speed = lMgr.getStableSpeed()
+                self.distance = lMgr.getDistance()
+                self.durationString = lMgr.getDuration()
+                self.duration = lMgr.getDurationDouble()
+            }
             let x = CLLocationCoordinate2DMake(lat, lon)
             geoEvents.append(x)
             if self.duration > 0.0000001 {
@@ -98,8 +99,6 @@ class RaceRecordViewController: UIViewController {
             self.title = String(format:"Race:%@",date)
         }
 
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
