@@ -23,17 +23,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var myMapView: MKMapView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        let coordinateRegion = mapRegion() // MKCoordinateRegionMakeWithDistance(geoEvents.last!, 5000, 5000)
-        myMapView.setRegion(coordinateRegion, animated: true)
-        let runPoly = MKPolyline(coordinates: &geoEvents, count:geoEvents.count)
-        myMapView.addOverlay(runPoly)
-        
-        // Drop a pin at the start location
-        let anotation = MKPointAnnotation()
-        anotation.coordinate = geoEvents[0]
-        anotation.title = "Race Start"
-        anotation.subtitle = "This is the Start location"
-        myMapView.addAnnotation(anotation)
+        if geoEvents.count > 0 {
+            let coordinateRegion = mapRegion() // MKCoordinateRegionMakeWithDistance(geoEvents.last!, 5000, 5000)
+            myMapView.setRegion(coordinateRegion, animated: true)
+            let runPoly = MKPolyline(coordinates: &geoEvents, count:geoEvents.count)
+            myMapView.addOverlay(runPoly)
+            
+            // Drop a pin at the start location
+            let anotation = MKPointAnnotation()
+            anotation.coordinate = geoEvents[0]
+            anotation.title = "Race Start"
+            anotation.subtitle = "This is the Start location"
+            myMapView.addAnnotation(anotation)
+        }
     }
     
     override func didReceiveMemoryWarning() {
