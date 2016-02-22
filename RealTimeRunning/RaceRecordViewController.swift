@@ -85,7 +85,7 @@ class RaceRecordViewController: UIViewController {
             print("lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration)")
         }
         if let hdr = newHeading {
-            self.heading = hdr.magneticHeading;
+            self.heading = hdr.magneticHeading
             print("Heading: \(self.heading)")
         }
     }

@@ -14,13 +14,13 @@
 // This class conformas to the Sigleton pattern so only one instance is created for the app
 
 
-// To use GPS in any class in your app just added the following lines
+// To use GPS in any class in your app just add the following lines
 
 // myLocationManager = SharedLocationManager.sharedInstance
 // NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
 
 
-/* and to get the location data add this function
+/* To get the location data into your controller add this function
 
 func receiveLocationNotification(notification:NSNotification) {
     let userInfo:NSDictionary = notification.userInfo!
@@ -37,7 +37,7 @@ func receiveLocationNotification(notification:NSNotification) {
         print("lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration)")
     }
     if let hdr = newHeading {
-        let heading = hdr.magneticHeading;
+        let heading = hdr.magneticHeading
         print("Heading: \(self.heading)")
     }
 }
@@ -80,25 +80,25 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         
         self.locationManager = CLLocationManager()
         if let lm = self.locationManager {
-            lm.desiredAccuracy = kCLLocationAccuracyBest;
+            lm.desiredAccuracy = kCLLocationAccuracyBest
             lm.activityType    = .OtherNavigation
-            lm.distanceFilter  = kCLDistanceFilterNone;
-            lm.delegate        = self;
+            lm.distanceFilter  = kCLDistanceFilterNone
+            lm.delegate        = self
             lm.requestAlwaysAuthorization()
-            lm.allowsBackgroundLocationUpdates = true;
+            lm.allowsBackgroundLocationUpdates = true
             
             // Setup & Start Compass service
-            lm.headingFilter      = 1.0;
+            lm.headingFilter      = 1.0
             lm.headingOrientation = .Portrait
             lm.startUpdatingHeading()
             
             // If the hardware has an barometer the setup and use it
-            if((NSClassFromString("CMAltimeter")) != nil) {
-                if(CMAltimeter.isRelativeAltitudeAvailable() == true) {
+            if NSClassFromString("CMAltimeter") != nil {
+                if CMAltimeter.isRelativeAltitudeAvailable() == true {
                     self.altitudeManager = CMAltimeter()
-                    self.bAltitudeAvailable = true;
+                    self.bAltitudeAvailable = true
                     self.altitudeManager!.startRelativeAltitudeUpdatesToQueue(NSOperationQueue.mainQueue(), withHandler: { data, error in
-                        if (error == nil) {
+                        if error == nil {
                             if let altimeterData:CMAltitudeData = data {
                                 print("Relative Altitude: \(altimeterData.relativeAltitude)")
                                 print("Pressure: \(altimeterData.pressure)")
@@ -112,8 +112,8 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
             // Listen for background notifications
             NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveBackgroundNotification:", name:"backgroundNotification", object:nil)
         }
-        self.bKeepAlive = false;
-        self.bAltitudeAvailable = false;
+        self.bKeepAlive = false
+        self.bAltitudeAvailable = false
     }
     
     // The GPS Chip has data to give us

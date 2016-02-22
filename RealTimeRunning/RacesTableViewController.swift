@@ -28,7 +28,7 @@ class RacesTableViewController: UITableViewController {
         for index in 0...10 {
             
             let components = NSCalendar.currentCalendar().components([.Hour], fromDate: NSDate())
-            components.setValue(index + 1, forComponent: .Hour);
+            components.setValue(index + 1, forComponent: .Hour)
             let startTime = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: startDate!, options: NSCalendarOptions(rawValue: 0))
             
             let race = Race(startTime: startTime!, competitors: [User](), distance: 1)
