@@ -100,8 +100,8 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
                     self.altitudeManager!.startRelativeAltitudeUpdatesToQueue(NSOperationQueue.mainQueue(), withHandler: { data, error in
                         if (error == nil) {
                             if let altimeterData:CMAltitudeData = data {
-                                print("Relative Altitude: \(altimeterData.relativeAltitude)")
-                                print("Pressure: \(altimeterData.pressure)")
+                                // print("Relative Altitude: \(altimeterData.relativeAltitude)")
+                                // print("Pressure: \(altimeterData.pressure)")
                                 let altitude:CMAltitudeData = altimeterData.copy() as! CMAltitudeData
                                 NSNotificationCenter.defaultCenter().postNotificationName("altimeterNotification", object:nil, userInfo:["Altimeter":altitude])
                             }
@@ -141,7 +141,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     }
     
     // The Compass has data to give us
-    func locationManager(manager:CLLocationManager, didUpdateHeading heading:CLHeading) {
+    func locationManager(manager: CLLocationManager, didUpdateHeading heading: CLHeading) {
         self.currentHeading = heading.copy() as? CLHeading
         dispatch_async(dispatch_get_main_queue()) {
             if let newHeading:CLHeading = heading.copy() as? CLHeading {
@@ -160,7 +160,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     }
 
     // Return true if compass calibration required
-    func locationManagerShouldDisplayHeadingCalibration(manager:CLLocationManager) ->Bool {
+    func locationManagerShouldDisplayHeadingCalibration(manager: CLLocationManager) -> Bool {
         if self.currentHeading == nil {
             return true // Got nothing, We can assume we have to calibrate.
         }
@@ -174,7 +174,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     }
     
     // This delegate method is invoked when the location managed encounters an error condition.
-    func locationManager(manager:CLLocationManager, didFailWithError error:NSError) {
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         NSNotificationCenter.defaultCenter().postNotificationName("locationNotification", object:nil, userInfo:["Error":error])
         if error.code == CLError.Denied.rawValue {
             // This error indicates that the user has denied the application's request to use location services.
@@ -196,7 +196,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         return self.savedLocation
     }
     
-    func workInBackground(bBackground:Bool) {
+    func workInBackground(bBackground: Bool) {
         self.bKeepAlive = bBackground
     }
     
@@ -205,11 +205,11 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         self.distanceTravelled = 0.0
     }
  
-    func getDistance() ->Double {
+    func getDistance() -> Double {
         return self.distanceTravelled
     }
 
-    func getDuration() ->String {
+    func getDuration() -> String {
         if let sTime = self.startTime {
             let diffDateComponents = NSCalendar.currentCalendar().components([.Hour, .Minute, .Second], fromDate: sTime, toDate: NSDate(), options: NSCalendarOptions.init(rawValue: 0))
             return String(format: "%02d:%02d:%02d", diffDateComponents.hour,diffDateComponents.minute,diffDateComponents.second)
@@ -217,7 +217,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         return ""
     }
 
-    func getDurationDouble() ->Double {
+    func getDurationDouble() -> Double {
         if let sTime = self.startTime {
             let diffDateComponents = NSCalendar.currentCalendar().components([.Hour, .Minute, .Second], fromDate: sTime, toDate: NSDate(), options: NSCalendarOptions.init(rawValue: 0))
             let duration =  Double(diffDateComponents.hour) + (Double(diffDateComponents.minute) / 60.0) + (Double(diffDateComponents.second) / 3600.0)
@@ -226,17 +226,17 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         return 0.0
     }
     
-    func getStableSpeed() ->Double {
+    func getStableSpeed() -> Double {
         if avgSpeedQueue.count == 0 {
             return 0.0
         }
         return avgSpeedQueue.reduce(0) { $0 + $1 } / Double(avgSpeedQueue.count)
     }
 
-    func receiveBackgroundNotification(notification:NSNotification) {
+    func receiveBackgroundNotification(notification: NSNotification) {
         //let userInfo:NSDictionary = notification.userInfo!
-        if let userInfo:[String:String] = notification.userInfo as? [String:String] {
-            if let backgroundMode:String = userInfo["BackGroundMode"] {
+        if let userInfo:[String: String] = notification.userInfo as? [String: String] {
+            if let backgroundMode: String = userInfo["BackGroundMode"] {
                 //let backgroundMode:String = userInfo.objectForKey("BackGroundMode") as! String
                 
                 if backgroundMode == "BackGround" {
