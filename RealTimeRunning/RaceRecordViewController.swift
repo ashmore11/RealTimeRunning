@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import CoreMotion
 
 class RaceRecordViewController: UIViewController {
     var race:Race?
@@ -23,6 +24,11 @@ class RaceRecordViewController: UIViewController {
     var endTime:NSDate?
     var myLocationManager:SharedLocationManager? = nil
 
+    let activityManager = CMMotionActivityManager()
+    let pedoMeter = CMPedometer()
+    var stepsTaken:Int = 0
+    var activity:String = ""
+
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var startStopButton: UIButton!
@@ -34,6 +40,8 @@ class RaceRecordViewController: UIViewController {
     
     @IBAction func startStopPressed(sender: AnyObject) {
         if myLocationManager == nil {
+            setupMotionManage()
+
             self.startTime = NSDate()
             
             let dateFormatter = NSDateFormatter()
@@ -115,6 +123,68 @@ class RaceRecordViewController: UIViewController {
                 controller.geoEvents = geoEvents
             }
         }
+    }
+    
+    func setupMotionManage() {
+        let cal = NSCalendar.currentCalendar()
+        let comps = NSCalendar.currentCalendar().components([.Day, .Month, .Year, .Hour, .Minute, .Second ], fromDate: NSDate())
+        comps.hour = 0
+        comps.minute = 0
+        comps.second = 0
+        let timeZone = NSTimeZone.systemTimeZone()
+        cal.timeZone = timeZone
+        
+        let midnightOfToday = cal.dateFromComponents(comps)!
+        
+        
+        if(CMMotionActivityManager.isActivityAvailable()){
+            print("Motion Activity available")
+            self.activityManager.startActivityUpdatesToQueue(NSOperationQueue.mainQueue()) { data in
+                if let rawdata = data {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if(rawdata.stationary == true){
+                            self.activity = "Stationary"
+                        } else if (rawdata.walking == true){
+                            self.activity = "Walking"
+                        } else if (rawdata.running == true){
+                            self.activity = "Running"
+                        } else if (rawdata.automotive == true){
+                            self.activity = "Automotive"
+                        }
+                    }
+                }
+                else {
+                    print("ERROR Motion Activity data is nil")
+                   
+                }
+            }
+        }
+        
+        if(CMPedometer.isStepCountingAvailable()){
+            let fromDate = NSDate(timeIntervalSinceNow: -86400 * 7)
+            self.pedoMeter.queryPedometerDataFromDate(fromDate, toDate: NSDate()) { (data , error) -> Void in
+                print(data)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    if(error == nil){
+                        self.stepsTaken = Int(data!.numberOfSteps)
+                    }
+                    else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
+                        print( "******************* Not Authorised to use Motion Data *******************")
+                    }
+                    
+                })
+                
+            }
+            
+            self.pedoMeter.startPedometerUpdatesFromDate(midnightOfToday) { (data, error) -> Void in
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    if(error == nil){
+                        self.stepsTaken = Int(data!.numberOfSteps)
+                    }
+                })
+            }
+        }
+    
     }
 
 }
