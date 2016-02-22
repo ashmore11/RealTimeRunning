@@ -92,10 +92,12 @@ class RaceRecordViewController: UIViewController {
             self.accuracy = loc.horizontalAccuracy
             
             if let lMgr = myLocationManager {
+                
                 self.speed = lMgr.getStableSpeed()
                 self.distance = lMgr.getDistance()
                 self.durationString = lMgr.getDuration()
                 self.duration = lMgr.getDurationDouble()
+                
             }
             
             let x = CLLocationCoordinate2DMake(lat, lon)
@@ -105,7 +107,7 @@ class RaceRecordViewController: UIViewController {
                 
                 let distancek = distance / 1000.0
                 let avgSpeed = distancek / self.duration
-                self.averageSpeedLabel.text =  String(format:"Average Speed:%6.2f Kph",avgSpeed)
+                self.averageSpeedLabel.text =  "Average Speed: \(avgSpeed) Kph"
             
             }
             

@@ -180,9 +180,9 @@
                     </view>
                     <connections>
                         <outlet property="accuracyLabel" destination="Rd6-tV-9Um" id="TqF-Qf-g8H"/>
+                        <outlet property="averageSpeedLabel" destination="S97-K6-8uq" id="5gX-6d-Sh5"/>
+                        <outlet property="distanceLabel" destination="RvV-Sq-jhZ" id="FOD-ir-rhH"/>
                         <outlet property="durationLabel" destination="D4I-aA-Vv1" id="ETM-Mj-9My"/>
-                        <outlet property="raceAverageSpeedLabel" destination="S97-K6-8uq" id="Kdy-3h-SpP"/>
-                        <outlet property="raceDistanceLabel" destination="RvV-Sq-jhZ" id="ien-ri-JNf"/>
                         <outlet property="speedLabel" destination="9Zx-3B-szD" id="xuU-rj-W5X"/>
                         <outlet property="startStopButton" destination="38d-Zq-jbh" id="h8O-jr-gXB"/>
                     </connections>

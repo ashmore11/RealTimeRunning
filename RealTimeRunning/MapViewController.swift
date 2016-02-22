@@ -9,6 +9,14 @@
 import UIKit
 import MapKit
 
+func degreesToRadian(x: Double) -> Double {
+    return (M_PI * x / 180.0)
+}
+
+func radiansToDegrees(x: Double) -> Double {
+    return (180.0 * x / M_PI)
+}
+
 class MapViewController: UIViewController, MKMapViewDelegate {
     
     var geoEvents:[CLLocationCoordinate2D] = []
@@ -25,11 +33,21 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let runPoly = MKPolyline(coordinates: &geoEvents, count:geoEvents.count)
         myMapView.addOverlay(runPoly)
         
+        // Drop a pin at the start location
+        let anotation = MKPointAnnotation()
+        anotation.coordinate = geoEvents[0]
+        anotation.title = "Race Start"
+        anotation.subtitle = "This is the Start location"
+        myMapView.addAnnotation(anotation)
+        
     }
     
     override func didReceiveMemoryWarning() {
+        
         super.didReceiveMemoryWarning()
+        
         // Dispose of any resources that can be recreated.
+        
     }
     
     func mapRegion() -> MKCoordinateRegion {
@@ -77,7 +95,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             let polylineRenderer = MKPolylineRenderer(overlay: overlay)
             
-            polylineRenderer.strokeColor = UIColor.redColor()
+            polylineRenderer.strokeColor = UIColor(red: 0.607, green: 0.862, blue: 0.247, alpha: 1.0)
             polylineRenderer.lineWidth = 3.5
             
             return polylineRenderer
