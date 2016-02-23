@@ -9,6 +9,9 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
+import Alamofire
+import SwiftyJSON
+import Alamofire_SwiftyJSON
 
 class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     
@@ -124,6 +127,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             // Get the facebook data and deal with optionals
             var id: String = ""
             var profileImage: UIImage?
+            var profileImageURL: String = ""
             var name: String = ""
             var email: String = ""
             
@@ -150,7 +154,52 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             self.user = User(id: id, profileImage: profileImage, name: name, email: email)
             
+            if let imageURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL) {
+                
+                let directoryURL: NSURL = nsurl
+                let urlString: String = directoryURL.absoluteString
+                
+                profileImageURL = urlString
+                
+            }
+            
+            //self.createUser(id, name: name, email: email, profileImage: profileImageURL)
+            self.getUser("12345")
+            
         }
+        
+    }
+    
+    func createUser(fbid: String, name: String, email: String, profileImage: String) {
+        
+        let parameters = [
+            "fbid": fbid,
+            "name": name,
+            "email": email,
+            "profileImage": profileImage
+        ]
+        
+        Alamofire.request(.POST, "http://192.168.168.108:3000/api/users", parameters: parameters, encoding: .JSON)
+        
+    }
+    
+    func getUsers() {
+        
+        Alamofire.request(.GET, "http://192.168.168.108:3000/api/users").responseSwiftyJSON({ (request, response, json, error) in
+            
+            print(json)
+            
+        })
+        
+    }
+    
+    func getUser(id: String) {
+        
+        Alamofire.request(.GET, "http://192.168.168.108:3000/api/users/\(id)").responseSwiftyJSON({ (request, response, json, error) in
+            
+            print(json)
+            
+        })
         
     }
 
