@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 import CoreMotion
+import Alamofire
 
 class RaceRecordViewController: UIViewController {
     var race:Race?
@@ -27,8 +28,8 @@ class RaceRecordViewController: UIViewController {
     var myLocationManager:SharedLocationManager? = nil
     var logTimer: NSTimer?
 
-    let activityManager = CMMotionActivityManager()
-    let pedoMeter = CMPedometer()
+    var activityManager:CMMotionActivityManager?
+    var pedoMeter:CMPedometer?
     var stepsTaken:Int = 0
     var activity:String = ""
 
@@ -43,7 +44,8 @@ class RaceRecordViewController: UIViewController {
     
     @IBAction func startStopPressed(sender: AnyObject) {
         if myLocationManager == nil {
-            setupMotionManage()
+            //setupMotionManage()
+
             // Start a timer that will run the updateLog function once every second
             self.logTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLog", userInfo: nil, repeats: true)
 
@@ -118,12 +120,36 @@ class RaceRecordViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
+        Alamofire.request(.GET, "https://httpbin.org/get", parameters: ["foo": "bar"])
+            .responseJSON { response in
+                print("TESTING alamofire")
+                print("request")
+                print(response.request)  // original URL request
+                print("response")
+                print(response.response) // URL response
+                print("data")
+                print(response.data)     // server data
+                print("result")
+                print(response.result)   // result of response serialization
+                
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+        }
+        
+        
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         if let theRace = race {
             let date = dateFormatter.stringFromDate(theRace.startTime)
             self.title = String(format:"Race:%@",date)
         }
+        //self.activityManager = CMMotionActivityManager()
+        //self.pedoMeter = CMPedometer()
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -153,10 +179,10 @@ class RaceRecordViewController: UIViewController {
         
         let midnightOfToday = cal.dateFromComponents(comps)!
         
-        
+ /*
         if(CMMotionActivityManager.isActivityAvailable()){
             print("Motion Activity available")
-            self.activityManager.startActivityUpdatesToQueue(NSOperationQueue.mainQueue()) { data in
+            self.activityManager!.startActivityUpdatesToQueue(NSOperationQueue.mainQueue()) { data in
                 if let rawdata = data {
                     dispatch_async(dispatch_get_main_queue()) {
                         if(rawdata.stationary == true){
@@ -176,27 +202,33 @@ class RaceRecordViewController: UIViewController {
                 }
             }
         }
-        
         if(CMPedometer.isStepCountingAvailable()){
             let fromDate = NSDate(timeIntervalSinceNow: -86400 * 7)
-            self.pedoMeter.queryPedometerDataFromDate(fromDate, toDate: NSDate()) { (data , error) -> Void in
+            self.pedoMeter!.queryPedometerDataFromDate(fromDate, toDate: NSDate()) { (data , error) -> Void in
                 print(data)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     if(error == nil){
                         self.stepsTaken = Int(data!.numberOfSteps)
                     }
                     else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
-                        print( "******************* Not Authorised to use Motion Data *******************")
+                        self.didEncounterAuthorizationError()
+                        //print( "******************* Not Authorised to use Motion Data *******************")
                     }
                     
                 })
                 
             }
-            
-            self.pedoMeter.startPedometerUpdatesFromDate(midnightOfToday) { (data, error) -> Void in
+        */
+        
+        if(CMPedometer.isStepCountingAvailable()){
+            self.pedoMeter!.startPedometerUpdatesFromDate(NSDate()) { (data, error) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     if(error == nil){
                         self.stepsTaken = Int(data!.numberOfSteps)
+                    }
+                    else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
+                        self.didEncounterAuthorizationError()
+                        //print( "******************* Not Authorised to use Motion Data *******************")
                     }
                 })
             }
@@ -212,5 +244,30 @@ class RaceRecordViewController: UIViewController {
         print("Logging Heading: \(self.heading)")
 
     }
+    
+    func didEncounterAuthorizationError() {
+        let title = NSLocalizedString("Motion Activity Not Authorized", comment: "")
+        
+        let message = NSLocalizedString("To enable Motion features, please allow access to Motion & Fitness in Settings under Privacy.", comment: "")
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        let openSettingsAction = UIAlertAction(title: "Open Settings", style: .Default) { _ in
+            // Open the Settings app.
+            let url = NSURL(string: UIApplicationOpenSettingsURLString)!
+            
+            UIApplication.sharedApplication().openURL(url)
+        }
+        
+        alert.addAction(openSettingsAction)
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.presentViewController(alert, animated: true, completion:nil)
+        }
+    }
+
 
 }
