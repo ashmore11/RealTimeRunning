@@ -100,8 +100,6 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
                     self.altitudeManager!.startRelativeAltitudeUpdatesToQueue(NSOperationQueue.mainQueue(), withHandler: { data, error in
                         if error == nil {
                             if let altimeterData:CMAltitudeData = data {
-                                print("Relative Altitude: \(altimeterData.relativeAltitude)")
-                                print("Pressure: \(altimeterData.pressure)")
                                 let altitude:CMAltitudeData = altimeterData.copy() as! CMAltitudeData
                                 NSNotificationCenter.defaultCenter().postNotificationName("altimeterNotification", object:nil, userInfo:["Altimeter":altitude])
                             }

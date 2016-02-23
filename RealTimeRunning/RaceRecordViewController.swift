@@ -16,13 +16,16 @@ class RaceRecordViewController: UIViewController {
     var lat:Double = 0.0
     var lon:Double = 0.0
     var speed:Double = 0.0
-    var heading:Double = 0.0
     var distance:Double = 0.0
+    var altitude:Double = 0.0
+    var pressure:Double = 0.0
+    var heading:Double = 0.0
     var durationString:String = ""
     var duration:Double = 0.0
     var startTime:NSDate?
     var endTime:NSDate?
     var myLocationManager:SharedLocationManager? = nil
+    var logTimer: NSTimer?
 
     let activityManager = CMMotionActivityManager()
     let pedoMeter = CMPedometer()
@@ -41,6 +44,8 @@ class RaceRecordViewController: UIViewController {
     @IBAction func startStopPressed(sender: AnyObject) {
         if myLocationManager == nil {
             setupMotionManage()
+            // Start a timer that will run the updateLog function once every second
+            self.logTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLog", userInfo: nil, repeats: true)
 
             self.startTime = NSDate()
             
@@ -53,16 +58,31 @@ class RaceRecordViewController: UIViewController {
             geoEvents = []
             myLocationManager = SharedLocationManager.sharedInstance
             NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveAltimeterNotification:", name:"altimeterNotification", object:nil)
             myLocationManager?.workInBackground(true)
             myLocationManager?.resetDistance()
             self.startStopButton.setTitle("Stop", forState: .Normal)
         }
         else {
+            if self.logTimer != nil {
+                self.logTimer!.invalidate()
+                self.logTimer = nil
+            }
             self.startStopButton.setTitle("Start", forState: .Normal)
             NSNotificationCenter.defaultCenter().removeObserver(self, name:"locationNotification", object:nil)
+            NSNotificationCenter.defaultCenter().removeObserver(self, name:"altimeterNotification", object:nil)
             myLocationManager?.workInBackground(false)
             myLocationManager = nil
             self.endTime = NSDate()
+        }
+    }
+    
+    func receiveAltimeterNotification(notification:NSNotification) {
+        let userInfo:NSDictionary = notification.userInfo!
+        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
+        if let data = altimeterData {
+            pressure = Double(data.pressure)
+            altitude = Double(data.relativeAltitude)
         }
     }
     
@@ -90,11 +110,9 @@ class RaceRecordViewController: UIViewController {
             self.durationLabel.text = String(format:"Duration:%@",self.durationString)
             self.speedLabel.text = String(format:"Speed:%6.2f Kph",self.speed * 3.6)
             self.raceDistanceLabel.text = String(format:"Distanced Raced:%6.2f Meters",self.distance)
-            print("lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration)")
         }
         if let hdr = newHeading {
             self.heading = hdr.magneticHeading
-            print("Heading: \(self.heading)")
         }
     }
 
@@ -106,7 +124,6 @@ class RaceRecordViewController: UIViewController {
             let date = dateFormatter.stringFromDate(theRace.startTime)
             self.title = String(format:"Race:%@",date)
         }
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -114,7 +131,6 @@ class RaceRecordViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
@@ -125,6 +141,7 @@ class RaceRecordViewController: UIViewController {
         }
     }
     
+    // This doesnt work in this app but it works if i add it to a new app ????
     func setupMotionManage() {
         let cal = NSCalendar.currentCalendar()
         let comps = NSCalendar.currentCalendar().components([.Day, .Month, .Year, .Hour, .Minute, .Second ], fromDate: NSDate())
@@ -185,6 +202,15 @@ class RaceRecordViewController: UIViewController {
             }
         }
     
+    }
+    
+    // This function will be used for logging data
+    func updateLog() {
+        
+        print("Logging lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration) speed: \(self.speed)")
+        print("Logging Relative Altitude: \(altitude) Pressure: \(pressure)")
+        print("Logging Heading: \(self.heading)")
+
     }
 
 }
