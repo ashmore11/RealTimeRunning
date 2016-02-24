@@ -236,7 +236,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xBa-mc-8Nv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4070" y="206"/>
+            <point key="canvasLocation" x="4070" y="154"/>
         </scene>
         <!--Race Competitors Table View Controller-->
         <scene sceneID="P4D-pQ-e9e">
@@ -275,7 +275,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kHU-0L-5ae" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4070" y="878"/>
+            <point key="canvasLocation" x="4070" y="860"/>
         </scene>
         <!--PROFILE-->
         <scene sceneID="tne-QT-ifu">
