@@ -169,6 +169,9 @@ class RaceRecordViewController: UIViewController {
     
     // This doesnt work in this app but it works if i add it to a new app ????
     func setupMotionManage() {
+        
+        /*
+        
         let cal = NSCalendar.currentCalendar()
         let comps = NSCalendar.currentCalendar().components([.Day, .Month, .Year, .Hour, .Minute, .Second ], fromDate: NSDate())
         comps.hour = 0
@@ -179,7 +182,6 @@ class RaceRecordViewController: UIViewController {
         
         let midnightOfToday = cal.dateFromComponents(comps)!
         
- /*
         if(CMMotionActivityManager.isActivityAvailable()){
             print("Motion Activity available")
             self.activityManager!.startActivityUpdatesToQueue(NSOperationQueue.mainQueue()) { data in
