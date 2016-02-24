@@ -30,9 +30,9 @@ class RacesTableViewController: UITableViewController {
             
             for (_, value) in json {
                 
-                if let startTime = value["startTime"].string, let parsedDate = formatter.dateFromString(startTime), let competitors = value["competitors"].array, let distance = value["distance"].int {
+                if let raceId = value["_id"].string, let startTime = value["startTime"].string, let parsedDate = formatter.dateFromString(startTime), let competitors = value["competitors"].array, let distance = value["distance"].int {
                     
-                    let race = Race(startTime: parsedDate, competitors: competitors, distance: distance)
+                    let race = Race(id: raceId, startTime: parsedDate, competitors: competitors, distance: distance)
                     
                     self.races.append(race)
                     
@@ -45,6 +45,7 @@ class RacesTableViewController: UITableViewController {
         })
         
     }
+    
 
     // MARK: - Table view data source
 
@@ -74,8 +75,6 @@ class RacesTableViewController: UITableViewController {
         dateFormatter.dateFormat = "HH:mm"
         
         let date = dateFormatter.stringFromDate(race.startTime)
-        //let toArray = date.componentsSeparatedByString(", ")
-        //let formattedDate = toArray.joinWithSeparator(":")
         
         cell.startTimeLabel.text = date
         cell.competitorsLabel.text = "competitors: \(race.competitors!.count)"

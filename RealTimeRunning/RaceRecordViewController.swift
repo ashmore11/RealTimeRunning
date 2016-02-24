@@ -133,6 +133,14 @@ class RaceRecordViewController: UIViewController {
                 
             }
             
+        } else if segue.identifier == "raceCompetitors" {
+            
+            if let controller = segue.destinationViewController as? RaceCompetitorsTableViewController, let competitors = race?.competitors {
+                    
+                controller.competitors = competitors
+                
+            }
+            
         }
         
     }
