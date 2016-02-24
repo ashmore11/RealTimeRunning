@@ -19,7 +19,6 @@
 		D226B4BF1C73B28400366800 /* RealTimeRunningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4BE1C73B28400366800 /* RealTimeRunningTests.swift */; };
 		D235C3331C7DF70900893BB6 /* RaceCompetitorsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235C3321C7DF70900893BB6 /* RaceCompetitorsTableViewController.swift */; };
 		D235C33A1C7E055200893BB6 /* RaceCompetitorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235C3381C7E055200893BB6 /* RaceCompetitorTableViewCell.swift */; };
-		D235C33B1C7E055200893BB6 /* RaceCompetitorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D235C3391C7E055200893BB6 /* RaceCompetitorTableViewCell.xib */; };
 		D2830BD91C73D52B00B1B1A8 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */; };
 		D2830BDB1C73D53500B1B1A8 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */; };
 		D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FD1C75EA06009750A8 /* Race.swift */; };
@@ -61,7 +60,6 @@
 		D226B4C01C73B28400366800 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D235C3321C7DF70900893BB6 /* RaceCompetitorsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceCompetitorsTableViewController.swift; sourceTree = "<group>"; };
 		D235C3381C7E055200893BB6 /* RaceCompetitorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceCompetitorTableViewCell.swift; sourceTree = "<group>"; };
-		D235C3391C7E055200893BB6 /* RaceCompetitorTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RaceCompetitorTableViewCell.xib; sourceTree = "<group>"; };
 		D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		D2AFE1FD1C75EA06009750A8 /* Race.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Race.swift; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 				C48647E71C78983C005AB06F /* SharedLocationManager.swift */,
 				D235C3321C7DF70900893BB6 /* RaceCompetitorsTableViewController.swift */,
 				D235C3381C7E055200893BB6 /* RaceCompetitorTableViewCell.swift */,
-				D235C3391C7E055200893BB6 /* RaceCompetitorTableViewCell.xib */,
 			);
 			path = RealTimeRunning;
 			sourceTree = "<group>";
@@ -271,7 +268,6 @@
 				D2FA282E1C777DA000B3787D /* Oswald-ExtraLight.ttf in Resources */,
 				D226B4B11C73B28400366800 /* Assets.xcassets in Resources */,
 				D2FA28301C777DA000B3787D /* Oswald-Medium.ttf in Resources */,
-				D235C33B1C7E055200893BB6 /* RaceCompetitorTableViewCell.xib in Resources */,
 				D2FA282F1C777DA000B3787D /* Oswald-Light.ttf in Resources */,
 				D226B4AF1C73B28400366800 /* Main.storyboard in Resources */,
 				D2FA28311C777DA000B3787D /* Oswald-Regular.ttf in Resources */,
