@@ -192,6 +192,7 @@
                     <connections>
                         <outlet property="accuracyLabel" destination="Rd6-tV-9Um" id="TqF-Qf-g8H"/>
                         <outlet property="averageSpeedLabel" destination="S97-K6-8uq" id="5gX-6d-Sh5"/>
+                        <outlet property="competitorsButton" destination="YNR-kG-hGL" id="arX-PQ-zzn"/>
                         <outlet property="distanceLabel" destination="RvV-Sq-jhZ" id="FOD-ir-rhH"/>
                         <outlet property="durationLabel" destination="D4I-aA-Vv1" id="ETM-Mj-9My"/>
                         <outlet property="speedLabel" destination="9Zx-3B-szD" id="xuU-rj-W5X"/>
@@ -299,7 +300,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="7z9-R5-Yo2" kind="show" id="lUW-y3-d57"/>
+                                    <segue destination="7z9-R5-Yo2" kind="show" identifier="showRaces" id="lUW-y3-d57"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fYn-Cw-gaz">

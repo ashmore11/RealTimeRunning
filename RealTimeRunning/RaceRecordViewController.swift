@@ -30,6 +30,7 @@ class RaceRecordViewController: UIViewController {
     @IBOutlet weak var accuracyLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var averageSpeedLabel: UILabel!
+    @IBOutlet weak var competitorsButton: UIButton!
     
     override func viewDidLoad() {
         
@@ -41,7 +42,15 @@ class RaceRecordViewController: UIViewController {
         if let theRace = race {
             
             let date = dateFormatter.stringFromDate(theRace.startTime)
-            self.title = "Race: \(date)"
+            self.title = "\(date)"
+            
+            if theRace.competitors?.count == 0 {
+                
+                competitorsButton.enabled = false
+                
+                competitorsButton.alpha = 0.2
+                
+            }
             
         }
 
@@ -134,6 +143,10 @@ class RaceRecordViewController: UIViewController {
             }
             
         } else if segue.identifier == "raceCompetitors" {
+            
+            let backItem = UIBarButtonItem()
+            backItem.title = "RACE"
+            navigationItem.backBarButtonItem = backItem
             
             if let controller = segue.destinationViewController as? RaceCompetitorsTableViewController, let competitors = race?.competitors {
                     

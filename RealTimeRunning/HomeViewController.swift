@@ -187,25 +187,18 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
     }
     
-    func getUsers() {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        Alamofire.request(.GET, "http://192.168.168.108:3000/api/users").responseSwiftyJSON({ (request, response, json, error) in
+        if segue.identifier == "showRaces" {
             
-            print(json)
+            let backItem = UIBarButtonItem()
+            backItem.title = "PROFILE"
+            navigationItem.backBarButtonItem = backItem
             
-        })
-        
-    }
-    
-    func getUser(id: String) {
-        
-        Alamofire.request(.GET, "http://192.168.168.108:3000/api/users/\(id)").responseSwiftyJSON({ (request, response, json, error) in
-            
-            print(json)
-            
-        })
+        }
         
     }
+
 
 }
 
