@@ -7,7 +7,9 @@
 //
 
 import UIKit
+import Alamofire
 import SwiftyJSON
+import Alamofire_SwiftyJSON
 
 class RaceCompetitorsTableViewController: UITableViewController {
     
@@ -38,9 +40,21 @@ class RaceCompetitorsTableViewController: UITableViewController {
         let cellIdentifier = "RaceCompetitorTableViewCell"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! RaceCompetitorTableViewCell
         
-        let competitor = competitors[indexPath.row]
-
-        cell.nameLabel.text = "\(competitor)"
+        let id = competitors[indexPath.row]
+        
+        Alamofire.request(.GET, "http://192.168.168.108:3000/api/users/\(id)").responseSwiftyJSON({ (request, response, json, error) in
+            
+            if let name = json[0]["name"].string {
+                
+                print(name)
+                
+                cell.nameLabel.text = "\(name)"
+                
+            }
+            
+            self.tableView.reloadData()
+            
+        })
 
         return cell
         
