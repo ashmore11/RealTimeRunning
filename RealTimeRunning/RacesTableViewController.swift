@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
+import Alamofire_SwiftyJSON
 
 class RacesTableViewController: UITableViewController {
     
@@ -15,27 +18,31 @@ class RacesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        loadSampleRaces()
+        loadRaces()
     }
     
-    func loadSampleRaces() {
+    func loadRaces() {
         
-        let components = NSCalendar.currentCalendar().components([.Day, .Month, .Year, .Hour, .Minute, .Second ], fromDate: NSDate())
-        components.minute = 0
-        components.second = 0
-        let startDate = NSCalendar.currentCalendar().dateFromComponents(components)
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         
-        for index in 0...10 {
+        Alamofire.request(.GET, "http://192.168.168.108:3000/api/races").responseSwiftyJSON({ (request, response, json, error) in
             
-            let components = NSCalendar.currentCalendar().components([.Hour], fromDate: NSDate())
-            components.setValue(index + 1, forComponent: .Hour);
-            let startTime = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: startDate!, options: NSCalendarOptions(rawValue: 0))
+            for (_, value) in json {
+                
+                if let startTime = value["startTime"].string, let parsedDate = formatter.dateFromString(startTime), let competitors = value["competitors"].array, let distance = value["distance"].int {
+                    
+                    let race = Race(startTime: parsedDate, competitors: competitors, distance: distance)
+                    
+                    self.races.append(race)
+                    
+                }
+                
+            }
             
-            let race = Race(startTime: startTime!, competitors: [User](), distance: 1)
+            self.tableView.reloadData()
             
-            races.append(race)
-            
-        }
+        })
         
     }
 

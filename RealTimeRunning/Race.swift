@@ -7,16 +7,17 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class Race {
     
     // MARK: Properties
     
     var startTime: NSDate
-    var competitors: [User]?
+    var competitors: [JSON]?
     var distance: Int
     
-    init(startTime: NSDate, competitors: [User]?, distance: Int) {
+    init(startTime: NSDate, competitors: [JSON]?, distance: Int) {
         
         self.startTime = startTime
         self.competitors = competitors

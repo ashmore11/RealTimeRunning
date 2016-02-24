@@ -163,8 +163,8 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
                 
             }
             
-            //self.createUser(id, name: name, email: email, profileImage: profileImageURL)
-            self.getUser("12345")
+            self.createUser(id, name: name, email: email, profileImage: profileImageURL)
+            //self.getUser("12345")
             
         }
         
@@ -179,7 +179,11 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             "profileImage": profileImage
         ]
         
-        Alamofire.request(.POST, "http://192.168.168.108:3000/api/users", parameters: parameters, encoding: .JSON)
+        Alamofire.request(.PUT, "http://192.168.168.108:3000/api/users/\(fbid)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+            
+            print(json["message"])
+            
+        })
         
     }
     
