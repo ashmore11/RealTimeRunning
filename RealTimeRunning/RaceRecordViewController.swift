@@ -8,13 +8,16 @@
 
 import UIKit
 import CoreLocation
+import Alamofire
+import SwiftyJSON
+import Alamofire_SwiftyJSON
 
 class RaceRecordViewController: UIViewController {
     
     // MARK: Properties
     
-    var user: User?
-    var race: Race?
+    var user: User!
+    var race: Race!
     var geoEvents: [CLLocationCoordinate2D] = []
     var lat: Double = 0.0
     var lon: Double = 0.0
@@ -32,6 +35,7 @@ class RaceRecordViewController: UIViewController {
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var averageSpeedLabel: UILabel!
     @IBOutlet weak var competitorsButton: UIButton!
+    @IBOutlet weak var joinRaceButton: UIButton!
     
     override func viewDidLoad() {
         
@@ -39,19 +43,15 @@ class RaceRecordViewController: UIViewController {
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH:mm"
+            
+        let date = dateFormatter.stringFromDate(race.startTime)
+        self.title = "\(date)"
         
-        if let theRace = race {
+        if race.competitors?.count == 0 {
             
-            let date = dateFormatter.stringFromDate(theRace.startTime)
-            self.title = "\(date)"
+            competitorsButton.enabled = false
             
-            if theRace.competitors?.count == 0 {
-                
-                competitorsButton.enabled = false
-                
-                competitorsButton.alpha = 0.2
-                
-            }
+            competitorsButton.alpha = 0.2
             
         }
 
@@ -87,6 +87,44 @@ class RaceRecordViewController: UIViewController {
             myLocationManager = nil
             
         }
+        
+    }
+    
+    @IBAction func joinButtonPressed(sender: UIButton) {
+        
+        let parameters = [
+            "id": user.id
+        ]
+            
+        Alamofire.request(.PUT, "http://192.168.168.108:3000/api/races/\(race.id)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+            
+            print(json, error)
+            
+        })
+        
+        checkIfUserIsInRace()
+    
+    }
+    
+    func checkIfUserIsInRace() {
+        
+        Alamofire.request(.GET, "http://192.168.168.108:3000/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
+            
+            if let arr = json[0]["competitors"].object as? [String] {
+
+                if arr.contains(self.user.id) {
+                    
+                    print("user already in race")
+                    
+                } else {
+                    
+                    print("user not in race")
+                    
+                }
+                
+            }
+            
+        })
         
     }
     

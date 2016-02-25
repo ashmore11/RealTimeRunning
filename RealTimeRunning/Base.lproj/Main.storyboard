@@ -140,8 +140,19 @@
                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillEqually" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="FMv-jr-Aby">
                                 <rect key="frame" x="20" y="539" width="560" height="32"/>
                                 <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jeo-pM-Z1J">
+                                        <rect key="frame" x="0.0" y="0.0" width="173" height="32"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <state key="normal" title="Join Race">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="joinButtonPressed:" destination="vfY-vH-x9Z" eventType="touchUpInside" id="rAr-vR-tT0"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YNR-kG-hGL">
-                                        <rect key="frame" x="0.0" y="0.0" width="270" height="32"/>
+                                        <rect key="frame" x="193" y="0.0" width="174" height="32"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <state key="normal" title="Competitors">
@@ -152,7 +163,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VGJ-mG-m2L">
-                                        <rect key="frame" x="290" y="0.0" width="270" height="32"/>
+                                        <rect key="frame" x="387" y="0.0" width="173" height="32"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <state key="normal" title="View Map">
@@ -195,6 +206,7 @@
                         <outlet property="competitorsButton" destination="YNR-kG-hGL" id="arX-PQ-zzn"/>
                         <outlet property="distanceLabel" destination="RvV-Sq-jhZ" id="FOD-ir-rhH"/>
                         <outlet property="durationLabel" destination="D4I-aA-Vv1" id="ETM-Mj-9My"/>
+                        <outlet property="joinRaceButton" destination="jeo-pM-Z1J" id="bEw-ee-xhH"/>
                         <outlet property="speedLabel" destination="9Zx-3B-szD" id="xuU-rj-W5X"/>
                         <outlet property="startStopButton" destination="38d-Zq-jbh" id="h8O-jr-gXB"/>
                     </connections>
