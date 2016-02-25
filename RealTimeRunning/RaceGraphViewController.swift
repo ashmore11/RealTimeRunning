@@ -56,30 +56,26 @@ class RaceGraphViewController: UIViewController {
                         }
                     }
                 }
+                // Convert from meters per second to kilometers per hour
                 topSpeed = topSpeed * 3.6
-                topSpeed = topSpeed * 2.0
+                // Give the graph some headroom
+                topSpeed = topSpeed * 1.5
                 let first = result.first as! RunData
                 let sDate = first.timeStamp
                 let last = result.last as! RunData
                 let eDate = last.timeStamp
                 if let sd = sDate,let ed = eDate {
                     raceTimeInSeconds = Int(ed.timeIntervalSinceDate(sd))
-                    
                 }
                 
                 averageSpeed = totalSpeed / Double(result.count)
-                
                 self.graphView.yMax = CGFloat(topSpeed)
                 self.graphView.dataPoints = speedArray
-                
-                
             } catch {
                 let fetchError = error as NSError
                 print(fetchError)
             }
         }
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {

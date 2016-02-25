@@ -119,6 +119,16 @@ class RaceRecordViewController: UIViewController {
             self.navigationController!.interactivePopGestureRecognizer!.enabled = false
         }
     }
+    
+    override func viewDidAppear(animated:Bool) {
+        super.viewDidAppear(animated)
+        UIApplication.sharedApplication().idleTimerDisabled = true
+    }
+    
+    override func viewDidDisappear(animated:Bool) {
+        super.viewDidDisappear(animated)
+        UIApplication.sharedApplication().idleTimerDisabled = false
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

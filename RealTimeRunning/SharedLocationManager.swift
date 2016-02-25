@@ -88,9 +88,9 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
             lm.allowsBackgroundLocationUpdates = true
             
             // Setup & Start Compass service
-            lm.headingFilter      = 1.0
-            lm.headingOrientation = .Portrait
-            lm.startUpdatingHeading()
+            //lm.headingFilter      = 1.0
+            //lm.headingOrientation = .Portrait
+            //lm.startUpdatingHeading()
             
             // If the hardware has an barometer the setup and use it
             if NSClassFromString("CMAltimeter") != nil {

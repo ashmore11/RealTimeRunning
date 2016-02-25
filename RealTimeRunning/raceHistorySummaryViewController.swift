@@ -29,6 +29,8 @@ class raceHistorySummaryViewController: UIViewController {
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             self.managedObjectContext = delegate.managedObjectContext
         }
+        
+        // Get data for the race and summerise it
         if let context = self.managedObjectContext {
             let fetchRequest = NSFetchRequest(entityName: "RunData")
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: true)]
@@ -63,7 +65,6 @@ class raceHistorySummaryViewController: UIViewController {
                     if let sd = sDate,let ed = eDate {
                         raceTime = stringFromTimeInterval(ed.timeIntervalSinceDate(sd))
                     }
-                    
                 }
                 
                 averageSpeed = totalSpeed / Double(result.count)
@@ -77,8 +78,6 @@ class raceHistorySummaryViewController: UIViewController {
                 print(fetchError)
             }
         }
-
-        // Do any additional setup after loading the view.
     }
     
 
@@ -86,7 +85,6 @@ class raceHistorySummaryViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     // MARK: - Navigation
 
