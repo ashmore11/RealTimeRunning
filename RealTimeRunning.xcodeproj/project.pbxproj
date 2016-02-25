@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C42C383E1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */; };
+		C42C38891C7E0B660080BFFC /* RawRaceDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */; };
+		C42C388B1C7E0D150080BFFC /* RawTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */; };
+		C42C38901C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388C1C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift */; };
+		C42C38911C7E0F0B0080BFFC /* RunData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388D1C7E0F0B0080BFFC /* RunData.swift */; };
+		C42C38921C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */; };
+		C42C38931C7E0F0B0080BFFC /* RunDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */; };
+		C42C38951C7E13E20080BFFC /* latLonFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C38941C7E13E20080BFFC /* latLonFormats.swift */; };
 		C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E71C78983C005AB06F /* SharedLocationManager.swift */; };
 		C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */; };
 		C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647EB1C78A593005AB06F /* MapViewController.swift */; };
@@ -49,6 +57,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C42C383D1C7DC3C70080BFFC /* realTimeRunning.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = realTimeRunning.xcdatamodel; sourceTree = "<group>"; };
+		C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawRaceDataTableViewController.swift; sourceTree = "<group>"; };
+		C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawTableViewCell.swift; sourceTree = "<group>"; };
+		C42C388C1C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RunData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C42C388D1C7E0F0B0080BFFC /* RunData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunData.swift; sourceTree = "<group>"; };
+		C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RunDetail+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunDetail.swift; sourceTree = "<group>"; };
+		C42C38941C7E13E20080BFFC /* latLonFormats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = latLonFormats.swift; sourceTree = "<group>"; };
 		C48647E71C78983C005AB06F /* SharedLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedLocationManager.swift; sourceTree = "<group>"; };
 		C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceRecordViewController.swift; sourceTree = "<group>"; };
 		C48647EB1C78A593005AB06F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +110,10 @@
 		D226B49D1C73B28400366800 = {
 			isa = PBXGroup;
 			children = (
+				C42C388C1C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift */,
+				C42C388D1C7E0F0B0080BFFC /* RunData.swift */,
+				C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */,
+				C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */,
 				D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */,
 				D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */,
 				D226B4A81C73B28400366800 /* RealTimeRunning */,
@@ -119,14 +139,18 @@
 				D226B4AB1C73B28400366800 /* HomeViewController.swift */,
 				C48647EB1C78A593005AB06F /* MapViewController.swift */,
 				C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */,
+				C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */,
+				C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */,
 				D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */,
 				D2AFE1FD1C75EA06009750A8 /* Race.swift */,
 				D2AFE1FF1C75EBC3009750A8 /* User.swift */,
 				D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */,
 				C48647E71C78983C005AB06F /* SharedLocationManager.swift */,
+				C42C38941C7E13E20080BFFC /* latLonFormats.swift */,
 				D226B4B01C73B28400366800 /* Assets.xcassets */,
 				D226B4AD1C73B28400366800 /* Main.storyboard */,
 				D226B4B21C73B28400366800 /* LaunchScreen.storyboard */,
+				C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */,
 				D226B4B51C73B28400366800 /* Info.plist */,
 			);
 			path = RealTimeRunning;
@@ -257,15 +281,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C42C38921C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift in Sources */,
+				C42C383E1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld in Sources */,
 				D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */,
+				C42C38931C7E0F0B0080BFFC /* RunDetail.swift in Sources */,
+				C42C38911C7E0F0B0080BFFC /* RunData.swift in Sources */,
 				C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */,
+				C42C38891C7E0B660080BFFC /* RawRaceDataTableViewController.swift in Sources */,
 				D2AFE2001C75EBC3009750A8 /* User.swift in Sources */,
 				C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */,
+				C42C38901C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift in Sources */,
 				C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */,
 				D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */,
 				D226B4AC1C73B28400366800 /* HomeViewController.swift in Sources */,
 				D226B4AA1C73B28400366800 /* AppDelegate.swift in Sources */,
+				C42C388B1C7E0D150080BFFC /* RawTableViewCell.swift in Sources */,
 				D2FA28281C77299100B3787D /* Kerning.swift in Sources */,
+				C42C38951C7E13E20080BFFC /* latLonFormats.swift in Sources */,
 				D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -488,6 +520,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C42C383D1C7DC3C70080BFFC /* realTimeRunning.xcdatamodel */,
+			);
+			currentVersion = C42C383D1C7DC3C70080BFFC /* realTimeRunning.xcdatamodel */;
+			path = realTimeRunning.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D226B49E1C73B28400366800 /* Project object */;
 }

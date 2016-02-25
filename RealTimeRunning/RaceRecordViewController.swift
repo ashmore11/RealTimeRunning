@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 import CoreMotion
-import Alamofire
+import CoreData
 
 class RaceRecordViewController: UIViewController {
     var race:Race?
@@ -27,55 +27,37 @@ class RaceRecordViewController: UIViewController {
     var endTime:NSDate?
     var myLocationManager:SharedLocationManager? = nil
     var logTimer: NSTimer?
+    var raceName:String = ""
+    var managedObjectContext:NSManagedObjectContext?
+    var bLocationsReceived = false
 
     var activityManager:CMMotionActivityManager?
     var pedoMeter:CMPedometer?
     var stepsTaken:Int = 0
     var activity:String = ""
+    var runDetailObject:RunDetail?
+    var pedDistance = 0.0
+    var currentPace = 0.0
+    var currentCadence = 0.0
+    var floorsAscended = 0.0
+    var floorsDescended = 0.0
 
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var startStopButton: UIButton!
-    
     @IBOutlet weak var raceDistanceLabel: UILabel!
     @IBOutlet weak var raceStartTimeLabel: UILabel!
-    
     @IBOutlet weak var raceAverageSpeedLabel: UILabel!
+    @IBOutlet weak var stepsLabel: UILabel!
+    @IBOutlet weak var paceLabel: UILabel!
+    @IBOutlet weak var cadenceLabel: UILabel!
     
     @IBAction func startStopPressed(sender: AnyObject) {
         if myLocationManager == nil {
-            //setupMotionManage()
-
-            // Start a timer that will run the updateLog function once every second
-            self.logTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLog", userInfo: nil, repeats: true)
-
-            self.startTime = NSDate()
-            
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "HH:mm:ss"
-            
-            let dateString = dateFormatter.stringFromDate(self.startTime!)
-            raceStartTimeLabel.text = String(format:"Your start time:%@",dateString)
-            
-            geoEvents = []
-            myLocationManager = SharedLocationManager.sharedInstance
-            NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
-            NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveAltimeterNotification:", name:"altimeterNotification", object:nil)
-            myLocationManager?.workInBackground(true)
-            myLocationManager?.resetDistance()
-            self.startStopButton.setTitle("Stop", forState: .Normal)
+            self.willStartRace()
         }
         else {
-            if self.logTimer != nil {
-                self.logTimer!.invalidate()
-                self.logTimer = nil
-            }
-            self.startStopButton.setTitle("Start", forState: .Normal)
-            NSNotificationCenter.defaultCenter().removeObserver(self, name:"locationNotification", object:nil)
-            NSNotificationCenter.defaultCenter().removeObserver(self, name:"altimeterNotification", object:nil)
-            myLocationManager?.workInBackground(false)
-            myLocationManager = nil
-            self.endTime = NSDate()
+            self.willStopRace()
         }
     }
     
@@ -94,6 +76,8 @@ class RaceRecordViewController: UIViewController {
         let newHeading:CLHeading? = userInfo.objectForKey("Heading") as? CLHeading
         
         if let loc = location  {
+            self.bLocationsReceived = true
+
             self.lat = loc.coordinate.latitude
             self.lon = loc.coordinate.longitude
             if let lMgr = myLocationManager {
@@ -102,16 +86,12 @@ class RaceRecordViewController: UIViewController {
                 self.durationString = lMgr.getDuration()
                 self.duration = lMgr.getDurationDouble()
             }
-            let x = CLLocationCoordinate2DMake(lat, lon)
-            geoEvents.append(x)
-            if self.duration > 0.0000001 {
-                let distancek = distance / 1000.0
-                let avgSpeed = distancek / self.duration
-                self.raceAverageSpeedLabel.text =  String(format:"Average Speed:%6.2f Kph",avgSpeed)
+            dispatch_async(dispatch_get_main_queue()) {
+                self.durationLabel.text = String(format:"Duration: %@",self.durationString)
+                self.speedLabel.text = String(format:"Speed: %6.2f Kph",self.speed * 3.6)
+                self.raceDistanceLabel.text = String(format:"Distanced Raced:%6.2f Meters",self.distance)
             }
-            self.durationLabel.text = String(format:"Duration:%@",self.durationString)
-            self.speedLabel.text = String(format:"Speed:%6.2f Kph",self.speed * 3.6)
-            self.raceDistanceLabel.text = String(format:"Distanced Raced:%6.2f Meters",self.distance)
+
         }
         if let hdr = newHeading {
             self.heading = hdr.magneticHeading
@@ -120,36 +100,24 @@ class RaceRecordViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
-        Alamofire.request(.GET, "https://httpbin.org/get", parameters: ["foo": "bar"])
-            .responseJSON { response in
-                print("TESTING alamofire")
-                print("request")
-                print(response.request)  // original URL request
-                print("response")
-                print(response.response) // URL response
-                print("data")
-                print(response.data)     // server data
-                print("result")
-                print(response.result)   // result of response serialization
-                
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
-                }
+        if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            self.managedObjectContext = delegate.managedObjectContext
         }
-        
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         if let theRace = race {
             let date = dateFormatter.stringFromDate(theRace.startTime)
-            self.title = String(format:"Race:%@",date)
+            self.raceName = String(format:"Race:%@",date)
+            self.title = self.raceName
         }
-        //self.activityManager = CMMotionActivityManager()
-        //self.pedoMeter = CMPedometer()
-
+        self.activityManager = CMMotionActivityManager()
+        self.pedoMeter = CMPedometer()
+        
+        // disable the interactivePopGestureRecognizer so you cant slide from left to pop the current view
+        if self.navigationController!.respondsToSelector("interactivePopGestureRecognizer") {
+            self.navigationController!.interactivePopGestureRecognizer!.enabled = false
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -165,86 +133,57 @@ class RaceRecordViewController: UIViewController {
                 controller.geoEvents = geoEvents
             }
         }
+        if segue.identifier == "showRaw" {
+            if let controller = segue.destinationViewController as? RawRaceDataTableViewController {
+                controller.runDetail = self.runDetailObject
+            }
+        }
     }
     
-    // This doesnt work in this app but it works if i add it to a new app ????
+    // This sets up the motion manager to return step data
     func setupMotionManage() {
-        
-        /*
-        
-        let cal = NSCalendar.currentCalendar()
-        let comps = NSCalendar.currentCalendar().components([.Day, .Month, .Year, .Hour, .Minute, .Second ], fromDate: NSDate())
-        comps.hour = 0
-        comps.minute = 0
-        comps.second = 0
-        let timeZone = NSTimeZone.systemTimeZone()
-        cal.timeZone = timeZone
-        
-        let midnightOfToday = cal.dateFromComponents(comps)!
-        
-        if(CMMotionActivityManager.isActivityAvailable()){
-            print("Motion Activity available")
-            self.activityManager!.startActivityUpdatesToQueue(NSOperationQueue.mainQueue()) { data in
-                if let rawdata = data {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        if(rawdata.stationary == true){
-                            self.activity = "Stationary"
-                        } else if (rawdata.walking == true){
-                            self.activity = "Walking"
-                        } else if (rawdata.running == true){
-                            self.activity = "Running"
-                        } else if (rawdata.automotive == true){
-                            self.activity = "Automotive"
+        if(CMPedometer.isStepCountingAvailable()){
+            if let ped = self.pedoMeter {
+                ped.startPedometerUpdatesFromDate(NSDate()) { (data, error) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if(error == nil){
+                            if let stepData = data {
+                                self.stepsTaken = Int(stepData.numberOfSteps)
+                                if let dst = stepData.distance {
+                                    self.pedDistance = Double(dst)
+                                }
+                                if let pce = stepData.currentPace {
+                                    self.currentPace = Double(pce)
+                                }
+                                if let cad = stepData.currentCadence {
+                                    self.currentCadence = Double(cad)
+                                }
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    self.stepsLabel.text = String(format:"Steps taken: %d",self.stepsTaken)
+                                    self.paceLabel.text = String(format:"Pace: %6.2f Sec. / Mtr.",self.currentPace)
+                                    self.cadenceLabel.text = String(format:"Cadence: %6.2f Steps / Sec.",self.currentCadence)
+                                }
+
+                            }
                         }
-                    }
-                }
-                else {
-                    print("ERROR Motion Activity data is nil")
-                   
+                        else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
+                            self.didEncounterAuthorizationError()
+                        }
+                    })
                 }
             }
         }
-        if(CMPedometer.isStepCountingAvailable()){
-            let fromDate = NSDate(timeIntervalSinceNow: -86400 * 7)
-            self.pedoMeter!.queryPedometerDataFromDate(fromDate, toDate: NSDate()) { (data , error) -> Void in
-                print(data)
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    if(error == nil){
-                        self.stepsTaken = Int(data!.numberOfSteps)
-                    }
-                    else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
-                        self.didEncounterAuthorizationError()
-                        //print( "******************* Not Authorised to use Motion Data *******************")
-                    }
-                    
-                })
-                
-            }
-        */
-        
-        if(CMPedometer.isStepCountingAvailable()){
-            self.pedoMeter!.startPedometerUpdatesFromDate(NSDate()) { (data, error) -> Void in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    if(error == nil){
-                        self.stepsTaken = Int(data!.numberOfSteps)
-                    }
-                    else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
-                        self.didEncounterAuthorizationError()
-                        //print( "******************* Not Authorised to use Motion Data *******************")
-                    }
-                })
-            }
-        }
-    
     }
     
     // This function will be used for logging data
     func updateLog() {
-        
-        print("Logging lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration) speed: \(self.speed)")
-        print("Logging Relative Altitude: \(altitude) Pressure: \(pressure)")
-        print("Logging Heading: \(self.heading)")
+        self.writeRaceData()
+        let x = CLLocationCoordinate2DMake(self.lat, self.lon)
+        geoEvents.append(x)
 
+        //print("Logging lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration) speed: \(self.speed)")
+        //print("Logging Relative Altitude: \(altitude) Pressure: \(pressure)")
+        //print("Logging Heading: \(self.heading)")
     }
     
     func didEncounterAuthorizationError() {
@@ -271,5 +210,111 @@ class RaceRecordViewController: UIViewController {
         }
     }
 
+    func writeRaceDetail() ->RunDetail? {
+        if let context = self.managedObjectContext {
+            if let detailObject = NSEntityDescription.insertNewObjectForEntityForName("RunDetail", inManagedObjectContext: context) as? RunDetail {
+                detailObject.name = self.raceName
+                detailObject.date = self.startTime
+                detailObject.distance = 10.0
+                detailObject.organiser = "East London athletics club"
+                detailObject.contact = "Scott 123 45678"
+                self.saveData()
+                return detailObject
+            }
+        }
+        return nil
+    }
+
+    func writeRaceData() {
+        if self.bLocationsReceived == false {
+            return
+        }
+
+        if let context = self.managedObjectContext {
+            if let runDetail = self.runDetailObject {
+                if let dataObject = NSEntityDescription.insertNewObjectForEntityForName("RunData", inManagedObjectContext: context) as? RunData {
+                    dataObject.lattitude = self.lat
+                    dataObject.longitude = self.lon
+                    dataObject.speed = self.speed
+                    dataObject.distance = self.distance
+                    dataObject.altitude = self.altitude
+                    dataObject.stepsTaken = self.stepsTaken
+                    dataObject.pedDistance = self.pedDistance
+                    dataObject.currentPace = self.currentPace
+                    dataObject.currentCadence = self.currentCadence
+                    dataObject.floorsAscended = self.floorsAscended
+                    dataObject.floorsDescended = self.floorsDescended
+                    dataObject.runDataToRunDetail = runDetail
+                    self.saveData()
+                }
+            }
+        }
+    }
+    
+    func saveData() {
+        do {
+            try self.managedObjectContext!.save()
+        } catch {
+            fatalError("Failure to save context: \(error)")
+        }
+    }
+    
+    func willStartRace() {
+        setupMotionManage()
+        
+        // Hide the back button incase the user accidently hits it
+        self.navigationItem.setHidesBackButton(true, animated: true)
+        self.startTime = NSDate()
+        self.bLocationsReceived = false
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
+        
+        let dateString = dateFormatter.stringFromDate(self.startTime!)
+        raceStartTimeLabel.text = String(format:"Your start time:%@",dateString)
+        
+        geoEvents = []
+        myLocationManager = SharedLocationManager.sharedInstance
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveAltimeterNotification:", name:"altimeterNotification", object:nil)
+        myLocationManager?.workInBackground(true)
+        myLocationManager?.resetDistance()
+        self.runDetailObject = writeRaceDetail()
+        // Start a timer that will run the updateLog function once every second
+        self.logTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLog", userInfo: nil, repeats: true)
+        self.startStopButton.setTitle("Stop", forState: .Normal)
+    }
+    
+    func willStopRace() {
+        let title = NSLocalizedString("Finished Race", comment: "")
+        
+        let message = NSLocalizedString("By pressing OK you will finish the current race and logging will stop.", comment: "")
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        let finishRaceAction = UIAlertAction(title: "Finish Race", style: .Default) { _ in
+            self.bLocationsReceived = false
+            if self.logTimer != nil {
+                self.logTimer!.invalidate()
+                self.logTimer = nil
+            }
+            self.startStopButton.setTitle("Start", forState: .Normal)
+            NSNotificationCenter.defaultCenter().removeObserver(self, name:"locationNotification", object:nil)
+            NSNotificationCenter.defaultCenter().removeObserver(self, name:"altimeterNotification", object:nil)
+            self.myLocationManager?.workInBackground(false)
+            self.myLocationManager = nil
+            self.endTime = NSDate()
+            self.pedoMeter!.stopPedometerUpdates()
+            self.navigationItem.setHidesBackButton(false, animated: true)
+        }
+        
+        alert.addAction(finishRaceAction)
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.presentViewController(alert, animated: true, completion:nil)
+        }
+    }
 
 }
