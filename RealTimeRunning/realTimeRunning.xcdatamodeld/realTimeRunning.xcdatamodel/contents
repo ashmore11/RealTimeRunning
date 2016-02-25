@@ -23,7 +23,7 @@
         <attribute name="organiser" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="startLat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="startLon" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="runDetailToRunData" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RunData" inverseName="runDataToRunDetail" inverseEntity="RunData" syncable="YES"/>
+        <relationship name="runDetailToRunData" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="RunData" inverseName="runDataToRunDetail" inverseEntity="RunData" syncable="YES"/>
     </entity>
     <elements>
         <element name="RunData" positionX="-54" positionY="27" width="128" height="240"/>

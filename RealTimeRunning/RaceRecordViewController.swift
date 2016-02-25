@@ -233,6 +233,7 @@ class RaceRecordViewController: UIViewController {
         if let context = self.managedObjectContext {
             if let runDetail = self.runDetailObject {
                 if let dataObject = NSEntityDescription.insertNewObjectForEntityForName("RunData", inManagedObjectContext: context) as? RunData {
+                    dataObject.timeStamp = NSDate()
                     dataObject.lattitude = self.lat
                     dataObject.longitude = self.lon
                     dataObject.speed = self.speed

@@ -18,6 +18,13 @@
 		C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E71C78983C005AB06F /* SharedLocationManager.swift */; };
 		C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */; };
 		C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647EB1C78A593005AB06F /* MapViewController.swift */; };
+		C4EC42FA1C7F2D5600A458E3 /* raceHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */; };
+		C4EC42FC1C7F2DF200A458E3 /* raceHistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42FB1C7F2DF200A458E3 /* raceHistoryTableViewController.swift */; };
+		C4EC42FE1C7F402D00A458E3 /* raceHistorySummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42FD1C7F402D00A458E3 /* raceHistorySummaryViewController.swift */; };
+		C4EC43001C7F5ABC00A458E3 /* RaceGraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42FF1C7F5ABC00A458E3 /* RaceGraphViewController.swift */; };
+		C4EC43021C7F5C1B00A458E3 /* utilityFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC43011C7F5C1B00A458E3 /* utilityFunctions.swift */; };
+		C4EC43061C7F5FF600A458E3 /* UIGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC43051C7F5FF600A458E3 /* UIGraphView.swift */; };
+		C4EC43081C7F77AD00A458E3 /* settingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC43071C7F77AD00A458E3 /* settingsTableViewController.swift */; };
 		D226B4AA1C73B28400366800 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4A91C73B28400366800 /* AppDelegate.swift */; };
 		D226B4AC1C73B28400366800 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4AB1C73B28400366800 /* HomeViewController.swift */; };
 		D226B4AF1C73B28400366800 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D226B4AD1C73B28400366800 /* Main.storyboard */; };
@@ -68,6 +75,13 @@
 		C48647E71C78983C005AB06F /* SharedLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedLocationManager.swift; sourceTree = "<group>"; };
 		C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceRecordViewController.swift; sourceTree = "<group>"; };
 		C48647EB1C78A593005AB06F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = raceHistoryTableViewCell.swift; sourceTree = "<group>"; };
+		C4EC42FB1C7F2DF200A458E3 /* raceHistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = raceHistoryTableViewController.swift; path = ../raceHistoryTableViewController.swift; sourceTree = "<group>"; };
+		C4EC42FD1C7F402D00A458E3 /* raceHistorySummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = raceHistorySummaryViewController.swift; sourceTree = "<group>"; };
+		C4EC42FF1C7F5ABC00A458E3 /* RaceGraphViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceGraphViewController.swift; sourceTree = "<group>"; };
+		C4EC43011C7F5C1B00A458E3 /* utilityFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = utilityFunctions.swift; sourceTree = "<group>"; };
+		C4EC43051C7F5FF600A458E3 /* UIGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIGraphView.swift; path = ../UIGraphView.swift; sourceTree = "<group>"; };
+		C4EC43071C7F77AD00A458E3 /* settingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = settingsTableViewController.swift; sourceTree = "<group>"; };
 		D226B4A61C73B28400366800 /* RealTimeRunning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealTimeRunning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D226B4A91C73B28400366800 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D226B4AB1C73B28400366800 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -136,10 +150,17 @@
 			children = (
 				D2FA28261C77297A00B3787D /* components */,
 				D226B4A91C73B28400366800 /* AppDelegate.swift */,
+				C4EC43011C7F5C1B00A458E3 /* utilityFunctions.swift */,
 				D226B4AB1C73B28400366800 /* HomeViewController.swift */,
 				C48647EB1C78A593005AB06F /* MapViewController.swift */,
 				C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */,
 				C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */,
+				C4EC42FB1C7F2DF200A458E3 /* raceHistoryTableViewController.swift */,
+				C4EC42FD1C7F402D00A458E3 /* raceHistorySummaryViewController.swift */,
+				C4EC42FF1C7F5ABC00A458E3 /* RaceGraphViewController.swift */,
+				C4EC43051C7F5FF600A458E3 /* UIGraphView.swift */,
+				C4EC43071C7F77AD00A458E3 /* settingsTableViewController.swift */,
+				C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */,
 				C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */,
 				D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */,
 				D2AFE1FD1C75EA06009750A8 /* Race.swift */,
@@ -283,14 +304,17 @@
 			files = (
 				C42C38921C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift in Sources */,
 				C42C383E1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld in Sources */,
+				C4EC42FE1C7F402D00A458E3 /* raceHistorySummaryViewController.swift in Sources */,
 				D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */,
 				C42C38931C7E0F0B0080BFFC /* RunDetail.swift in Sources */,
 				C42C38911C7E0F0B0080BFFC /* RunData.swift in Sources */,
 				C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */,
+				C4EC43081C7F77AD00A458E3 /* settingsTableViewController.swift in Sources */,
 				C42C38891C7E0B660080BFFC /* RawRaceDataTableViewController.swift in Sources */,
 				D2AFE2001C75EBC3009750A8 /* User.swift in Sources */,
 				C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */,
 				C42C38901C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift in Sources */,
+				C4EC43021C7F5C1B00A458E3 /* utilityFunctions.swift in Sources */,
 				C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */,
 				D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */,
 				D226B4AC1C73B28400366800 /* HomeViewController.swift in Sources */,
@@ -298,7 +322,11 @@
 				C42C388B1C7E0D150080BFFC /* RawTableViewCell.swift in Sources */,
 				D2FA28281C77299100B3787D /* Kerning.swift in Sources */,
 				C42C38951C7E13E20080BFFC /* latLonFormats.swift in Sources */,
+				C4EC42FA1C7F2D5600A458E3 /* raceHistoryTableViewCell.swift in Sources */,
 				D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */,
+				C4EC43001C7F5ABC00A458E3 /* RaceGraphViewController.swift in Sources */,
+				C4EC42FC1C7F2DF200A458E3 /* raceHistoryTableViewController.swift in Sources */,
+				C4EC43061C7F5FF600A458E3 /* UIGraphView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

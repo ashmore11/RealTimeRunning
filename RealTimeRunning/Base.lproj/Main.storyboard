@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="EcM-1v-ajb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8CI-1U-HOg">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
@@ -85,7 +85,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Diz-y7-sJV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2361" y="492"/>
+            <point key="canvasLocation" x="3173" y="492"/>
         </scene>
         <!--Race Record View Controller-->
         <scene sceneID="PwH-hw-va2">
@@ -226,7 +226,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GVy-VH-9a5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3145" y="492"/>
+            <point key="canvasLocation" x="3957" y="492"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="II3-OI-Cbj">
@@ -261,7 +261,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xBa-mc-8Nv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3844" y="492"/>
+            <point key="canvasLocation" x="4730" y="492"/>
         </scene>
         <!--Raw Race Data Table View Controller-->
         <scene sceneID="K6u-Ej-CsC">
@@ -325,7 +325,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y0J-cT-kuN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3839" y="1274"/>
+            <point key="canvasLocation" x="4730" y="1274"/>
         </scene>
         <!--PROFILE-->
         <scene sceneID="tne-QT-ifu">
@@ -398,12 +398,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1612" y="492"/>
+            <point key="canvasLocation" x="2424" y="492"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Race-->
         <scene sceneID="7RM-Nj-rSF">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="EcM-1v-ajb" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Race" image="runner" id="a5j-z8-Vw4"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="m8Z-o9-cev">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -416,7 +417,300 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wYz-AB-W3G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1696" y="492"/>
+        </scene>
+        <!--Race History Table View Controller-->
+        <scene sceneID="jNN-ry-8C1">
+            <objects>
+                <tableViewController id="07P-Oy-0hJ" customClass="raceHistoryTableViewController" customModule="RealTimeRunning" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="NY0-MK-I9H">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="raceHistoryCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="raceHistoryCell" id="bg8-R2-TJW" customClass="raceHistoryTableViewCell" customModule="RealTimeRunning" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bg8-R2-TJW" id="m3v-ed-rZ7">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q9S-ce-QbW">
+                                            <rect key="frame" x="22" y="11" width="570" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="raceLabel" destination="q9S-ce-QbW" id="pLc-bz-Bat"/>
+                                    <segue destination="vhX-lO-RXZ" kind="show" identifier="showSummary" id="oYZ-oz-hiZ"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="07P-Oy-0hJ" id="LA2-Qm-FEZ"/>
+                            <outlet property="delegate" destination="07P-Oy-0hJ" id="zoo-fL-HfM"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="wgJ-Xq-KLH"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0SJ-vr-Jff" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2424" y="1274"/>
+        </scene>
+        <!--Race History Summary View Controller-->
+        <scene sceneID="dhZ-4T-Qe9">
+            <objects>
+                <viewController id="vhX-lO-RXZ" customClass="raceHistorySummaryViewController" customModule="RealTimeRunning" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0bt-2v-T2k"/>
+                        <viewControllerLayoutGuide type="bottom" id="fkc-9Q-e9X"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ppx-10-XcT">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1aL-0C-THL">
+                                <rect key="frame" x="20" y="468" width="560" height="47"/>
+                                <color key="backgroundColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                <state key="normal" title="Race Route">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="QNf-cC-SPw" kind="show" identifier="showMap" id="91q-TJ-sWv"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jjs-YQ-E6Z">
+                                <rect key="frame" x="20" y="401" width="560" height="47"/>
+                                <color key="backgroundColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                <state key="normal" title="Raw Data">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="5wx-Rr-LPU" kind="show" identifier="showRaw" id="7L9-EX-Xz4"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJ9-N4-65Q">
+                                <rect key="frame" x="20" y="334" width="560" height="47"/>
+                                <color key="backgroundColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                <state key="normal" title="Graph Speed vs Time">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="vZQ-Qb-z7v" kind="show" identifier="showGraph" id="uZA-1B-JeG"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Race Stats" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cne-Co-5in">
+                                <rect key="frame" x="20" y="72" width="560" height="35"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dN4-wp-R5x">
+                                <rect key="frame" x="20" y="115" width="560" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average Speed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vUN-4R-PHN">
+                                <rect key="frame" x="20" y="143" width="560" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pmf-vz-50g">
+                                <rect key="frame" x="20" y="171.5" width="560" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Steps" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rqZ-rU-YuQ">
+                                <rect key="frame" x="20" y="200" width="560" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="vUN-4R-PHN" secondAttribute="trailing" id="0Qe-LO-0sY"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Jjs-YQ-E6Z" secondAttribute="trailing" id="0dA-va-nOE"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="1aL-0C-THL" secondAttribute="leading" id="6v6-hA-XE6"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="vUN-4R-PHN" secondAttribute="leading" id="9xC-hS-cDM"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="cne-Co-5in" secondAttribute="leading" id="EKl-p7-XO7"/>
+                            <constraint firstItem="pmf-vz-50g" firstAttribute="top" secondItem="vUN-4R-PHN" secondAttribute="bottom" constant="7.5" id="HsZ-RA-4MB"/>
+                            <constraint firstItem="Jjs-YQ-E6Z" firstAttribute="top" secondItem="KJ9-N4-65Q" secondAttribute="bottom" constant="20" id="JJw-Ki-rbK"/>
+                            <constraint firstItem="rqZ-rU-YuQ" firstAttribute="top" secondItem="pmf-vz-50g" secondAttribute="bottom" constant="8" id="Kud-AA-wcp"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="rqZ-rU-YuQ" secondAttribute="trailing" id="NBU-IX-VWH"/>
+                            <constraint firstItem="cne-Co-5in" firstAttribute="top" secondItem="0bt-2v-T2k" secondAttribute="bottom" constant="8" id="StA-ZC-dNZ"/>
+                            <constraint firstItem="fkc-9Q-e9X" firstAttribute="top" secondItem="1aL-0C-THL" secondAttribute="bottom" constant="36" id="TyW-pY-dOB"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="KJ9-N4-65Q" secondAttribute="trailing" id="Z1z-ZN-xLU"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="dN4-wp-R5x" secondAttribute="leading" id="aLd-a6-wgP"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="pmf-vz-50g" secondAttribute="leading" id="cvv-Ji-ZQG"/>
+                            <constraint firstItem="vUN-4R-PHN" firstAttribute="top" secondItem="dN4-wp-R5x" secondAttribute="bottom" constant="8" id="iqH-r0-DsP"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="rqZ-rU-YuQ" secondAttribute="leading" id="ix8-dR-jd0"/>
+                            <constraint firstItem="1aL-0C-THL" firstAttribute="top" secondItem="Jjs-YQ-E6Z" secondAttribute="bottom" constant="20" id="jUa-Fi-Mjg"/>
+                            <constraint firstItem="dN4-wp-R5x" firstAttribute="top" secondItem="cne-Co-5in" secondAttribute="bottom" constant="8" id="nkn-pe-ENF"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="1aL-0C-THL" secondAttribute="trailing" id="pup-eK-HbN"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="Jjs-YQ-E6Z" secondAttribute="leading" id="tsv-Yr-HbE"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="pmf-vz-50g" secondAttribute="trailing" id="wAx-hc-VIM"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cne-Co-5in" secondAttribute="trailing" id="wM5-NX-gkW"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="dN4-wp-R5x" secondAttribute="trailing" id="yhK-Wa-HFV"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="KJ9-N4-65Q" secondAttribute="leading" id="ylI-N4-S4A"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="averageSpeedLabel" destination="vUN-4R-PHN" id="jSh-Hm-hYi"/>
+                        <outlet property="distanceLabel" destination="dN4-wp-R5x" id="Xe9-bP-S6B"/>
+                        <outlet property="timeLabel" destination="pmf-vz-50g" id="Juo-cu-Y6x"/>
+                        <outlet property="totalStepsLabel" destination="rqZ-rU-YuQ" id="736-ti-4cJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X0v-xj-n6f" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3173" y="1274"/>
+        </scene>
+        <!--Race Graph View Controller-->
+        <scene sceneID="sJz-rN-qfy">
+            <objects>
+                <viewController id="vZQ-Qb-z7v" customClass="RaceGraphViewController" customModule="RealTimeRunning" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="mWL-Kk-tB0"/>
+                        <viewControllerLayoutGuide type="bottom" id="Vhk-76-rTN"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ce2-Ct-lf5">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sx0-ej-eLM" customClass="UIGraphView" customModule="RealTimeRunning" customModuleProvider="target">
+                                <rect key="frame" x="40" y="118.5" width="520" height="412.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speed in Kilometers per Hour" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YE9-9G-xBb">
+                                <rect key="frame" x="20" y="94" width="560" height="19.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Vhk-76-rTN" firstAttribute="top" secondItem="Sx0-ej-eLM" secondAttribute="bottom" constant="20" id="2xN-Rb-uK2"/>
+                            <constraint firstItem="Sx0-ej-eLM" firstAttribute="top" secondItem="YE9-9G-xBb" secondAttribute="bottom" constant="5" id="Idj-Co-CxM"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="YE9-9G-xBb" secondAttribute="trailing" id="TSK-ai-ieV"/>
+                            <constraint firstItem="YE9-9G-xBb" firstAttribute="top" secondItem="mWL-Kk-tB0" secondAttribute="bottom" constant="30" id="dSa-G8-D8k"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="YE9-9G-xBb" secondAttribute="leading" id="f0o-kL-zf9"/>
+                            <constraint firstItem="Sx0-ej-eLM" firstAttribute="leading" secondItem="ce2-Ct-lf5" secondAttribute="leadingMargin" constant="20" id="sOz-W4-2Sp"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Sx0-ej-eLM" secondAttribute="trailing" constant="20" id="x3l-ht-9Tu"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="graphView" destination="Sx0-ej-eLM" id="zyo-FE-HZH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Lei-fU-AHl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3910" y="1281"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="ZmI-zY-cxR">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="8CI-1U-HOg" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="fKg-Ol-1zu">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="EcM-1v-ajb" kind="relationship" relationship="viewControllers" id="0Ju-mD-YDq"/>
+                        <segue destination="Nd6-u9-bTx" kind="relationship" relationship="viewControllers" id="Ln0-NP-Q5y"/>
+                        <segue destination="DSn-Cc-tfW" kind="relationship" relationship="viewControllers" id="kg9-wo-iKF"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SPW-wU-uob" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
             <point key="canvasLocation" x="884" y="492"/>
         </scene>
+        <!--Settings Table View Controller-->
+        <scene sceneID="ijA-jh-0uR">
+            <objects>
+                <tableViewController id="jv2-n5-a5S" customClass="settingsTableViewController" customModule="RealTimeRunning" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="H7i-da-fUS">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="settingsMenuCell" id="W5P-iv-J9G">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="W5P-iv-J9G" id="Haz-bE-eld">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="jv2-n5-a5S" id="bxI-LY-zbO"/>
+                            <outlet property="delegate" destination="jv2-n5-a5S" id="0GR-cw-Gh5"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="dXg-bm-CZD"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Gk6-9a-nuX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1696" y="1981"/>
+        </scene>
+        <!--History-->
+        <scene sceneID="9Py-fg-V40">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Nd6-u9-bTx" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="History" image="history" id="pl9-cP-kwC"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6LP-Vx-p3I">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="07P-Oy-0hJ" kind="relationship" relationship="rootViewController" id="jP7-n7-qMG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qTp-Kq-Hlx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1696" y="1274"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="Z4J-6J-eUK">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DSn-Cc-tfW" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Settings" image="gear_24" id="B47-0z-K9A"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Stu-Q3-bsT">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="jv2-n5-a5S" kind="relationship" relationship="rootViewController" id="fCL-Z6-FtP"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oUV-LW-eYO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="884" y="1981"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="gear_24" width="24" height="24"/>
+        <image name="history" width="30" height="30"/>
+        <image name="runner" width="30" height="30"/>
+    </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="91q-TJ-sWv"/>
+        <segue reference="7L9-EX-Xz4"/>
+    </inferredMetricsTieBreakers>
 </document>
