@@ -1,11 +1,13 @@
 PODS:
   - Alamofire (3.2.0)
   - Alamofire-SwiftyJSON (3.0.0)
+  - Socket.IO-Client-Swift (5.4.1)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - Alamofire (~> 3.0)
   - Alamofire-SwiftyJSON (from `https://raw.githubusercontent.com/pdutourgeerling/Alamofire-SwiftyJSON-Podspec/master/Alamofire3-SwiftyJSON.podspec`)
+  - Socket.IO-Client-Swift (~> 5.4.1)
   - SwiftyJSON
 
 EXTERNAL SOURCES:
@@ -20,6 +22,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 4da478599fccddff361205c8929333d7fe18dceb
   Alamofire-SwiftyJSON: 01127779f4bd2d4d5e7b41d8d37488efba0e6185
+  Socket.IO-Client-Swift: ad65f1437dd97c4ac01e2e506386fafc3de2ece1
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
 COCOAPODS: 0.39.0

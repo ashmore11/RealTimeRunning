@@ -12,6 +12,7 @@ import FBSDKLoginKit
 import Alamofire
 import SwiftyJSON
 import Alamofire_SwiftyJSON
+import SocketIOClientSwift
 
 class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     
@@ -143,6 +144,10 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             // if all optionals unwrap OK then we can setup the image
             if let imageURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
+                let directoryURL: NSURL = nsurl
+                let urlString: String = directoryURL.absoluteString
+                
+                profileImageURL = urlString
                 profileImage = image
             }
             
@@ -154,34 +159,33 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             self.user = User(id: id, profileImage: profileImage, name: name, email: email)
             
-            if let imageURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL) {
-                
-                let directoryURL: NSURL = nsurl
-                let urlString: String = directoryURL.absoluteString
-                
-                profileImageURL = urlString
-                
-            }
-            
-            self.createUser(id, name: name, email: email, profileImage: profileImageURL)
-            //self.getUser("12345")
+            self.createUser(id, name: name, email: email, profileImageURL: profileImageURL)
+            self.initSocket()
             
         }
         
     }
     
-    func createUser(fbid: String, name: String, email: String, profileImage: String) {
+    func createUser(fbid: String, name: String, email: String, profileImageURL: String) {
         
         let parameters = [
             "fbid": fbid,
             "name": name,
             "email": email,
-            "profileImage": profileImage
+            "profileImage": profileImageURL
         ]
         
-        Alamofire.request(.PUT, "http://192.168.168.108:3000/api/users/\(fbid)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+        Alamofire.request(.GET, "http://192.168.168.108:3000/api/users/\(fbid)").responseSwiftyJSON({ (request, response, json, error) in
             
-            print(json["message"])
+            if json.count == 0 {
+                
+                Alamofire.request(.POST, "http://192.168.168.108:3000/api/users/", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+                    
+                    print(json["message"])
+                    
+                })
+                
+            }
             
         })
         
@@ -195,7 +199,27 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             backItem.title = "PROFILE"
             navigationItem.backBarButtonItem = backItem
             
+            if let controller = segue.destinationViewController as? RacesTableViewController {
+                
+                controller.user = self.user
+                
+            }
+            
         }
+        
+    }
+    
+    func initSocket() {
+        
+        let socket = SocketIOClient(socketURL: NSURL(string: "http://192.168.168.108:3000")!, options: [.Log(false), .ForcePolling(true)])
+        
+        socket.on("connect") {data, ack in
+        
+            print("socket connected")
+        
+        }
+        
+        socket.connect()
         
     }
 

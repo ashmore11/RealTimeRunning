@@ -13,6 +13,7 @@ class RaceRecordViewController: UIViewController {
     
     // MARK: Properties
     
+    var user: User?
     var race: Race?
     var geoEvents: [CLLocationCoordinate2D] = []
     var lat: Double = 0.0

@@ -46,8 +46,6 @@ class RaceCompetitorsTableViewController: UITableViewController {
             
             if let name = json[0]["name"].string {
                 
-                print(name)
-                
                 cell.nameLabel.text = "\(name)"
                 
             }
