@@ -13,40 +13,19 @@ import Alamofire_SwiftyJSON
 
 class RacesTableViewController: UITableViewController {
     
+    // MARK: Properties
+    
     var races = [Race]()
-    var user: User?
+    var user: User!
         
     override func viewDidLoad() {
+        
         super.viewDidLoad()
 
-        loadRaces()
-    }
-    
-    func loadRaces() {
-        
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        
-        Alamofire.request(.GET, "http://192.168.168.108:3000/api/races").responseSwiftyJSON({ (request, response, json, error) in
-            
-            for (_, value) in json {
-                
-                if let raceId = value["_id"].string, let startTime = value["startTime"].string, let parsedDate = formatter.dateFromString(startTime), let competitors = value["competitors"].array, let distance = value["distance"].int {
-                    
-                    let race = Race(id: raceId, startTime: parsedDate, competitors: competitors, distance: distance)
-                    
-                    self.races.append(race)
-                    
-                }
-                
-            }
-            
-            self.tableView.reloadData()
-            
-        })
+        bindEvents()
+        getTableViewData()
         
     }
-    
 
     // MARK: - Table view data source
 
@@ -88,7 +67,46 @@ class RacesTableViewController: UITableViewController {
         return cell
         
     }
-
+    
+    func bindEvents() {
+        
+        SocketHandler.socket.on("reloadRaceView") {data, ack in
+            
+            print("reloading table view...")
+            
+            self.getTableViewData()
+            
+        }
+        
+    }
+    
+    func getTableViewData() {
+        
+        races = [Race]()
+        
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        
+        Alamofire.request(.GET, "http://192.168.168.108:3000/api/races").responseSwiftyJSON({ (request, response, json, error) in
+            
+            for (_, value) in json {
+                
+                if let raceId = value["_id"].string, let startTime = value["startTime"].string, let parsedDate = formatter.dateFromString(startTime), let competitors = value["competitors"].array, let distance = value["distance"].int {
+                    
+                    let race = Race(id: raceId, startTime: parsedDate, competitors: competitors, distance: distance)
+                    
+                    self.races.append(race)
+                    
+                }
+                
+            }
+            
+            self.tableView.reloadData()
+            
+        })
+        
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         // Get the new view controller using segue.destinationViewController.
@@ -98,7 +116,7 @@ class RacesTableViewController: UITableViewController {
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 
                 let race = races[indexPath.row]
-
+                
                 if let controller = segue.destinationViewController as? RaceRecordViewController {
                     
                     controller.race = race

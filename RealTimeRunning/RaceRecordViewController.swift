@@ -41,7 +41,8 @@ class RaceRecordViewController: UIViewController {
         
         super.viewDidLoad()
         
-        self.checkIfUserIsInRace()
+        checkIfUserIsInRace()
+        bindEvents()
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH:mm"
@@ -94,26 +95,22 @@ class RaceRecordViewController: UIViewController {
     @IBAction func joinButtonPressed(sender: UIButton) {
         
         let parameters = [
-            "raceId": race.id,
-            "userId": user.id
+            "id": race.id
         ]
-        
-        SocketHandler.socket.emit("addOrRemoveUserFromRace", parameters)
-        
-        SocketHandler.socket.on("raceUpdated") {data, ack in
-            
-            print("race updated")
-            
-            // self.tableView.reloadData()
-            
-        }
             
         Alamofire.request(.PUT, "http://192.168.168.108:3000/api/races/\(race.id)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
             
             print(json["message"])
             
+            SocketHandler.socket.emit("raceUpdated")
+            
         })
     
+    }
+    
+    func bindEvents() {
+
+        
     }
     
     func receiveLocationNotification(notification: NSNotification) {

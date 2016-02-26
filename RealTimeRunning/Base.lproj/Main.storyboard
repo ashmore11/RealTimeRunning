@@ -319,29 +319,29 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="161"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8cv-jA-14l">
-                                        <rect key="frame" x="105" y="15" width="390" height="131"/>
+                                        <rect key="frame" x="105" y="15" width="390" height="130"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8fx-M2-f7a">
-                                                <rect key="frame" x="0.0" y="9" width="130" height="113"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8fx-M2-f7a">
+                                                <rect key="frame" x="0.0" y="17" width="130" height="96"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="RANK" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mXM-61-uTc">
-                                                        <rect key="frame" x="47" y="0.0" width="35" height="24"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="RANK" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mXM-61-uTc">
+                                                        <rect key="frame" x="41" y="0.0" width="47" height="20"/>
                                                         <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="17"/>
                                                         <color key="textColor" red="0.65490196079999996" green="0.94117647059999998" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Hf-ny-3eT">
-                                                        <rect key="frame" x="49" y="24" width="31" height="89"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Hf-ny-3eT">
+                                                        <rect key="frame" x="46" y="20" width="37" height="76"/>
                                                         <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="65"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
                                             </stackView>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zUv-X2-KHQ">
-                                                <rect key="frame" x="130" y="0.0" width="130" height="131"/>
+                                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zUv-X2-KHQ">
+                                                <rect key="frame" x="130" y="0.0" width="130" height="130"/>
                                                 <subviews>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ocz-LS-jqQ">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ocz-LS-jqQ">
                                                         <rect key="frame" x="0.0" y="0.0" width="130" height="131"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="130" id="QRh-rq-MtG"/>
@@ -356,17 +356,17 @@
                                                     <constraint firstItem="ocz-LS-jqQ" firstAttribute="top" secondItem="zUv-X2-KHQ" secondAttribute="top" id="cWP-KT-11x"/>
                                                 </constraints>
                                             </view>
-                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dDI-ar-0hJ">
-                                                <rect key="frame" x="260" y="9" width="130" height="113"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dDI-ar-0hJ">
+                                                <rect key="frame" x="260" y="17" width="130" height="96"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="POINTS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ChK-2b-FSk">
-                                                        <rect key="frame" x="42" y="0.0" width="46" height="24"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="POINTS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ChK-2b-FSk">
+                                                        <rect key="frame" x="34" y="0.0" width="62" height="20"/>
                                                         <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="17"/>
                                                         <color key="textColor" red="0.65490196079999996" green="0.94117647059999998" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="319-Kx-n52">
-                                                        <rect key="frame" x="49" y="24" width="32" height="89"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="319-Kx-n52">
+                                                        <rect key="frame" x="47" y="20" width="37" height="76"/>
                                                         <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="65"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
