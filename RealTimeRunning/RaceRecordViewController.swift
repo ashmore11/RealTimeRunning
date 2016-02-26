@@ -41,6 +41,8 @@ class RaceRecordViewController: UIViewController {
         
         super.viewDidLoad()
         
+        self.checkIfUserIsInRace()
+        
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH:mm"
             
@@ -50,7 +52,6 @@ class RaceRecordViewController: UIViewController {
         if race.competitors?.count == 0 {
             
             competitorsButton.enabled = false
-            
             competitorsButton.alpha = 0.2
             
         }
@@ -93,39 +94,26 @@ class RaceRecordViewController: UIViewController {
     @IBAction func joinButtonPressed(sender: UIButton) {
         
         let parameters = [
-            "id": user.id
+            "raceId": race.id,
+            "userId": user.id
         ]
+        
+        SocketHandler.socket.emit("addOrRemoveUserFromRace", parameters)
+        
+        SocketHandler.socket.on("raceUpdated") {data, ack in
+            
+            print("race updated")
+            
+            // self.tableView.reloadData()
+            
+        }
             
         Alamofire.request(.PUT, "http://192.168.168.108:3000/api/races/\(race.id)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
             
-            print(json, error)
+            print(json["message"])
             
         })
-        
-        checkIfUserIsInRace()
     
-    }
-    
-    func checkIfUserIsInRace() {
-        
-        Alamofire.request(.GET, "http://192.168.168.108:3000/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
-            
-            if let arr = json[0]["competitors"].object as? [String] {
-
-                if arr.contains(self.user.id) {
-                    
-                    print("user already in race")
-                    
-                } else {
-                    
-                    print("user not in race")
-                    
-                }
-                
-            }
-            
-        })
-        
     }
     
     func receiveLocationNotification(notification: NSNotification) {
@@ -194,6 +182,24 @@ class RaceRecordViewController: UIViewController {
             }
             
         }
+        
+    }
+    
+    func checkIfUserIsInRace() {
+        
+        Alamofire.request(.GET, "http://192.168.168.108:3000/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
+            
+            if let arr = json[0]["competitors"].object as? [String] {
+                
+                if arr.contains(self.user.id) {
+                    
+                    self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
+                    
+                }
+                
+            }
+            
+        })
         
     }
 

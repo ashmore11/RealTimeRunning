@@ -12,7 +12,6 @@ import FBSDKLoginKit
 import Alamofire
 import SwiftyJSON
 import Alamofire_SwiftyJSON
-import SocketIOClientSwift
 
 class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     
@@ -27,6 +26,14 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        SocketHandler.socket.connect()
+        
+        SocketHandler.socket.on("connect") {data, ack in
+            
+            print("socket connected")
+            
+        }
         
         setupLayout()
         
@@ -160,7 +167,6 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             self.user = User(id: id, profileImage: profileImage, name: name, email: email)
             
             self.createUser(id, name: name, email: email, profileImageURL: profileImageURL)
-            self.initSocket()
             
         }
         
@@ -208,21 +214,6 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         }
         
     }
-    
-    func initSocket() {
-        
-        let socket = SocketIOClient(socketURL: NSURL(string: "http://192.168.168.108:3000")!, options: [.Log(false), .ForcePolling(true)])
-        
-        socket.on("connect") {data, ack in
-        
-            print("socket connected")
-        
-        }
-        
-        socket.connect()
-        
-    }
-
 
 }
 

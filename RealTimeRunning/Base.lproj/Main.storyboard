@@ -137,11 +137,11 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" distribution="fillEqually" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="FMv-jr-Aby">
-                                <rect key="frame" x="20" y="539" width="560" height="32"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="FMv-jr-Aby">
+                                <rect key="frame" x="20" y="548" width="560" height="32"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jeo-pM-Z1J">
-                                        <rect key="frame" x="0.0" y="0.0" width="173" height="32"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="183" height="32"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <state key="normal" title="Join Race">
@@ -152,7 +152,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YNR-kG-hGL">
-                                        <rect key="frame" x="193" y="0.0" width="174" height="32"/>
+                                        <rect key="frame" x="188" y="0.0" width="184" height="32"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <state key="normal" title="Competitors">
@@ -163,7 +163,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VGJ-mG-m2L">
-                                        <rect key="frame" x="387" y="0.0" width="173" height="32"/>
+                                        <rect key="frame" x="377" y="0.0" width="183" height="32"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <state key="normal" title="View Map">
