@@ -16,6 +16,8 @@ import Alamofire_SwiftyJSON
 
 class RaceRecordViewController: UIViewController {
     
+    // MARK: Properties
+    
     var user: User!
     var race: Race!
     var geoEvents:[CLLocationCoordinate2D] = []
@@ -35,7 +37,6 @@ class RaceRecordViewController: UIViewController {
     var raceName:String = ""
     var managedObjectContext:NSManagedObjectContext?
     var bLocationsReceived = false
-
     var activityManager:CMMotionActivityManager?
     var pedoMeter:CMPedometer?
     var stepsTaken:Int = 0
@@ -52,35 +53,10 @@ class RaceRecordViewController: UIViewController {
     @IBOutlet weak var startStopButton: UIButton!
     @IBOutlet weak var raceDistanceLabel: UILabel!
     @IBOutlet weak var raceStartTimeLabel: UILabel!
-    @IBOutlet weak var raceAverageSpeedLabel: UILabel!
     @IBOutlet weak var stepsLabel: UILabel!
     @IBOutlet weak var paceLabel: UILabel!
     @IBOutlet weak var cadenceLabel: UILabel!
-
-    @IBAction func startStopPressed(sender: AnyObject) {
-        if myLocationManager == nil {
-            self.willStartRace()
-        }
-        else {
-            self.willStopRace()
-        }
-    }
-
-    @IBAction func joinButtonPressed(sender: UIButton) {
-
-        let parameters = [
-            "id": race.id
-        ]
-
-        Alamofire.request(.PUT, "http://192.168.168.108:3000/api/races/\(race.id)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
-
-            print(json["message"])
-
-            SocketHandler.socket.emit("raceUpdated")
-
-        })
-
-    }
+    @IBOutlet weak var joinRaceButton: UIButton!
 
     func receiveAltimeterNotification(notification:NSNotification) {
         let userInfo:NSDictionary = notification.userInfo!
@@ -121,6 +97,9 @@ class RaceRecordViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        checkIfUserIsInRace()
+        
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             self.managedObjectContext = delegate.managedObjectContext
         }
@@ -155,6 +134,35 @@ class RaceRecordViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: Actions
+    
+    @IBAction func startStopPressed(sender: AnyObject) {
+        if myLocationManager == nil {
+            self.willStartRace()
+        }
+        else {
+            self.willStopRace()
+        }
+    }
+    
+    @IBAction func joinButtonPressed(sender: UIButton) {
+        
+        let parameters = [
+            "id": user.id
+        ]
+        
+        Alamofire.request(.PUT, "http://192.168.168.108:3000/api/races/\(race.id)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+            
+            print(json["message"])
+            
+            SocketHandler.socket.emit("raceUpdated")
+            
+            self.checkIfUserIsInRace()
+            
+        })
+        
+    }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 
@@ -165,18 +173,6 @@ class RaceRecordViewController: UIViewController {
                 controller.geoEvents = geoEvents
 
             }
-
-        } else if segue.identifier == "raceCompetitors" {
-
-//            let backItem = UIBarButtonItem()
-//            backItem.title = "RACE"
-//            navigationItem.backBarButtonItem = backItem
-//
-//            if let controller = segue.destinationViewController as? RaceCompetitorsTableViewController, let competitors = race?.competitors {
-//
-//                controller.competitors = competitors
-//
-//            }
 
         } else if segue.identifier == "showRaw" {
 
@@ -193,13 +189,19 @@ class RaceRecordViewController: UIViewController {
     func checkIfUserIsInRace() {
 
         Alamofire.request(.GET, "http://192.168.168.108:3000/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
+            
+            print(json[0]["competitors"], self.user.id)
 
             if let arr = json[0]["competitors"].object as? [String] {
 
                 if arr.contains(self.user.id) {
 
-                    //self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
+                    self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
 
+                } else {
+                    
+                    self.joinRaceButton.setTitle("Join Race", forState: .Normal)
+                    
                 }
 
             }
