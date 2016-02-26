@@ -7,29 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		70227BA877C625F16729C51B /* Pods_RealTimeRunning.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99636EE3542FCDCF425BFFC9 /* Pods_RealTimeRunning.framework */; };
+		C42C383E1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */; };
+		C42C38891C7E0B660080BFFC /* RawRaceDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */; };
+		C42C388B1C7E0D150080BFFC /* RawTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */; };
+		C42C38901C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388C1C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift */; };
+		C42C38911C7E0F0B0080BFFC /* RunData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388D1C7E0F0B0080BFFC /* RunData.swift */; };
+		C42C38921C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */; };
+		C42C38931C7E0F0B0080BFFC /* RunDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */; };
+		C42C38951C7E13E20080BFFC /* latLonFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C38941C7E13E20080BFFC /* latLonFormats.swift */; };
 		C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E71C78983C005AB06F /* SharedLocationManager.swift */; };
 		C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */; };
 		C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647EB1C78A593005AB06F /* MapViewController.swift */; };
+		C4EC42FA1C7F2D5600A458E3 /* raceHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */; };
+		C4EC42FC1C7F2DF200A458E3 /* raceHistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42FB1C7F2DF200A458E3 /* raceHistoryTableViewController.swift */; };
+		C4EC42FE1C7F402D00A458E3 /* raceHistorySummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42FD1C7F402D00A458E3 /* raceHistorySummaryViewController.swift */; };
+		C4EC43001C7F5ABC00A458E3 /* RaceGraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42FF1C7F5ABC00A458E3 /* RaceGraphViewController.swift */; };
+		C4EC43021C7F5C1B00A458E3 /* utilityFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC43011C7F5C1B00A458E3 /* utilityFunctions.swift */; };
+		C4EC43061C7F5FF600A458E3 /* UIGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC43051C7F5FF600A458E3 /* UIGraphView.swift */; };
+		C4EC43081C7F77AD00A458E3 /* settingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC43071C7F77AD00A458E3 /* settingsTableViewController.swift */; };
 		D226B4AA1C73B28400366800 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4A91C73B28400366800 /* AppDelegate.swift */; };
 		D226B4AC1C73B28400366800 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4AB1C73B28400366800 /* HomeViewController.swift */; };
 		D226B4AF1C73B28400366800 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D226B4AD1C73B28400366800 /* Main.storyboard */; };
 		D226B4B11C73B28400366800 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D226B4B01C73B28400366800 /* Assets.xcassets */; };
 		D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D226B4B21C73B28400366800 /* LaunchScreen.storyboard */; };
 		D226B4BF1C73B28400366800 /* RealTimeRunningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4BE1C73B28400366800 /* RealTimeRunningTests.swift */; };
-		D235C3331C7DF70900893BB6 /* RaceCompetitorsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235C3321C7DF70900893BB6 /* RaceCompetitorsTableViewController.swift */; };
-		D235C33A1C7E055200893BB6 /* RaceCompetitorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235C3381C7E055200893BB6 /* RaceCompetitorTableViewCell.swift */; };
-		D235C33D1C7F75AC00893BB6 /* SocketHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235C33C1C7F75AC00893BB6 /* SocketHandler.swift */; };
 		D2830BD91C73D52B00B1B1A8 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */; };
 		D2830BDB1C73D53500B1B1A8 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */; };
 		D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FD1C75EA06009750A8 /* Race.swift */; };
 		D2AFE2001C75EBC3009750A8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FF1C75EBC3009750A8 /* User.swift */; };
 		D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */; };
 		D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */; };
-		D2FA282E1C777DA000B3787D /* Oswald-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2FA282A1C777DA000B3787D /* Oswald-ExtraLight.ttf */; };
-		D2FA282F1C777DA000B3787D /* Oswald-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2FA282B1C777DA000B3787D /* Oswald-Light.ttf */; };
-		D2FA28301C777DA000B3787D /* Oswald-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2FA282C1C777DA000B3787D /* Oswald-Medium.ttf */; };
-		D2FA28311C777DA000B3787D /* Oswald-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2FA282D1C777DA000B3787D /* Oswald-Regular.ttf */; };
+		D2FA28281C77299100B3787D /* Kerning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FA28271C77299100B3787D /* Kerning.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,13 +50,38 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		C4FA10471C7CDB7400C390B3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		99636EE3542FCDCF425BFFC9 /* Pods_RealTimeRunning.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealTimeRunning.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9B134DBB8DBD351336CE9B7D /* Pods-RealTimeRunning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealTimeRunning.release.xcconfig"; path = "Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning.release.xcconfig"; sourceTree = "<group>"; };
-		A642D91EC220FA15CE7E4CD6 /* Pods-RealTimeRunning.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealTimeRunning.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning.debug.xcconfig"; sourceTree = "<group>"; };
+		C42C383D1C7DC3C70080BFFC /* realTimeRunning.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = realTimeRunning.xcdatamodel; sourceTree = "<group>"; };
+		C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawRaceDataTableViewController.swift; sourceTree = "<group>"; };
+		C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawTableViewCell.swift; sourceTree = "<group>"; };
+		C42C388C1C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RunData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C42C388D1C7E0F0B0080BFFC /* RunData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunData.swift; sourceTree = "<group>"; };
+		C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RunDetail+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunDetail.swift; sourceTree = "<group>"; };
+		C42C38941C7E13E20080BFFC /* latLonFormats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = latLonFormats.swift; sourceTree = "<group>"; };
 		C48647E71C78983C005AB06F /* SharedLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedLocationManager.swift; sourceTree = "<group>"; };
 		C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceRecordViewController.swift; sourceTree = "<group>"; };
 		C48647EB1C78A593005AB06F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = raceHistoryTableViewCell.swift; sourceTree = "<group>"; };
+		C4EC42FB1C7F2DF200A458E3 /* raceHistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = raceHistoryTableViewController.swift; path = ../raceHistoryTableViewController.swift; sourceTree = "<group>"; };
+		C4EC42FD1C7F402D00A458E3 /* raceHistorySummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = raceHistorySummaryViewController.swift; sourceTree = "<group>"; };
+		C4EC42FF1C7F5ABC00A458E3 /* RaceGraphViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceGraphViewController.swift; sourceTree = "<group>"; };
+		C4EC43011C7F5C1B00A458E3 /* utilityFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = utilityFunctions.swift; sourceTree = "<group>"; };
+		C4EC43051C7F5FF600A458E3 /* UIGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIGraphView.swift; path = ../UIGraphView.swift; sourceTree = "<group>"; };
+		C4EC43071C7F77AD00A458E3 /* settingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = settingsTableViewController.swift; sourceTree = "<group>"; };
 		D226B4A61C73B28400366800 /* RealTimeRunning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealTimeRunning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D226B4A91C73B28400366800 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D226B4AB1C73B28400366800 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -59,19 +92,13 @@
 		D226B4BA1C73B28400366800 /* RealTimeRunningTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealTimeRunningTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D226B4BE1C73B28400366800 /* RealTimeRunningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealTimeRunningTests.swift; sourceTree = "<group>"; };
 		D226B4C01C73B28400366800 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D235C3321C7DF70900893BB6 /* RaceCompetitorsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceCompetitorsTableViewController.swift; sourceTree = "<group>"; };
-		D235C3381C7E055200893BB6 /* RaceCompetitorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceCompetitorTableViewCell.swift; sourceTree = "<group>"; };
-		D235C33C1C7F75AC00893BB6 /* SocketHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketHandler.swift; sourceTree = "<group>"; };
 		D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		D2AFE1FD1C75EA06009750A8 /* Race.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Race.swift; sourceTree = "<group>"; };
 		D2AFE1FF1C75EBC3009750A8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RacesTableViewController.swift; sourceTree = "<group>"; };
 		D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceTableViewCell.swift; sourceTree = "<group>"; };
-		D2FA282A1C777DA000B3787D /* Oswald-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-ExtraLight.ttf"; path = "../../../../Downloads/oswald/Oswald-ExtraLight.ttf"; sourceTree = "<group>"; };
-		D2FA282B1C777DA000B3787D /* Oswald-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-Light.ttf"; path = "../../../../Downloads/oswald/Oswald-Light.ttf"; sourceTree = "<group>"; };
-		D2FA282C1C777DA000B3787D /* Oswald-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-Medium.ttf"; path = "../../../../Downloads/oswald/Oswald-Medium.ttf"; sourceTree = "<group>"; };
-		D2FA282D1C777DA000B3787D /* Oswald-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-Regular.ttf"; path = "../../../../Downloads/oswald/Oswald-Regular.ttf"; sourceTree = "<group>"; };
+		D2FA28271C77299100B3787D /* Kerning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kerning.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +108,6 @@
 			files = (
 				D2830BDB1C73D53500B1B1A8 /* FBSDKLoginKit.framework in Frameworks */,
 				D2830BD91C73D52B00B1B1A8 /* FBSDKCoreKit.framework in Frameworks */,
-				70227BA877C625F16729C51B /* Pods_RealTimeRunning.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,33 +121,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1F4821FED03F9C980E035B05 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				99636EE3542FCDCF425BFFC9 /* Pods_RealTimeRunning.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		32B99476868CABE42C0489F4 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				A642D91EC220FA15CE7E4CD6 /* Pods-RealTimeRunning.debug.xcconfig */,
-				9B134DBB8DBD351336CE9B7D /* Pods-RealTimeRunning.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		D226B49D1C73B28400366800 = {
 			isa = PBXGroup;
 			children = (
+				C42C388C1C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift */,
+				C42C388D1C7E0F0B0080BFFC /* RunData.swift */,
+				C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */,
+				C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */,
 				D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */,
 				D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */,
 				D226B4A81C73B28400366800 /* RealTimeRunning */,
 				D226B4BD1C73B28400366800 /* RealTimeRunningTests */,
 				D226B4A71C73B28400366800 /* Products */,
-				32B99476868CABE42C0489F4 /* Pods */,
-				1F4821FED03F9C980E035B05 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -137,23 +148,31 @@
 		D226B4A81C73B28400366800 /* RealTimeRunning */ = {
 			isa = PBXGroup;
 			children = (
-				D2FA28291C777CE100B3787D /* Resources */,
+				D2FA28261C77297A00B3787D /* components */,
 				D226B4A91C73B28400366800 /* AppDelegate.swift */,
+				C4EC43011C7F5C1B00A458E3 /* utilityFunctions.swift */,
 				D226B4AB1C73B28400366800 /* HomeViewController.swift */,
-				D226B4AD1C73B28400366800 /* Main.storyboard */,
 				C48647EB1C78A593005AB06F /* MapViewController.swift */,
 				C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */,
+				C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */,
+				C4EC42FB1C7F2DF200A458E3 /* raceHistoryTableViewController.swift */,
+				C4EC42FD1C7F402D00A458E3 /* raceHistorySummaryViewController.swift */,
+				C4EC42FF1C7F5ABC00A458E3 /* RaceGraphViewController.swift */,
+				C4EC43051C7F5FF600A458E3 /* UIGraphView.swift */,
+				C4EC43071C7F77AD00A458E3 /* settingsTableViewController.swift */,
+				C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */,
+				C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */,
 				D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */,
-				D226B4B01C73B28400366800 /* Assets.xcassets */,
-				D226B4B21C73B28400366800 /* LaunchScreen.storyboard */,
-				D226B4B51C73B28400366800 /* Info.plist */,
 				D2AFE1FD1C75EA06009750A8 /* Race.swift */,
 				D2AFE1FF1C75EBC3009750A8 /* User.swift */,
 				D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */,
-				D235C33C1C7F75AC00893BB6 /* SocketHandler.swift */,
 				C48647E71C78983C005AB06F /* SharedLocationManager.swift */,
-				D235C3321C7DF70900893BB6 /* RaceCompetitorsTableViewController.swift */,
-				D235C3381C7E055200893BB6 /* RaceCompetitorTableViewCell.swift */,
+				C42C38941C7E13E20080BFFC /* latLonFormats.swift */,
+				D226B4B01C73B28400366800 /* Assets.xcassets */,
+				D226B4AD1C73B28400366800 /* Main.storyboard */,
+				D226B4B21C73B28400366800 /* LaunchScreen.storyboard */,
+				C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */,
+				D226B4B51C73B28400366800 /* Info.plist */,
 			);
 			path = RealTimeRunning;
 			sourceTree = "<group>";
@@ -167,15 +186,12 @@
 			path = RealTimeRunningTests;
 			sourceTree = "<group>";
 		};
-		D2FA28291C777CE100B3787D /* Resources */ = {
+		D2FA28261C77297A00B3787D /* components */ = {
 			isa = PBXGroup;
 			children = (
-				D2FA282A1C777DA000B3787D /* Oswald-ExtraLight.ttf */,
-				D2FA282B1C777DA000B3787D /* Oswald-Light.ttf */,
-				D2FA282C1C777DA000B3787D /* Oswald-Medium.ttf */,
-				D2FA282D1C777DA000B3787D /* Oswald-Regular.ttf */,
+				D2FA28271C77299100B3787D /* Kerning.swift */,
 			);
-			name = Resources;
+			name = components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,12 +201,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D226B4C31C73B28400366800 /* Build configuration list for PBXNativeTarget "RealTimeRunning" */;
 			buildPhases = (
-				7A3A1B16A67B109E0F27665F /* Check Pods Manifest.lock */,
 				D226B4A21C73B28400366800 /* Sources */,
 				D226B4A31C73B28400366800 /* Frameworks */,
 				D226B4A41C73B28400366800 /* Resources */,
-				B911FAD5D9A598BFE8DE3307 /* Embed Pods Frameworks */,
-				AD3BB1D7DE8988F61FD0AD35 /* Copy Pods Resources */,
+				C4FA10471C7CDB7400C390B3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -231,6 +245,7 @@
 				TargetAttributes = {
 					D226B4A51C73B28400366800 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = TM5JB8724P;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -268,12 +283,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */,
-				D2FA282E1C777DA000B3787D /* Oswald-ExtraLight.ttf in Resources */,
 				D226B4B11C73B28400366800 /* Assets.xcassets in Resources */,
-				D2FA28301C777DA000B3787D /* Oswald-Medium.ttf in Resources */,
-				D2FA282F1C777DA000B3787D /* Oswald-Light.ttf in Resources */,
 				D226B4AF1C73B28400366800 /* Main.storyboard in Resources */,
-				D2FA28311C777DA000B3787D /* Oswald-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,71 +297,36 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		7A3A1B16A67B109E0F27665F /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		AD3BB1D7DE8988F61FD0AD35 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B911FAD5D9A598BFE8DE3307 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		D226B4A21C73B28400366800 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C42C38921C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift in Sources */,
+				C42C383E1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld in Sources */,
+				C4EC42FE1C7F402D00A458E3 /* raceHistorySummaryViewController.swift in Sources */,
 				D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */,
+				C42C38931C7E0F0B0080BFFC /* RunDetail.swift in Sources */,
+				C42C38911C7E0F0B0080BFFC /* RunData.swift in Sources */,
 				C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */,
+				C4EC43081C7F77AD00A458E3 /* settingsTableViewController.swift in Sources */,
+				C42C38891C7E0B660080BFFC /* RawRaceDataTableViewController.swift in Sources */,
 				D2AFE2001C75EBC3009750A8 /* User.swift in Sources */,
 				C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */,
+				C42C38901C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift in Sources */,
+				C4EC43021C7F5C1B00A458E3 /* utilityFunctions.swift in Sources */,
 				C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */,
 				D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */,
-				D235C3331C7DF70900893BB6 /* RaceCompetitorsTableViewController.swift in Sources */,
 				D226B4AC1C73B28400366800 /* HomeViewController.swift in Sources */,
 				D226B4AA1C73B28400366800 /* AppDelegate.swift in Sources */,
-				D235C33D1C7F75AC00893BB6 /* SocketHandler.swift in Sources */,
-				D235C33A1C7E055200893BB6 /* RaceCompetitorTableViewCell.swift in Sources */,
+				C42C388B1C7E0D150080BFFC /* RawTableViewCell.swift in Sources */,
+				D2FA28281C77299100B3787D /* Kerning.swift in Sources */,
+				C42C38951C7E13E20080BFFC /* latLonFormats.swift in Sources */,
+				C4EC42FA1C7F2D5600A458E3 /* raceHistoryTableViewCell.swift in Sources */,
 				D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */,
+				C4EC43001C7F5ABC00A458E3 /* RaceGraphViewController.swift in Sources */,
+				C4EC42FC1C7F2DF200A458E3 /* raceHistoryTableViewController.swift in Sources */,
+				C4EC43061C7F5FF600A458E3 /* UIGraphView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +385,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -454,6 +431,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -477,9 +455,10 @@
 		};
 		D226B4C41C73B28400366800 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A642D91EC220FA15CE7E4CD6 /* Pods-RealTimeRunning.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -489,15 +468,17 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.scottashmore.RealTimeRunning;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 			};
 			name = Debug;
 		};
 		D226B4C51C73B28400366800 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9B134DBB8DBD351336CE9B7D /* Pods-RealTimeRunning.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -507,6 +488,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.scottashmore.RealTimeRunning;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 			};
 			name = Release;
@@ -566,6 +548,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C42C383D1C7DC3C70080BFFC /* realTimeRunning.xcdatamodel */,
+			);
+			currentVersion = C42C383D1C7DC3C70080BFFC /* realTimeRunning.xcdatamodel */;
+			path = realTimeRunning.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D226B49E1C73B28400366800 /* Project object */;
 }

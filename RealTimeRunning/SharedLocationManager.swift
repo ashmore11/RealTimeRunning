@@ -14,13 +14,13 @@
 // This class conformas to the Sigleton pattern so only one instance is created for the app
 
 
-// To use GPS in any class in your app just added the following lines
+// To use GPS in any class in your app just add the following lines
 
 // myLocationManager = SharedLocationManager.sharedInstance
 // NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
 
 
-/* and to get the location data add this function
+/* To get the location data into your controller add this function
 
 func receiveLocationNotification(notification:NSNotification) {
     let userInfo:NSDictionary = notification.userInfo!
@@ -37,7 +37,7 @@ func receiveLocationNotification(notification:NSNotification) {
         print("lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration)")
     }
     if let hdr = newHeading {
-        let heading = hdr.magneticHeading;
+        let heading = hdr.magneticHeading
         print("Heading: \(self.heading)")
     }
 }
@@ -63,7 +63,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     var distanceTravelled = 0.0
     var startTime:NSDate?
     var avgSpeedQueue:[Double] = []
-    let queueSize = 20
+    let queueSize = 20 // Tthe stable speed will return the average of the last 20 speed readings
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
             manager.startUpdatingLocation()
@@ -80,28 +80,26 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         
         self.locationManager = CLLocationManager()
         if let lm = self.locationManager {
-            lm.desiredAccuracy = kCLLocationAccuracyBest;
+            lm.desiredAccuracy = kCLLocationAccuracyBest
             lm.activityType    = .OtherNavigation
-            lm.distanceFilter  = kCLDistanceFilterNone;
-            lm.delegate        = self;
+            lm.distanceFilter  = kCLDistanceFilterNone
+            lm.delegate        = self
             lm.requestAlwaysAuthorization()
-            lm.allowsBackgroundLocationUpdates = true;
+            lm.allowsBackgroundLocationUpdates = true
             
             // Setup & Start Compass service
-            lm.headingFilter      = 1.0;
-            lm.headingOrientation = .Portrait
-            lm.startUpdatingHeading()
+            //lm.headingFilter      = 1.0
+            //lm.headingOrientation = .Portrait
+            //lm.startUpdatingHeading()
             
             // If the hardware has an barometer the setup and use it
-            if((NSClassFromString("CMAltimeter")) != nil) {
-                if(CMAltimeter.isRelativeAltitudeAvailable() == true) {
+            if NSClassFromString("CMAltimeter") != nil {
+                if CMAltimeter.isRelativeAltitudeAvailable() == true {
                     self.altitudeManager = CMAltimeter()
-                    self.bAltitudeAvailable = true;
+                    self.bAltitudeAvailable = true
                     self.altitudeManager!.startRelativeAltitudeUpdatesToQueue(NSOperationQueue.mainQueue(), withHandler: { data, error in
-                        if (error == nil) {
+                        if error == nil {
                             if let altimeterData:CMAltitudeData = data {
-                                // print("Relative Altitude: \(altimeterData.relativeAltitude)")
-                                // print("Pressure: \(altimeterData.pressure)")
                                 let altitude:CMAltitudeData = altimeterData.copy() as! CMAltitudeData
                                 NSNotificationCenter.defaultCenter().postNotificationName("altimeterNotification", object:nil, userInfo:["Altimeter":altitude])
                             }
@@ -112,8 +110,8 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
             // Listen for background notifications
             NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveBackgroundNotification:", name:"backgroundNotification", object:nil)
         }
-        self.bKeepAlive = false;
-        self.bAltitudeAvailable = false;
+        self.bKeepAlive = false
+        self.bAltitudeAvailable = false
     }
     
     // The GPS Chip has data to give us
@@ -121,19 +119,24 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         if let currentLocation = locations.last {
             let eventDate = currentLocation.timestamp
             let howRecent = eventDate.timeIntervalSinceNow
+            // if the reading from the GPS is older than 10 Seconds
+            // then I will discard it
             if fabs(howRecent) > 10.0 {
                 return
             }
+            // Calculate the distance travelled since the last reading
             if self.savedLocation != nil {
                 self.distanceTravelled += currentLocation.distanceFromLocation(self.savedLocation!)
             }
-
+            // save the current reading for the above distance travelled calculation
             self.savedLocation = locations.last
+            // Need to keep an array of the last number of speed readings so
+            // we can return the average speed
             avgSpeedQueue.append(currentLocation.speed)
             if avgSpeedQueue.count > queueSize {
                 avgSpeedQueue.removeAtIndex(0)
             }
-            
+            // Post the new location data out to all listners
             dispatch_async(dispatch_get_main_queue()) {
                 NSNotificationCenter.defaultCenter().postNotificationName("locationNotification", object:nil, userInfo:["Location":currentLocation.copy()])
             }
@@ -141,7 +144,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     }
     
     // The Compass has data to give us
-    func locationManager(manager: CLLocationManager, didUpdateHeading heading: CLHeading) {
+    func locationManager(manager:CLLocationManager, didUpdateHeading heading:CLHeading) {
         self.currentHeading = heading.copy() as? CLHeading
         dispatch_async(dispatch_get_main_queue()) {
             if let newHeading:CLHeading = heading.copy() as? CLHeading {
@@ -151,6 +154,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
                 if fabs(howRecent) > 2.0 {
                     return
                 }
+                // I calculate and keep the current variation if the user requires it
                 self.currentVariation = newHeading.magneticHeading - newHeading.trueHeading
                 if(newHeading.headingAccuracy >= 0) {
                     NSNotificationCenter.defaultCenter().postNotificationName("locationNotification", object:nil, userInfo:["Heading":newHeading])
@@ -160,7 +164,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     }
 
     // Return true if compass calibration required
-    func locationManagerShouldDisplayHeadingCalibration(manager: CLLocationManager) -> Bool {
+    func locationManagerShouldDisplayHeadingCalibration(manager:CLLocationManager) ->Bool {
         if self.currentHeading == nil {
             return true // Got nothing, We can assume we have to calibrate.
         }
@@ -174,7 +178,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     }
     
     // This delegate method is invoked when the location managed encounters an error condition.
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(manager:CLLocationManager, didFailWithError error:NSError) {
         NSNotificationCenter.defaultCenter().postNotificationName("locationNotification", object:nil, userInfo:["Error":error])
         if error.code == CLError.Denied.rawValue {
             // This error indicates that the user has denied the application's request to use location services.
@@ -196,7 +200,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         return self.savedLocation
     }
     
-    func workInBackground(bBackground: Bool) {
+    func workInBackground(bBackground:Bool) {
         self.bKeepAlive = bBackground
     }
     
@@ -205,11 +209,11 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         self.distanceTravelled = 0.0
     }
  
-    func getDistance() -> Double {
+    func getDistance() ->Double {
         return self.distanceTravelled
     }
 
-    func getDuration() -> String {
+    func getDuration() ->String {
         if let sTime = self.startTime {
             let diffDateComponents = NSCalendar.currentCalendar().components([.Hour, .Minute, .Second], fromDate: sTime, toDate: NSDate(), options: NSCalendarOptions.init(rawValue: 0))
             return String(format: "%02d:%02d:%02d", diffDateComponents.hour,diffDateComponents.minute,diffDateComponents.second)
@@ -217,7 +221,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         return ""
     }
 
-    func getDurationDouble() -> Double {
+    func getDurationDouble() ->Double {
         if let sTime = self.startTime {
             let diffDateComponents = NSCalendar.currentCalendar().components([.Hour, .Minute, .Second], fromDate: sTime, toDate: NSDate(), options: NSCalendarOptions.init(rawValue: 0))
             let duration =  Double(diffDateComponents.hour) + (Double(diffDateComponents.minute) / 60.0) + (Double(diffDateComponents.second) / 3600.0)
@@ -226,17 +230,17 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         return 0.0
     }
     
-    func getStableSpeed() -> Double {
+    func getStableSpeed() ->Double {
         if avgSpeedQueue.count == 0 {
             return 0.0
         }
         return avgSpeedQueue.reduce(0) { $0 + $1 } / Double(avgSpeedQueue.count)
     }
 
-    func receiveBackgroundNotification(notification: NSNotification) {
+    func receiveBackgroundNotification(notification:NSNotification) {
         //let userInfo:NSDictionary = notification.userInfo!
-        if let userInfo:[String: String] = notification.userInfo as? [String: String] {
-            if let backgroundMode: String = userInfo["BackGroundMode"] {
+        if let userInfo:[String:String] = notification.userInfo as? [String:String] {
+            if let backgroundMode:String = userInfo["BackGroundMode"] {
                 //let backgroundMode:String = userInfo.objectForKey("BackGroundMode") as! String
                 
                 if backgroundMode == "BackGround" {
