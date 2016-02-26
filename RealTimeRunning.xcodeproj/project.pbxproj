@@ -38,7 +38,7 @@
 		D2AFE2001C75EBC3009750A8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FF1C75EBC3009750A8 /* User.swift */; };
 		D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */; };
 		D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */; };
-		D2FA28281C77299100B3787D /* Kerning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FA28271C77299100B3787D /* Kerning.swift */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,7 +192,7 @@
 		D2FA28261C77297A00B3787D /* components */ = {
 			isa = PBXGroup;
 			children = (
-				D2FA28271C77299100B3787D /* Kerning.swift */,
+
 			);
 			name = components;
 			sourceTree = "<group>";
@@ -323,7 +323,7 @@
 				D226B4AC1C73B28400366800 /* HomeViewController.swift in Sources */,
 				D226B4AA1C73B28400366800 /* AppDelegate.swift in Sources */,
 				C42C388B1C7E0D150080BFFC /* RawTableViewCell.swift in Sources */,
-				D2FA28281C77299100B3787D /* Kerning.swift in Sources */,
+
 				C42C38951C7E13E20080BFFC /* latLonFormats.swift in Sources */,
 				C4EC42FA1C7F2D5600A458E3 /* raceHistoryTableViewCell.swift in Sources */,
 				D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */,
