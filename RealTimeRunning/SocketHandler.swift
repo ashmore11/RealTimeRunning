@@ -1,12 +1,11 @@
 //
-//  SocketHandler.swift
+//  File.swift
 //  RealTimeRunning
 //
-//  Created by Scott Ashmore on 25/02/2016.
+//  Created by Scott Ashmore on 26/02/2016.
 //  Copyright © 2016 Scott Ashmore. All rights reserved.
 //
 
-import Foundation
 import SocketIOClientSwift
 
 struct SocketHandler {

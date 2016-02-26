@@ -31,7 +31,7 @@
 		D226B4B11C73B28400366800 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D226B4B01C73B28400366800 /* Assets.xcassets */; };
 		D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D226B4B21C73B28400366800 /* LaunchScreen.storyboard */; };
 		D226B4BF1C73B28400366800 /* RealTimeRunningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4BE1C73B28400366800 /* RealTimeRunningTests.swift */; };
-		D235C33F1C8098EA00893BB6 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235C33E1C8098EA00893BB6 /* File.swift */; };
+		D235C33F1C8098EA00893BB6 /* SocketHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235C33E1C8098EA00893BB6 /* SocketHandler.swift */; };
 		D235C3451C809BAA00893BB6 /* Oswald-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D235C3411C809BAA00893BB6 /* Oswald-ExtraLight.ttf */; };
 		D235C3461C809BAA00893BB6 /* Oswald-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D235C3421C809BAA00893BB6 /* Oswald-Light.ttf */; };
 		D235C3471C809BAA00893BB6 /* Oswald-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D235C3431C809BAA00893BB6 /* Oswald-Medium.ttf */; };
@@ -96,7 +96,7 @@
 		D226B4BA1C73B28400366800 /* RealTimeRunningTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealTimeRunningTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D226B4BE1C73B28400366800 /* RealTimeRunningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealTimeRunningTests.swift; sourceTree = "<group>"; };
 		D226B4C01C73B28400366800 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D235C33E1C8098EA00893BB6 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		D235C33E1C8098EA00893BB6 /* SocketHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketHandler.swift; sourceTree = "<group>"; };
 		D235C3411C809BAA00893BB6 /* Oswald-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-ExtraLight.ttf"; path = "../../../../Downloads/oswald/Oswald-ExtraLight.ttf"; sourceTree = "<group>"; };
 		D235C3421C809BAA00893BB6 /* Oswald-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-Light.ttf"; path = "../../../../Downloads/oswald/Oswald-Light.ttf"; sourceTree = "<group>"; };
 		D235C3431C809BAA00893BB6 /* Oswald-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Oswald-Medium.ttf"; path = "../../../../Downloads/oswald/Oswald-Medium.ttf"; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 				D226B4B21C73B28400366800 /* LaunchScreen.storyboard */,
 				C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */,
 				D226B4B51C73B28400366800 /* Info.plist */,
-				D235C33E1C8098EA00893BB6 /* File.swift */,
+				D235C33E1C8098EA00893BB6 /* SocketHandler.swift */,
 			);
 			path = RealTimeRunning;
 			sourceTree = "<group>";
@@ -340,7 +340,7 @@
 				C4EC42FA1C7F2D5600A458E3 /* raceHistoryTableViewCell.swift in Sources */,
 				D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */,
 				C4EC43001C7F5ABC00A458E3 /* RaceGraphViewController.swift in Sources */,
-				D235C33F1C8098EA00893BB6 /* File.swift in Sources */,
+				D235C33F1C8098EA00893BB6 /* SocketHandler.swift in Sources */,
 				C4EC42FC1C7F2DF200A458E3 /* raceHistoryTableViewController.swift in Sources */,
 				C4EC43061C7F5FF600A458E3 /* UIGraphView.swift in Sources */,
 			);
