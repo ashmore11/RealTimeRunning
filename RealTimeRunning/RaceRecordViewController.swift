@@ -189,8 +189,6 @@ class RaceRecordViewController: UIViewController {
     func checkIfUserIsInRace() {
 
         Alamofire.request(.GET, "http://192.168.168.108:3000/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
-            
-            print(json[0]["competitors"], self.user.id)
 
             if let arr = json[0]["competitors"].object as? [String] {
 
