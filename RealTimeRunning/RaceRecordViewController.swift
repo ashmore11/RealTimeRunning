@@ -15,7 +15,9 @@ import SwiftyJSON
 import Alamofire_SwiftyJSON
 
 class RaceRecordViewController: UIViewController {
-    var race:Race?
+    
+    var user: User!
+    var race: Race!
     var geoEvents:[CLLocationCoordinate2D] = []
     var lat:Double = 0.0
     var lon:Double = 0.0
@@ -166,15 +168,15 @@ class RaceRecordViewController: UIViewController {
 
         } else if segue.identifier == "raceCompetitors" {
 
-            let backItem = UIBarButtonItem()
-            backItem.title = "RACE"
-            navigationItem.backBarButtonItem = backItem
-
-            if let controller = segue.destinationViewController as? RaceCompetitorsTableViewController, let competitors = race?.competitors {
-
-                controller.competitors = competitors
-
-            }
+//            let backItem = UIBarButtonItem()
+//            backItem.title = "RACE"
+//            navigationItem.backBarButtonItem = backItem
+//
+//            if let controller = segue.destinationViewController as? RaceCompetitorsTableViewController, let competitors = race?.competitors {
+//
+//                controller.competitors = competitors
+//
+//            }
 
         } else if segue.identifier == "showRaw" {
 
@@ -196,7 +198,7 @@ class RaceRecordViewController: UIViewController {
 
                 if arr.contains(self.user.id) {
 
-                    self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
+                    //self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
 
                 }
 

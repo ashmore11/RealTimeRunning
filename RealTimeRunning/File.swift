@@ -6,4 +6,10 @@
 //  Copyright © 2016 Scott Ashmore. All rights reserved.
 //
 
-import Foundation
+import SocketIOClientSwift
+
+struct SocketHandler {
+    
+    static let socket = SocketIOClient(socketURL: NSURL(string: "http://localhost:8080")!)
+    
+}
