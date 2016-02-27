@@ -152,7 +152,7 @@ class RaceRecordViewController: UIViewController {
             "id": user.id
         ]
         
-        Alamofire.request(.PUT, "http://192.168.168.108:3000/api/races/\(race.id)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+        Alamofire.request(.PUT, "http://real-time-running.herokuapp.com/api/races/\(race.id)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
             
             print(json["message"])
             
@@ -188,7 +188,7 @@ class RaceRecordViewController: UIViewController {
 
     func checkIfUserIsInRace() {
 
-        Alamofire.request(.GET, "http://192.168.168.108:3000/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
+        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
 
             if let arr = json[0]["competitors"].object as? [String] {
 

@@ -87,7 +87,7 @@ class RacesTableViewController: UITableViewController {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         
-        Alamofire.request(.GET, "http://192.168.168.108:3000/api/races").responseSwiftyJSON({ (request, response, json, error) in
+        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
             
             for (_, value) in json {
                 

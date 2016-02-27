@@ -181,11 +181,11 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             "profileImage": profileImageURL
         ]
         
-        Alamofire.request(.GET, "http://192.168.168.108:3000/api/users/\(fbid)").responseSwiftyJSON({ (request, response, json, error) in
+        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/users/\(fbid)").responseSwiftyJSON({ (request, response, json, error) in
             
             if json.count == 0 {
                 
-                Alamofire.request(.POST, "http://192.168.168.108:3000/api/users/", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+                Alamofire.request(.POST, "http://real-time-running.herokuapp.com/api/users/", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
                     
                     print(json["message"])
                     
