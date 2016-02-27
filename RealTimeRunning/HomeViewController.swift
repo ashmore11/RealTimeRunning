@@ -26,6 +26,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+
         
         SocketHandler.socket.connect()
         
