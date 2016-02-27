@@ -191,15 +191,19 @@ class RaceRecordViewController: UIViewController {
         Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
 
             if let arr = json[0]["competitors"].object as? [String] {
-
-                if arr.contains(self.user.id) {
-
-                    self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
-
-                } else {
-                    
+                if arr.count == 0 {
                     self.joinRaceButton.setTitle("Join Race", forState: .Normal)
-                    
+                }
+                else {
+                    if arr.contains(self.user.id) {
+
+                        self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
+
+                    } else {
+                        
+                        self.joinRaceButton.setTitle("Join Race", forState: .Normal)
+                        
+                    }
                 }
 
             }

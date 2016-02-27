@@ -9,14 +9,6 @@
 import UIKit
 import MapKit
 
-func degreesToRadian(x: Double) -> Double {
-    return (M_PI * x / 180.0)
-}
-
-func radiansToDegrees(x: Double) -> Double {
-    return (180.0 * x / M_PI)
-}
-
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     var geoEvents:[CLLocationCoordinate2D] = []
     let manager = CLLocationManager()
