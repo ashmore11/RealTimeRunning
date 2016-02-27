@@ -10,6 +10,6 @@ import SocketIOClientSwift
 
 struct SocketHandler {
     
-    static let socket = SocketIOClient(socketURL: NSURL(string: "http://192.168.168.108:3000")!)
+    static let socket = SocketIOClient(socketURL: NSURL(string: "http://real-time-running.herokuapp.com")!)
     
 }
