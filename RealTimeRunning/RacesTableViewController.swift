@@ -21,7 +21,7 @@ class RacesTableViewController: UITableViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-
+        self.tableView.backgroundColor = UIColor(red: 0.878, green: 0.517, blue: 0.258, alpha: 1)
         bindEvents()
         getTableViewData()
         
@@ -86,9 +86,43 @@ class RacesTableViewController: UITableViewController {
         
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        
+        let start = NSDate() // <- Start time
+
         Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
             
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+                if let err = error{
+                    print("Error:\(err)")
+                    return;
+                }
+                for (_, value) in json {
+                    
+                    if let raceId = value["_id"].string, let startTime = value["startTime"].string, let parsedDate = formatter.dateFromString(startTime), let competitors = value["competitors"].array, let distance = value["distance"].int {
+                        
+                        let race = Race(id: raceId, startTime: parsedDate, competitors: competitors, distance: distance)
+                        
+                        self.races.append(race)
+                        
+                    }
+                    
+                }
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.tableView.reloadData()
+                    let end = NSDate()   // <- End time
+                    let timeInterval: Double = end.timeIntervalSinceDate(start) // <- Difference in seconds (double)
+                    
+                    let fmt = NSNumberFormatter()
+                    fmt.numberStyle = .DecimalStyle
+                    print("Time to get data from server: \(timeInterval) seconds")
+                }
+            });
+
+            
+            
+            
+            
+            /*
             for (_, value) in json {
                 
                 if let raceId = value["_id"].string, let startTime = value["startTime"].string, let parsedDate = formatter.dateFromString(startTime), let competitors = value["competitors"].array, let distance = value["distance"].int {
@@ -102,7 +136,7 @@ class RacesTableViewController: UITableViewController {
             }
             
             self.tableView.reloadData()
-            
+            */
         })
         
     }

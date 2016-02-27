@@ -60,12 +60,14 @@ class RaceGraphViewController: UIViewController {
                 topSpeed = topSpeed * 3.6
                 // Give the graph some headroom
                 topSpeed = topSpeed * 1.5
-                let first = result.first as! RunData
-                let sDate = first.timeStamp
-                let last = result.last as! RunData
-                let eDate = last.timeStamp
-                if let sd = sDate,let ed = eDate {
-                    raceTimeInSeconds = Int(ed.timeIntervalSinceDate(sd))
+                if result.count > 1 {
+                    let first = result.first as! RunData
+                    let sDate = first.timeStamp
+                    let last = result.last as! RunData
+                    let eDate = last.timeStamp
+                    if let sd = sDate,let ed = eDate {
+                        raceTimeInSeconds = Int(ed.timeIntervalSinceDate(sd))
+                    }
                 }
                 
                 averageSpeed = totalSpeed / Double(result.count)

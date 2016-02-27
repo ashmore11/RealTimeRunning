@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import Social
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     var geoEvents:[CLLocationCoordinate2D] = []
@@ -16,6 +17,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var myMapView: MKMapView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let newButton  = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "processAction:")
+        navigationItem.rightBarButtonItem = newButton
+
         if geoEvents.count > 0 {
             let coordinateRegion = mapRegion() // MKCoordinateRegionMakeWithDistance(geoEvents.last!, 5000, 5000)
             myMapView.setRegion(coordinateRegion, animated: true)
@@ -132,4 +137,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         return MKPolylineRenderer()
     }
     
+    func processAction(sender: AnyObject) {
+        let mapImage = myMapView.uiViewContentToImage()
+        
+        let vc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+        vc.setInitialText("Test Post")
+        vc.addImage(mapImage)
+        //vc.addURL(NSURL(string: "https://www.hackingwithswift.com"))
+        presentViewController(vc, animated: true, completion: nil)
+        
+    }
+
 }
