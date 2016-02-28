@@ -265,7 +265,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="cBL-Do-THw">
-                                <rect key="frame" x="0.0" y="58" width="600" height="429"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
                                 <connections>
                                     <outlet property="delegate" destination="QNf-cC-SPw" id="tsV-0D-5PE"/>
                                 </connections>
@@ -273,7 +273,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="cBL-Do-THw" firstAttribute="top" secondItem="D0a-lk-PhG" secondAttribute="topMargin" constant="58" id="AV1-YP-ac9"/>
+                            <constraint firstItem="cBL-Do-THw" firstAttribute="top" secondItem="D0a-lk-PhG" secondAttribute="topMargin" id="AV1-YP-ac9"/>
                             <constraint firstItem="i9G-YH-qks" firstAttribute="top" secondItem="cBL-Do-THw" secondAttribute="bottom" id="RbO-tP-Lnc"/>
                             <constraint firstItem="cBL-Do-THw" firstAttribute="leading" secondItem="D0a-lk-PhG" secondAttribute="leadingMargin" constant="-20" id="Vmn-LS-5hm"/>
                             <constraint firstAttribute="trailingMargin" secondItem="cBL-Do-THw" secondAttribute="trailing" constant="-20" id="sRj-m7-039"/>
