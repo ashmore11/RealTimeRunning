@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import MBProgressHUD
 
 func stringFromTimeInterval(interval:NSTimeInterval) -> String {
     let ti = NSInteger(interval)
@@ -46,4 +47,23 @@ extension UIView {
         
         return image
     }
+}
+
+func getStartTime(index: Int) -> String {
+    
+    let components = NSCalendar.currentCalendar().components([.Day, .Month, .Year, .Hour, .Minute, .Second ], fromDate: NSDate())
+    components.minute = 0
+    components.second = 0
+    let startDate = NSCalendar.currentCalendar().dateFromComponents(components)
+    
+    components.setValue(index + 1, forComponent: .Hour);
+    let startTime = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: startDate!, options: NSCalendarOptions(rawValue: 0))
+    
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    
+    let date = dateFormatter.stringFromDate(startTime!)
+    
+    return date
+    
 }

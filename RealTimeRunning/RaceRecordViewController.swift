@@ -13,6 +13,7 @@ import CoreData
 import Alamofire
 import SwiftyJSON
 import Alamofire_SwiftyJSON
+import MBProgressHUD
 
 class RaceRecordViewController: UIViewController {
     
@@ -106,9 +107,8 @@ class RaceRecordViewController: UIViewController {
 
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH:mm"
-        if let theRace = race {
-            let date = dateFormatter.stringFromDate(theRace.startTime)
-            self.raceName = String(format:"Race:%@",date)
+        if let theRace = race, let startTime = theRace.startTime {
+            self.raceName = startTime
             self.title = self.raceName
         }
         self.activityManager = CMMotionActivityManager()
@@ -148,6 +148,10 @@ class RaceRecordViewController: UIViewController {
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
+        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.Indeterminate
+        loadingNotification.labelText = "Loading"
+        
         let parameters = [
             "id": user.id
         ]
@@ -157,6 +161,8 @@ class RaceRecordViewController: UIViewController {
             print(json["message"])
             
             SocketHandler.socket.emit("raceUpdated")
+            
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
             
             self.checkIfUserIsInRace()
             
@@ -191,10 +197,13 @@ class RaceRecordViewController: UIViewController {
         Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
 
             if let arr = json[0]["competitors"].object as? [String] {
+
                 if arr.count == 0 {
+                    
                     self.joinRaceButton.setTitle("Join Race", forState: .Normal)
-                }
-                else {
+                    
+                } else {
+                    
                     if arr.contains(self.user.id) {
 
                         self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
@@ -204,6 +213,7 @@ class RaceRecordViewController: UIViewController {
                         self.joinRaceButton.setTitle("Join Race", forState: .Normal)
                         
                     }
+                    
                 }
 
             }

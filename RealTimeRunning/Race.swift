@@ -14,20 +14,20 @@ class Race {
     // MARK: Properties
     
     var id: String
-    var startTime: NSDate
+    var createdAt: NSDate
     var competitors: [JSON]?
     var distance: Int
+    var live: Bool
+    var startTime: String?
     
-    init(id: String, startTime: NSDate, competitors: [JSON]?, distance: Int) {
+    init(id: String, createdAt: NSDate, competitors: [JSON]?, distance: Int, live: Bool) {
         
         self.id = id
-        self.startTime = startTime
+        self.createdAt = createdAt
         self.competitors = competitors
         self.distance = distance
-        
-        // super.init()
+        self.live = live
         
     }
 
-    
 }
