@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import Alamofire_SwiftyJSON
+import MBProgressHUD
 
 class RacesTableViewController: UITableViewController {
     
@@ -21,9 +22,10 @@ class RacesTableViewController: UITableViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
         self.tableView.backgroundColor = UIColor(red: 0.878, green: 0.517, blue: 0.258, alpha: 1)
+        
         bindEvents()
-        getTableViewData()
         
     }
 
@@ -46,21 +48,19 @@ class RacesTableViewController: UITableViewController {
         let cellIdentifier = "RaceTableViewCell"
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! RaceTableViewCell
+
+        let color1 = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1)
+        let color2 = UIColor(red: 0.078, green: 0.039, blue: 0.015, alpha: 1)
         
-        if indexPath.row % 2 == 0 {
-            cell.backgroundColor = UIColor(red: 0.878, green: 0.517, blue: 0.258, alpha: 1)
-        } else {
-            cell.backgroundColor = UIColor(red: 0.592, green: 0.172, blue: 0.070, alpha: 1)
-        }
+        setTableViewBackgroundGradient(cell, topColor: color1, bottomColor: color2)
+        
+        cell.backgroundColor = UIColor.clearColor()
         
         let race = races[indexPath.row]
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
+        race.startTime = getStartTime(indexPath.row)
         
-        let date = dateFormatter.stringFromDate(race.startTime)
-        
-        cell.startTimeLabel.text = date
+        cell.startTimeLabel.text = race.startTime
         cell.competitorsLabel.text = "competitors: \(race.competitors!.count)"
         cell.distanceLabel.text = "\(race.distance)km"
 
@@ -68,11 +68,25 @@ class RacesTableViewController: UITableViewController {
         
     }
     
+    func setTableViewBackgroundGradient(sender: UITableViewCell, topColor: UIColor, bottomColor: UIColor) {
+        
+        let gradientBackgroundColors = [topColor.CGColor, bottomColor.CGColor]
+        let gradientLocations = [0.0, 1.0]
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientBackgroundColors
+        gradientLayer.locations = gradientLocations
+        
+        gradientLayer.frame = sender.bounds
+        let backgroundView = UIView(frame: sender.bounds)
+        backgroundView.layer.insertSublayer(gradientLayer, atIndex: 0)
+        sender.backgroundView = backgroundView
+    
+    }
+    
     func bindEvents() {
         
         SocketHandler.socket.on("reloadRaceView") {data, ack in
-            
-            print("reloading table view...")
             
             self.getTableViewData()
             
@@ -83,23 +97,31 @@ class RacesTableViewController: UITableViewController {
     func getTableViewData() {
         
         races = [Race]()
-        
+
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let start = NSDate() // <- Start time
+        
+        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.Indeterminate
+        loadingNotification.labelText = "Loading"
 
         Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+
                 if let err = error{
+                    
                     print("Error:\(err)")
-                    return;
+                
+                    return
+                
                 }
+                
                 for (_, value) in json {
                     
-                    if let raceId = value["_id"].string, let startTime = value["startTime"].string, let parsedDate = formatter.dateFromString(startTime), let competitors = value["competitors"].array, let distance = value["distance"].int {
+                    if let raceId = value["_id"].string, let createdAt = value["createdAt"].string, let parsedDate = formatter.dateFromString(createdAt), let competitors = value["competitors"].array, let distance = value["distance"].int, let live = value["live"].bool {
                         
-                        let race = Race(id: raceId, startTime: parsedDate, competitors: competitors, distance: distance)
+                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live)
                         
                         self.races.append(race)
                         
@@ -108,35 +130,15 @@ class RacesTableViewController: UITableViewController {
                 }
                 
                 dispatch_async(dispatch_get_main_queue()) {
+                    
                     self.tableView.reloadData()
-                    let end = NSDate()   // <- End time
-                    let timeInterval: Double = end.timeIntervalSinceDate(start) // <- Difference in seconds (double)
                     
-                    let fmt = NSNumberFormatter()
-                    fmt.numberStyle = .DecimalStyle
-                    print("Time to get data from server: \(timeInterval) seconds")
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                    
                 }
-            });
+                
+            })
 
-            
-            
-            
-            
-            /*
-            for (_, value) in json {
-                
-                if let raceId = value["_id"].string, let startTime = value["startTime"].string, let parsedDate = formatter.dateFromString(startTime), let competitors = value["competitors"].array, let distance = value["distance"].int {
-                    
-                    let race = Race(id: raceId, startTime: parsedDate, competitors: competitors, distance: distance)
-                    
-                    self.races.append(race)
-                    
-                }
-                
-            }
-            
-            self.tableView.reloadData()
-            */
         })
         
     }
