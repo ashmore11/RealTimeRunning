@@ -193,6 +193,10 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
                     
                 })
                 
+            } else {
+                
+                print("user found:", self.user!.name)
+                
             }
             
         })
@@ -210,39 +214,25 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         loadingNotification.mode = MBProgressHUDMode.Indeterminate
         loadingNotification.labelText = "Loading"
         
+        racesButton.enabled = false
+        
         Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
                 
-                if let err = error{
+            for (_, value) in json {
+                
+                if let raceId = value["_id"].string, let createdAt = value["createdAt"].string, let parsedDate = formatter.dateFromString(createdAt), let competitors = value["competitors"].array, let distance = value["distance"].int, let live = value["live"].bool {
                     
-                    print("Error:\(err)")
+                    let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live)
                     
-                    return
+                    self.races.append(race)
                     
                 }
                 
-                for (_, value) in json {
+            }
                     
-                    if let raceId = value["_id"].string, let createdAt = value["createdAt"].string, let parsedDate = formatter.dateFromString(createdAt), let competitors = value["competitors"].array, let distance = value["distance"].int, let live = value["live"].bool {
-                        
-                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live)
-                        
-                        self.races.append(race)
-                        
-                    }
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                     
-                }
-                
-                dispatch_async(dispatch_get_main_queue()) {
-                    
-                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-                    
-                    self.performSegueWithIdentifier("showRaces", sender: sender)
-                    
-                }
-                
-            })
+            self.performSegueWithIdentifier("showRaces", sender: sender)
             
         })
         
@@ -251,6 +241,8 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "showRaces" {
+            
+            racesButton.enabled = true
             
             let backItem = UIBarButtonItem()
             backItem.title = "PROFILE"
