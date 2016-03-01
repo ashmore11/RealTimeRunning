@@ -183,19 +183,19 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             "profileImage": profileImageURL
         ]
         
-        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/users/\(fbid)").responseSwiftyJSON({ (request, response, json, error) in
+        let getURL = "http://real-time-running.herokuapp.com/api/users/\(fbid)"
+        let postURL = "http://real-time-running.herokuapp.com/api/users/"
+        
+        Alamofire.request(.GET, getURL).responseSwiftyJSON({ (request, response, json, error) in
             
             if json.count == 0 {
                 
-                Alamofire.request(.POST, "http://real-time-running.herokuapp.com/api/users/", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+                Alamofire.request(.POST, postURL, parameters: parameters, encoding: .JSON)
+                    .responseSwiftyJSON({ (request, response, json, error) in
                     
-                    print(json["message"])
+                        print(json["message"])
                     
                 })
-                
-            } else {
-                
-                print("user found:", self.user!.name)
                 
             }
             
@@ -214,19 +214,26 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         racesButton.enabled = false
         
-        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
+        let requestURL = "http://real-time-running.herokuapp.com/api/races"
+        
+        Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
                 
-            json.forEach({ (index, value) in
+            for (key, value) in json {
                 
-                if let raceId = value["_id"].string, let createdAt = value["createdAt"].string, let parsedDate = formatter.dateFromString(createdAt), let competitors = value["competitors"].array, let distance = value["distance"].int, let live = value["live"].bool {
+                if  let raceId = value["_id"].string,
+                    let createdAt = value["createdAt"].string,
+                    let parsedDate = formatter.dateFromString(createdAt),
+                    let competitors = value["competitors"].arrayObject as? [String],
+                    let distance = value["distance"].int,
+                    let live = value["live"].bool {
                     
-                    let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(index)!)
+                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(key)!)
                     
-                    self.races.append(race)
+                        self.races.append(race)
                     
                 }
                 
-            })
+            }
                     
             hideActivityIndicator(self.view)
                     

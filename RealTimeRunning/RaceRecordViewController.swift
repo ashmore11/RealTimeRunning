@@ -99,7 +99,7 @@ class RaceRecordViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        checkIfUserIsInRace()
+        updateJoinRaceButton()
         
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             self.managedObjectContext = delegate.managedObjectContext
@@ -138,35 +138,71 @@ class RaceRecordViewController: UIViewController {
     // MARK: Actions
     
     @IBAction func startStopPressed(sender: AnyObject) {
+        
         if myLocationManager == nil {
+        
             self.willStartRace()
-        }
-        else {
+        
+        } else {
+        
             self.willStopRace()
+        
         }
+        
     }
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
-        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        loadingNotification.mode = MBProgressHUDMode.Indeterminate
-        loadingNotification.labelText = "Loading"
+        showActivityIndicator(self.view, text: nil)
         
-        let parameters = [
-            "id": user.id
-        ]
+        let requestURL = "http://real-time-running.herokuapp.com/api/races/\(race.id)"
+        let parameters = ["id": user.id]
         
-        Alamofire.request(.PUT, "http://real-time-running.herokuapp.com/api/races/\(race.id)", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+        Alamofire.request(.PUT, requestURL, parameters: parameters, encoding: .JSON)
+            .responseSwiftyJSON({ (request, response, json, error) in
             
-            print(json["message"])
-            
-            SocketHandler.socket.emit("raceUpdated", self.race.index, self.race.id)
-            
-            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-            
-            self.checkIfUserIsInRace()
+                if (error != nil) {
+                    print(error)
+                    return
+                }
+                
+                SocketHandler.socket.emit("raceUpdated", self.race.index, self.race.id)
+                
+                hideActivityIndicator(self.view)
+                
+                self.updateCompetitorsArray()
             
         })
+        
+    }
+    
+    func updateCompetitorsArray() {
+        
+        if let index = race.competitors?.indexOf(user.id) {
+            
+            race.competitors?.removeAtIndex(index)
+            
+        } else {
+            
+            race.competitors?.append(user.id)
+            
+        }
+        
+        updateJoinRaceButton()
+        
+    }
+    
+    func updateJoinRaceButton() {
+        
+        if race.competitors!.contains(user.id) {
+            
+            self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
+            
+        } else {
+            
+            self.joinRaceButton.setTitle("Join Race", forState: .Normal)
+            
+        }
         
     }
 
@@ -189,36 +225,6 @@ class RaceRecordViewController: UIViewController {
             }
 
         }
-
-    }
-
-    func checkIfUserIsInRace() {
-
-        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races/\(race.id)").responseSwiftyJSON({ (request, response, json, error) in
-
-            if let arr = json[0]["competitors"].object as? [String] {
-
-                if arr.count == 0 {
-                    
-                    self.joinRaceButton.setTitle("Join Race", forState: .Normal)
-                    
-                } else {
-                    
-                    if arr.contains(self.user.id) {
-
-                        self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
-
-                    } else {
-                        
-                        self.joinRaceButton.setTitle("Join Race", forState: .Normal)
-                        
-                    }
-                    
-                }
-
-            }
-
-        })
 
     }
 

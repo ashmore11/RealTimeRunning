@@ -76,10 +76,12 @@ class RacesTableViewController: UITableViewController {
     }
     
     func reloadTableViewCell(index: Int, id: String) {
+        
+        let requestURL = "http://real-time-running.herokuapp.com/api/races/\(id)"
 
-        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races/\(id)").responseSwiftyJSON({ (request, response, json, error) in
+        Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
                     
-            if let competitors = json[0]["competitors"].array {
+            if let competitors = json[0]["competitors"].arrayObject as? [String] {
                 
                 self.races[index].competitors = competitors
 
