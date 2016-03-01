@@ -160,7 +160,7 @@ class RaceRecordViewController: UIViewController {
             
             print(json["message"])
             
-            SocketHandler.socket.emit("raceUpdated")
+            SocketHandler.socket.emit("raceUpdated", self.race.index, self.race.id)
             
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
             

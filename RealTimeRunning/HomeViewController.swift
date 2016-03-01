@@ -90,7 +90,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
         fbProfileImage.clipsToBounds = true
         
-        racesButton.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        racesButton.backgroundColor = UIColor.blackColor()
         
     }
     
@@ -210,27 +210,25 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         
-        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        loadingNotification.mode = MBProgressHUDMode.Indeterminate
-        loadingNotification.labelText = "Loading"
+        showActivityIndicator(self.view, text: "Loading Races")
         
         racesButton.enabled = false
         
         Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
                 
-            for (_, value) in json {
+            json.forEach({ (index, value) in
                 
                 if let raceId = value["_id"].string, let createdAt = value["createdAt"].string, let parsedDate = formatter.dateFromString(createdAt), let competitors = value["competitors"].array, let distance = value["distance"].int, let live = value["live"].bool {
                     
-                    let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live)
+                    let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(index)!)
                     
                     self.races.append(race)
                     
                 }
                 
-            }
+            })
                     
-            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            hideActivityIndicator(self.view)
                     
             self.performSegueWithIdentifier("showRaces", sender: sender)
             

@@ -49,6 +49,22 @@ extension UIView {
     }
 }
 
+func setTableViewBackgroundGradient(sender: UITableViewCell, topColor: UIColor, bottomColor: UIColor) {
+    
+    let gradientBackgroundColors = [topColor.CGColor, bottomColor.CGColor]
+    let gradientLocations = [0.0, 1.0]
+    
+    let gradientLayer = CAGradientLayer()
+    gradientLayer.colors = gradientBackgroundColors
+    gradientLayer.locations = gradientLocations
+    
+    gradientLayer.frame = sender.bounds
+    let backgroundView = UIView(frame: sender.bounds)
+    backgroundView.layer.insertSublayer(gradientLayer, atIndex: 0)
+    sender.backgroundView = backgroundView
+    
+}
+
 func getStartTime(index: Int) -> String {
     
     let components = NSCalendar.currentCalendar().components([.Day, .Month, .Year, .Hour, .Minute, .Second ], fromDate: NSDate())
@@ -65,5 +81,19 @@ func getStartTime(index: Int) -> String {
     let date = dateFormatter.stringFromDate(startTime!)
     
     return date
+    
+}
+
+func showActivityIndicator(view: UIView, text: String?) {
+
+    let loadingNotification = MBProgressHUD.showHUDAddedTo(view, animated: true)
+    loadingNotification.mode = MBProgressHUDMode.Indeterminate
+    loadingNotification.labelText = text ?? "Loading"
+    
+}
+
+func hideActivityIndicator(view: UIView) {
+    
+    MBProgressHUD.hideAllHUDsForView(view, animated: true)
     
 }
