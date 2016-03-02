@@ -69,8 +69,6 @@ class RaceRecordViewController: UIViewController {
                 self.durationLabel.text = String(format:"Duration: %@", self.durationString)
                 self.speedLabel.text = String(format:"Speed: %6.2f Kph", self.speed * 3.6)
                 self.raceDistanceLabel.text = String(format:"Distanced Raced: %6.2f Meters", self.distance)
-                
-                SocketHandler.socket.emit("positionUpdate", self.distance, self.speed)
             
             }
 
@@ -150,11 +148,7 @@ class RaceRecordViewController: UIViewController {
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
-        if race.competitors!.contains(user.id) {
-            showActivityIndicator(self.view, text: "Leaving Race")
-        } else {
-            showActivityIndicator(self.view, text: "Joining Race")
-        }
+        showActivityIndicator(self.view, text: nil)
         
         let requestURL = "http://real-time-running.herokuapp.com/api/races/\(race.id)"
         let parameters = ["id": user.id]
@@ -167,7 +161,11 @@ class RaceRecordViewController: UIViewController {
                     return
                 }
                 
-                SocketHandler.socket.emit("raceUpdated", self.race.index, self.race.id)
+                SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, id: self.race.id) { () -> Void in
+                 
+                    print("emit complete")
+                    
+                }
                 
                 hideActivityIndicator(self.view)
                 
@@ -354,7 +352,6 @@ class RaceRecordViewController: UIViewController {
             }
             
             NSNotificationCenter.defaultCenter().removeObserver(self, name:"locationNotification", object:nil)
-            NSNotificationCenter.defaultCenter().removeObserver(self, name:"altimeterNotification", object:nil)
             
             self.startStopButton.setTitle("Start", forState: .Normal)
             self.myLocationManager?.workInBackground(false)

@@ -78,15 +78,6 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         super.viewDidLoad()
         
         //testSeverRead()
-
-        
-        SocketHandler.socket.connect()
-        
-        SocketHandler.socket.on("connect") {data, ack in
-            
-            print("socket connected")
-            
-        }
         
         setupLayout()
         

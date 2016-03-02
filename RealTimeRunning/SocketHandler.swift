@@ -8,8 +8,50 @@
 
 import SocketIOClientSwift
 
-struct SocketHandler {
+class SocketIOManager: NSObject {
     
-    static let socket = SocketIOClient(socketURL: NSURL(string: "http://real-time-running.herokuapp.com")!)
+    static let sharedInstance = SocketIOManager()
+    
+    var socket = SocketIOClient(socketURL: NSURL(string: "http://real-time-running.herokuapp.com")!)
+    
+    override init() {
+    
+        super.init()
+    
+    }
+    
+    func establishConnection() {
+    
+        socket.connect()
+        
+        print("socket connected")
+    
+    }
+    
+    func closeConnection() {
+    
+        socket.disconnect()
+        
+        print("socket disconnected")
+    
+    }
+    
+    func raceUsersUpdated(index: Int, id: String, completionHandler: () -> Void) {
+        
+        socket.emit("raceUpdated", index, id)
+        
+        completionHandler()
+        
+    }
+    
+    func reloadRaceCell(completionHandler: (index: Int, id: String) -> Void) {
+        
+        socket.on("reloadRaceView") { (data, ack) -> Void in
+            
+            completionHandler(index: data[0] as! Int, id: data[1] as! String)
+            
+        }
+        
+    }
     
 }

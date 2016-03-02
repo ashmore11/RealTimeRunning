@@ -19,29 +19,15 @@ class RacesTableViewController: UITableViewController {
 
     var user: User!
     var races = [Race]()
-    
-    let socket:SocketIOClient = SocketIOClient(socketURL: NSURL(string: "http://real-time-running.herokuapp.com")!)
 
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
-        socket.on("connect") {data, ack in
-            print("Race socket connected")
-        }
-        
-        socket.on("reloadRaceView") {data, ack in
-            print("Race Updates")
-            
-            self.reloadTableViewCell(data[0] as! Int, id: data[1] as! String)
-            
-        }
-
-        socket.connect()
         self.tableView.backgroundColor = UIColor.blackColor()
         
-        //bindEvents()
+        bindEvents()
         
     }
 
@@ -83,9 +69,13 @@ class RacesTableViewController: UITableViewController {
     
     func bindEvents() {
         
-        SocketHandler.socket.on("reloadRaceView") {data, ack in
-            
-            self.reloadTableViewCell(data[0] as! Int, id: data[1] as! String)
+        SocketIOManager.sharedInstance.reloadRaceCell { (index, id) -> Void in
+
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+
+                self.reloadTableViewCell(index, id: id)
+                
+            })
             
         }
         
