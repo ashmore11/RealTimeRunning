@@ -11,6 +11,7 @@ import Alamofire
 import SwiftyJSON
 import Alamofire_SwiftyJSON
 import MBProgressHUD
+import SocketIOClientSwift
 
 class RacesTableViewController: UITableViewController {
     
@@ -18,14 +19,29 @@ class RacesTableViewController: UITableViewController {
 
     var user: User!
     var races = [Race]()
-        
+    
+    let socket:SocketIOClient = SocketIOClient(socketURL: NSURL(string: "http://real-time-running.herokuapp.com")!)
+
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
+        socket.on("connect") {data, ack in
+            print("Race socket connected")
+        }
+        
+        socket.on("reloadRaceView") {data, ack in
+            print("Race Updates")
+            
+            self.reloadTableViewCell(data[0] as! Int, id: data[1] as! String)
+            
+        }
+
+        socket.connect()
         self.tableView.backgroundColor = UIColor.blackColor()
         
-        bindEvents()
+        //bindEvents()
         
     }
 
