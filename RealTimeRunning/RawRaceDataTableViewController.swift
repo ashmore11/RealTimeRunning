@@ -74,7 +74,7 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
         if let rundata = fetchedResultsController?.objectAtIndexPath(indexPath) as? RunData {
             cell.latLonLabel.text = formatLatLonPrintA(CLLocationCoordinate2DMake(Double(rundata.lattitude!), Double(rundata.longitude!)) , type: .degreeDecimalMinutes)
             cell.gpsDataLabel.text = String(format:"Speed:%6.2f Kph Distance:%6.2f",Double(rundata.speed!) * 3.6, Double(rundata.distance!))
-            cell.pedometerDataLabel.text = String(format:"Steps:%d Pace:%6.2f",Int(rundata.stepsTaken!), Double(rundata.currentPace!))
+            cell.pedometerDataLabel.text = String(format:"Steps:%d Pace:%6.2f Altitude:%6.2f",Int(rundata.stepsTaken!), Double(rundata.currentPace!),Double(rundata.altitude!))
         }
     }
 

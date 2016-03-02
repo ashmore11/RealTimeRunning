@@ -26,6 +26,8 @@ class UIGraphView: UIView {
     var lineColor = UIColor.redColor()
     var graphHeader = "Speed vs Time"
     var numeralColor = UIColor.blackColor()
+    var divSize:CGFloat = 0.0
+    var topSize:CGFloat = 0.0
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func drawRect(rect: CGRect) {
@@ -43,33 +45,43 @@ class UIGraphView: UIView {
     }
     
     func drawGrid(context:CGContextRef) {
+        switch yMax {
+            case 0..<10:
+                divSize = 0.5
+                topSize = 10.0
+            case 10..<20:
+                divSize = 1.0
+                topSize = 20.0
+            case 20..<50:
+                divSize = 2.5
+                topSize = 50.0
+            case 50..<100:
+                divSize = 5.0
+                topSize = 100
+            case 100..<500:
+                divSize = 25.0
+                topSize = 500.0
+            default:
+                divSize = 50.0
+                topSize = 1000.0
+        }
+        
         var scaledPoint:CGFloat = 0.0
         let path = CGPathCreateMutable()
-        for var y = 1 ; y<Int(yMax) ; y++ {
-            scaledPoint = (CGFloat(self.bounds.size.height) / self.yMax) * CGFloat(y)
+        var delta:CGFloat = 0.0
+        for var y = 1 ; y<=21 ; y++ {
+            delta = divSize * CGFloat(y)
+            scaledPoint = (CGFloat(self.bounds.size.height) / self.topSize) * delta
             CGPathMoveToPoint(path, nil, 0.0, floor(self.bounds.size.height - scaledPoint)+0.5)
             CGPathAddLineToPoint(path,nil,CGFloat(self.bounds.size.width-1),floor(self.bounds.size.height - scaledPoint)+0.5)
-            let sx = String(format: "%02d",y)
+            let sx = String(format: "%02.1fKph",CGFloat(y) * self.divSize )
             drawNormalText(sx, context:context, origin:CGPointMake(4.0, floor(self.bounds.size.height - scaledPoint)+0.5), x1:0.0, y1:0.0, align: .ctAlignBottomLeft, fontName:"Helvetica", fontSize:10.0, textColor:numeralColor)
-
         }
         CGContextBeginPath(context)
         CGContextAddPath(context, path)
         CGContextSetLineWidth(context,0.5)
         CGContextSetStrokeColorWithColor(context,UIColor.lightGrayColor().CGColor)
         CGContextStrokePath(context)
-    }
-
-    func measureLine(line: CTLineRef, context: CGContextRef) ->CGSize {
-        var textHeight: CGFloat = 0.0
-        var ascent:CGFloat = 0.0
-        var descent:CGFloat = 0.0
-        var leading:CGFloat = 0.0
-        var width:Double = 0.0
-        
-        width = CTLineGetTypographicBounds(line, &ascent,  &descent, &leading)
-        textHeight = floor(ascent * 0.8)
-        return CGSizeMake(ceil(CGFloat(width)), ceil(textHeight))
     }
 
     func drawLine(context:CGContextRef, pointsArray:[Double], lineColor:UIColor)
@@ -86,7 +98,7 @@ class UIGraphView: UIView {
             scaledPoint = 0.0
         }
         else {
-            scaledPoint = (CGFloat(self.bounds.size.height) / self.yMax) * CGFloat(startPoint)
+            scaledPoint = (CGFloat(self.bounds.size.height) / self.topSize) * CGFloat(startPoint)
         }
         CGPathMoveToPoint(path, nil, floor(x)+0.5, floor(self.bounds.size.height - scaledPoint)+0.5)
         let xDelta:CGFloat = CGFloat(self.bounds.size.width-1) / CGFloat(pointsArray.count)
@@ -95,7 +107,7 @@ class UIGraphView: UIView {
                 scaledPoint = 0.0
             }
             else {
-                scaledPoint = (CGFloat(self.bounds.size.height) / self.yMax) * CGFloat(point)
+                scaledPoint = (CGFloat(self.bounds.size.height) / self.topSize) * CGFloat(point)
             }
             CGPathAddLineToPoint(path,nil,floor(x)+0.5,floor(self.bounds.size.height - scaledPoint)+0.5)
             x += xDelta
@@ -105,6 +117,18 @@ class UIGraphView: UIView {
         CGContextSetLineWidth(context,1.0)
         CGContextSetStrokeColorWithColor(context,lineColor.CGColor)
         CGContextStrokePath(context)
+    }
+    
+    func measureLine(line: CTLineRef, context: CGContextRef) ->CGSize {
+        var textHeight: CGFloat = 0.0
+        var ascent:CGFloat = 0.0
+        var descent:CGFloat = 0.0
+        var leading:CGFloat = 0.0
+        var width:Double = 0.0
+        
+        width = CTLineGetTypographicBounds(line, &ascent,  &descent, &leading)
+        textHeight = floor(ascent * 0.8)
+        return CGSizeMake(ceil(CGFloat(width)), ceil(textHeight))
     }
     
     func drawNormalText(text:String, context:CGContextRef, origin:CGPoint, x1:CGFloat, y1:CGFloat, align:textAlignTypes, fontName:String, fontSize:CGFloat, textColor:UIColor) {

@@ -122,7 +122,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-
+    func doTest() {
+        print("Test Run")
+    }
 
 }
 
