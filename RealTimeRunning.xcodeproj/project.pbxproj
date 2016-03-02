@@ -295,7 +295,7 @@
 				TargetAttributes = {
 					D226B4A51C73B28400366800 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = TM5JB8724P;
+						DevelopmentTeam = 2M48QV2N86;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -332,10 +332,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2B341681C87068E0024114C /* Oswald-ExtraLight.ttf in Resources */,
-				D2B341691C87068E0024114C /* Oswald-Light.ttf in Resources */,
-				D2B3416A1C87068E0024114C /* Oswald-Medium.ttf in Resources */,
-				D2B3416B1C87068E0024114C /* Oswald-Regular.ttf in Resources */,
 				D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */,
 				D226B4B11C73B28400366800 /* Assets.xcassets in Resources */,
 				D226B4AF1C73B28400366800 /* Main.storyboard in Resources */,
