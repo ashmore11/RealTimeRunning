@@ -26,57 +26,27 @@ class RaceRecordViewController: UIViewController {
     var lon:Double = 0.0
     var speed:Double = 0.0
     var distance:Double = 0.0
-    var altitude:Double = 0.0
-    var pressure:Double = 0.0
-    var heading:Double = 0.0
     var durationString:String = ""
     var duration:Double = 0.0
-    var endTime:NSDate?
     var myLocationManager:SharedLocationManager? = nil
     var logTimer: NSTimer?
     var raceName:String = ""
     var managedObjectContext:NSManagedObjectContext?
     var bLocationsReceived = false
-    var activityManager:CMMotionActivityManager?
-    var pedoMeter:CMPedometer?
-    var stepsTaken:Int = 0
-    var activity:String = ""
     var runDetailObject:RunDetail?
-    var pedDistance = 0.0
-    var currentPace = 0.0
-    var currentCadence = 0.0
-    var floorsAscended = 0.0
-    var floorsDescended = 0.0
 
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var raceDistanceLabel: UILabel!
-    @IBOutlet weak var raceStartTimeLabel: UILabel!
-    @IBOutlet weak var stepsLabel: UILabel!
-    @IBOutlet weak var paceLabel: UILabel!
-    @IBOutlet weak var cadenceLabel: UILabel!
     @IBOutlet weak var startStopButton: UIButton!
     @IBOutlet weak var joinRaceButton: UIButton!
     @IBOutlet weak var raceDataButton: UIButton!
     @IBOutlet weak var viewMapButton: UIButton!
 
-    func receiveAltimeterNotification(notification:NSNotification) {
-        
-        let userInfo:NSDictionary = notification.userInfo!
-        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
-    
-        if let data = altimeterData {
-            pressure = Double(data.pressure)
-            altitude = Double(data.relativeAltitude)
-        }
-    
-    }
-
     func receiveLocationNotification(notification: NSNotification) {
         
         let userInfo:NSDictionary = notification.userInfo!
         let location:CLLocation? = userInfo.objectForKey("Location") as? CLLocation
-        let newHeading:CLHeading? = userInfo.objectForKey("Heading") as? CLHeading
 
         if let loc = location  {
             
@@ -86,10 +56,12 @@ class RaceRecordViewController: UIViewController {
             self.lon = loc.coordinate.longitude
         
             if let lMgr = myLocationManager {
+             
                 self.speed = lMgr.getStableSpeed()
                 self.distance = lMgr.getDistance()
                 self.durationString = lMgr.getDuration()
                 self.duration = lMgr.getDurationDouble()
+            
             }
             
             dispatch_async(dispatch_get_main_queue()) {
@@ -97,13 +69,11 @@ class RaceRecordViewController: UIViewController {
                 self.durationLabel.text = String(format:"Duration: %@", self.durationString)
                 self.speedLabel.text = String(format:"Speed: %6.2f Kph", self.speed * 3.6)
                 self.raceDistanceLabel.text = String(format:"Distanced Raced: %6.2f Meters", self.distance)
+                
+                SocketHandler.socket.emit("positionUpdate", self.distance, self.speed)
             
             }
 
-        }
-        
-        if let hdr = newHeading {
-            self.heading = hdr.magneticHeading
         }
         
     }
@@ -117,20 +87,23 @@ class RaceRecordViewController: UIViewController {
         updateJoinRaceButton()
         
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            
             self.managedObjectContext = delegate.managedObjectContext
+        
         }
         
         if let theRace = race, let startTime = theRace.startTime {
+            
             self.raceName = startTime
             self.title = self.raceName
+            
         }
-        
-        self.activityManager = CMMotionActivityManager()
-        self.pedoMeter = CMPedometer()
 
         // disable the interactivePopGestureRecognizer so you cant slide from left to pop the current view
         if self.navigationController!.respondsToSelector("interactivePopGestureRecognizer") {
+            
             self.navigationController!.interactivePopGestureRecognizer!.enabled = false
+            
         }
         
     }
@@ -255,100 +228,17 @@ class RaceRecordViewController: UIViewController {
         }
 
     }
-
-    // This sets up the motion manager to return step data
-    func setupMotionManage() {
-        
-        if(CMPedometer.isStepCountingAvailable()){
-            
-            if let ped = self.pedoMeter {
-                
-                ped.startPedometerUpdatesFromDate(NSDate()) { (data, error) -> Void in
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        if(error == nil) {
-                            
-                            if let stepData = data {
-                                
-                                self.stepsTaken = Int(stepData.numberOfSteps)
-                                
-                                if let dst = stepData.distance {
-                                    self.pedDistance = Double(dst)
-                                }
-                                
-                                if let pce = stepData.currentPace {
-                                    self.currentPace = Double(pce)
-                                }
-                                
-                                if let cad = stepData.currentCadence {
-                                    self.currentCadence = Double(cad)
-                                }
-                                
-                                dispatch_async(dispatch_get_main_queue()) {
-                                    
-                                    self.stepsLabel.text = String(format:"Steps taken: %d",self.stepsTaken)
-                                    self.paceLabel.text = String(format:"Pace: %6.2f Sec. / Mtr.",self.currentPace)
-                                    self.cadenceLabel.text = String(format:"Cadence: %6.2f Steps / Sec.",self.currentCadence)
-                                
-                                }
-
-                            }
-                            
-                        } else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
-                         
-                            self.didEncounterAuthorizationError()
-                        
-                        }
-                        
-                    })
-                    
-                }
-                
-            }
-            
-        }
-        
-    }
-
+    
     // This function will be used for logging data
     func updateLog() {
         
         self.writeRaceData()
         let x = CLLocationCoordinate2DMake(self.lat, self.lon)
         geoEvents.append(x)
-
+        
         //print("Logging lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration) speed: \(self.speed)")
         //print("Logging Relative Altitude: \(altitude) Pressure: \(pressure)")
         //print("Logging Heading: \(self.heading)")
-        
-    }
-
-    func didEncounterAuthorizationError() {
-        
-        let title = NSLocalizedString("Motion Activity Not Authorized", comment: "")
-
-        let message = NSLocalizedString("To enable Motion features, please allow access to Motion & Fitness in Settings under Privacy.", comment: "")
-
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        alert.addAction(cancelAction)
-
-        let openSettingsAction = UIAlertAction(title: "Open Settings", style: .Default) { _ in
-            // Open the Settings app.
-            let url = NSURL(string: UIApplicationOpenSettingsURLString)!
-
-            UIApplication.sharedApplication().openURL(url)
-        }
-
-        alert.addAction(openSettingsAction)
-
-        dispatch_async(dispatch_get_main_queue()) {
-            
-            self.presentViewController(alert, animated: true, completion:nil)
-            
-        }
         
     }
 
@@ -394,13 +284,6 @@ class RaceRecordViewController: UIViewController {
                     dataObject.longitude = self.lon
                     dataObject.speed = self.speed
                     dataObject.distance = self.distance
-                    dataObject.altitude = self.altitude
-                    dataObject.stepsTaken = self.stepsTaken
-                    dataObject.pedDistance = self.pedDistance
-                    dataObject.currentPace = self.currentPace
-                    dataObject.currentCadence = self.currentCadence
-                    dataObject.floorsAscended = self.floorsAscended
-                    dataObject.floorsDescended = self.floorsDescended
                     dataObject.runDataToRunDetail = runDetail
                     
                     self.saveData()
@@ -428,20 +311,20 @@ class RaceRecordViewController: UIViewController {
     }
 
     func willStartRace() {
-        
-        setupMotionManage()
 
         // Hide the back button incase the user accidently hits it
         self.navigationItem.setHidesBackButton(true, animated: true)
         self.bLocationsReceived = false
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
 
         geoEvents = []
         myLocationManager = SharedLocationManager.sharedInstance
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveAltimeterNotification:", name:"altimeterNotification", object:nil)
         myLocationManager?.workInBackground(true)
         myLocationManager?.resetDistance()
+        
         self.runDetailObject = writeRaceDetail()
+        
         // Start a timer that will run the updateLog function once every second
         self.logTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLog", userInfo: nil, repeats: true)
         self.startStopButton.setTitle("Stop", forState: .Normal)
@@ -470,13 +353,13 @@ class RaceRecordViewController: UIViewController {
                 
             }
             
-            self.startStopButton.setTitle("Start", forState: .Normal)
             NSNotificationCenter.defaultCenter().removeObserver(self, name:"locationNotification", object:nil)
             NSNotificationCenter.defaultCenter().removeObserver(self, name:"altimeterNotification", object:nil)
+            
+            self.startStopButton.setTitle("Start", forState: .Normal)
             self.myLocationManager?.workInBackground(false)
             self.myLocationManager = nil
-            self.endTime = NSDate()
-            self.pedoMeter!.stopPedometerUpdates()
+            
             self.navigationItem.setHidesBackButton(false, animated: true)
             
         }
