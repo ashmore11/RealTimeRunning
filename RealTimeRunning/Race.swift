@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftyJSON
 
 class Race {
     
@@ -18,8 +17,8 @@ class Race {
     var competitors: [String]?
     var distance: Int
     var live: Bool
-    var startTime: String?
     var index: Int
+    var startTime: String?
     
     init(id: String, createdAt: NSDate, competitors: [String]?, distance: Int, live: Bool, index: Int) {
         
