@@ -37,10 +37,18 @@ class raceTester {
                 print("Error:\(err)")
                 return
             }
-            for (_, value) in json {
-                if let raceId = value["_id"].string, let createdAt = value["createdAt"].string, let parsedDate = formatter.dateFromString(createdAt), let competitors = value["competitors"].array, let distance = value["distance"].int, let live = value["live"].bool {
-                    let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live)
-                    self.testRaces.append(race)
+            for (key, value) in json {
+                if  let raceId = value["_id"].string,
+                    let createdAt = value["createdAt"].string,
+                    let parsedDate = formatter.dateFromString(createdAt),
+                    let competitors = value["competitors"].arrayObject as? [String],
+                    let distance = value["distance"].int,
+                    let live = value["live"].bool {
+                        
+                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(key)!)
+                        
+                        self.testRaces.append(race)
+                        
                 }
             }
             let timeInterval: Double = end.timeIntervalSinceDate(self.start) // <- Difference in seconds (double)
