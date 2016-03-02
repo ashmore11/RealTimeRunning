@@ -15,15 +15,15 @@ import MBProgressHUD
 class RacesTableViewController: UITableViewController {
     
     // MARK: Properties
-    
-    var races = [Race]()
+
     var user: User!
+    var races = [Race]()
         
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
-        self.tableView.backgroundColor = UIColor(red: 0.878, green: 0.517, blue: 0.258, alpha: 1)
+        self.tableView.backgroundColor = UIColor.blackColor()
         
         bindEvents()
         
@@ -48,11 +48,8 @@ class RacesTableViewController: UITableViewController {
         let cellIdentifier = "RaceTableViewCell"
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! RaceTableViewCell
-
-        let color1 = UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1)
-        let color2 = UIColor(red: 0.078, green: 0.039, blue: 0.015, alpha: 1)
         
-        setTableViewBackgroundGradient(cell, topColor: color1, bottomColor: color2)
+        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1), bottomColor: UIColor.blackColor())
         
         cell.backgroundColor = UIColor.clearColor()
         
@@ -68,76 +65,30 @@ class RacesTableViewController: UITableViewController {
         
     }
     
-    func setTableViewBackgroundGradient(sender: UITableViewCell, topColor: UIColor, bottomColor: UIColor) {
-        
-        let gradientBackgroundColors = [topColor.CGColor, bottomColor.CGColor]
-        let gradientLocations = [0.0, 1.0]
-        
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = gradientBackgroundColors
-        gradientLayer.locations = gradientLocations
-        
-        gradientLayer.frame = sender.bounds
-        let backgroundView = UIView(frame: sender.bounds)
-        backgroundView.layer.insertSublayer(gradientLayer, atIndex: 0)
-        sender.backgroundView = backgroundView
-    
-    }
-    
     func bindEvents() {
         
         SocketHandler.socket.on("reloadRaceView") {data, ack in
             
-            self.getTableViewData()
+            self.reloadTableViewCell(data[0] as! Int, id: data[1] as! String)
             
         }
         
     }
     
-    func getTableViewData() {
+    func reloadTableViewCell(index: Int, id: String) {
         
-        races = [Race]()
+        let requestURL = "http://real-time-running.herokuapp.com/api/races/\(id)"
 
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        
-        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        loadingNotification.mode = MBProgressHUDMode.Indeterminate
-        loadingNotification.labelText = "Loading"
+        Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
+                    
+            if let competitors = json[0]["competitors"].arrayObject as? [String] {
+                
+                self.races[index].competitors = competitors
 
-        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
+            }
             
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
-
-                if let err = error{
-                    
-                    print("Error:\(err)")
-                
-                    return
-                
-                }
-                
-                for (_, value) in json {
-                    
-                    if let raceId = value["_id"].string, let createdAt = value["createdAt"].string, let parsedDate = formatter.dateFromString(createdAt), let competitors = value["competitors"].array, let distance = value["distance"].int, let live = value["live"].bool {
-                        
-                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live)
-                        
-                        self.races.append(race)
-                        
-                    }
-                    
-                }
-                
-                dispatch_async(dispatch_get_main_queue()) {
-                    
-                    self.tableView.reloadData()
-                    
-                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-                    
-                }
-                
-            })
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
 
         })
         

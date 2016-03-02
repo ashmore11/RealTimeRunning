@@ -110,30 +110,15 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func setupLayout() {
-        
-        let gradientLayer = CAGradientLayer()
-        
-        gradientLayer.frame = self.view.bounds
-        
-        let color1 = UIColor(red: 0.878, green: 0.517, blue: 0.258, alpha: 1.0).CGColor as CGColorRef
-        let color2 = UIColor(red: 0.592, green: 0.172, blue: 0.070, alpha: 1.0).CGColor as CGColorRef
-        
-        gradientLayer.colors = [color1, color2]
-        gradientLayer.locations = [0.0, 0.75]
-        
-        self.view.layer.insertSublayer(gradientLayer, atIndex: 0)
+    
+        setViewGradient(self.view)
         
         topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
         
-        racesButton.layer.shadowColor = UIColor.blackColor().CGColor
-        racesButton.layer.shadowOffset = CGSizeMake(0, 0)
-        racesButton.layer.shadowRadius = 5
-        racesButton.layer.shadowOpacity = 0.5
+        setButtonGradient(racesButton)
         
         fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
         fbProfileImage.clipsToBounds = true
-        
-        racesButton.backgroundColor = UIColor(white: 0, alpha: 0.5)
         
     }
     
@@ -161,6 +146,8 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         navigationItem.title = "SIGN IN"
         self.fbProfileImage.image = nil
+        racesButton.enabled = false
+        racesButton.alpha = 0
         
     }
     
@@ -226,13 +213,17 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             "profileImage": profileImageURL
         ]
         
-        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/users/\(fbid)").responseSwiftyJSON({ (request, response, json, error) in
+        let getURL = "http://real-time-running.herokuapp.com/api/users/\(fbid)"
+        let postURL = "http://real-time-running.herokuapp.com/api/users/"
+        
+        Alamofire.request(.GET, getURL).responseSwiftyJSON({ (request, response, json, error) in
             
             if json.count == 0 {
                 
-                Alamofire.request(.POST, "http://real-time-running.herokuapp.com/api/users/", parameters: parameters, encoding: .JSON).responseSwiftyJSON({ (request, response, json, error) in
+                Alamofire.request(.POST, postURL, parameters: parameters, encoding: .JSON)
+                    .responseSwiftyJSON({ (request, response, json, error) in
                     
-                    print(json["message"])
+                        print(json["message"])
                     
                 })
                 
@@ -249,43 +240,34 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         
-        let loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        loadingNotification.mode = MBProgressHUDMode.Indeterminate
-        loadingNotification.labelText = "Loading"
+        showActivityIndicator(self.view, text: "Loading Races")
         
-        Alamofire.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+        racesButton.enabled = false
+        
+        let requestURL = "http://real-time-running.herokuapp.com/api/races"
+        
+        Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
                 
-                if let err = error{
-                    
-                    print("Error:\(err)")
-                    
-                    return
-                    
-                }
+            for (key, value) in json {
                 
-                for (_, value) in json {
+                if  let raceId = value["_id"].string,
+                    let createdAt = value["createdAt"].string,
+                    let parsedDate = formatter.dateFromString(createdAt),
+                    let competitors = value["competitors"].arrayObject as? [String],
+                    let distance = value["distance"].int,
+                    let live = value["live"].bool {
                     
-                    if let raceId = value["_id"].string, let createdAt = value["createdAt"].string, let parsedDate = formatter.dateFromString(createdAt), let competitors = value["competitors"].array, let distance = value["distance"].int, let live = value["live"].bool {
-                        
-                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live)
-                        
+                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(key)!)
+                    
                         self.races.append(race)
-                        
-                    }
                     
                 }
                 
-                dispatch_async(dispatch_get_main_queue()) {
+            }
                     
-                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            hideActivityIndicator(self.view)
                     
-                    self.performSegueWithIdentifier("showRaces", sender: sender)
-                    
-                }
-                
-            })
+            self.performSegueWithIdentifier("showRaces", sender: sender)
             
         })
         
@@ -294,6 +276,8 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "showRaces" {
+            
+            racesButton.enabled = true
             
             let backItem = UIBarButtonItem()
             backItem.title = "PROFILE"
