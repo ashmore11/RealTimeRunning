@@ -18,6 +18,8 @@
 		C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E71C78983C005AB06F /* SharedLocationManager.swift */; };
 		C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */; };
 		C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647EB1C78A593005AB06F /* MapViewController.swift */; };
+		C4E24C411C86F92E006F5712 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */; };
+		C4E24C421C86F93B006F5712 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */; };
 		C4EC42FA1C7F2D5600A458E3 /* raceHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */; };
 		C4EC42FC1C7F2DF200A458E3 /* raceHistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42FB1C7F2DF200A458E3 /* raceHistoryTableViewController.swift */; };
 		C4EC42FE1C7F402D00A458E3 /* raceHistorySummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EC42FD1C7F402D00A458E3 /* raceHistorySummaryViewController.swift */; };
@@ -39,10 +41,7 @@
 		D2AFE2001C75EBC3009750A8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FF1C75EBC3009750A8 /* User.swift */; };
 		D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */; };
 		D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */; };
-		D2B341681C87068E0024114C /* Oswald-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67821C81ABF800338D01 /* Oswald-ExtraLight.ttf */; };
-		D2B341691C87068E0024114C /* Oswald-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67831C81ABF800338D01 /* Oswald-Light.ttf */; };
-		D2B3416A1C87068E0024114C /* Oswald-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67841C81ABF800338D01 /* Oswald-Medium.ttf */; };
-		D2B3416B1C87068E0024114C /* Oswald-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67851C81ABF800338D01 /* Oswald-Regular.ttf */; };
+		F26242D9C92B38A80BBFC014 /* Pods_RealTimeRunningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B04F00C144E9C6F830EF8A /* Pods_RealTimeRunningTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,7 +69,9 @@
 
 /* Begin PBXFileReference section */
 		1470CD3C775CFC279C23ED3C /* Pods-RealTimeRunning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealTimeRunning.release.xcconfig"; path = "Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning.release.xcconfig"; sourceTree = "<group>"; };
+		54B04F00C144E9C6F830EF8A /* Pods_RealTimeRunningTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealTimeRunningTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		79F7C1862193F743D04764FC /* Pods_RealTimeRunning.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealTimeRunning.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A209476DC16635C56BD40475 /* Pods-RealTimeRunningTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealTimeRunningTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RealTimeRunningTests/Pods-RealTimeRunningTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C42C383D1C7DC3C70080BFFC /* realTimeRunning.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = realTimeRunning.xcdatamodel; sourceTree = "<group>"; };
 		C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawRaceDataTableViewController.swift; sourceTree = "<group>"; };
 		C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawTableViewCell.swift; sourceTree = "<group>"; };
@@ -110,6 +111,7 @@
 		D2AFE1FF1C75EBC3009750A8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RacesTableViewController.swift; sourceTree = "<group>"; };
 		D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceTableViewCell.swift; sourceTree = "<group>"; };
+		E03FA64D4A6A3E2D3BD9503F /* Pods-RealTimeRunningTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealTimeRunningTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RealTimeRunningTests/Pods-RealTimeRunningTests.release.xcconfig"; sourceTree = "<group>"; };
 		FA77EDEB677191A8B3B61085 /* Pods-RealTimeRunning.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealTimeRunning.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -128,6 +130,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4E24C421C86F93B006F5712 /* FBSDKLoginKit.framework in Frameworks */,
+				C4E24C411C86F92E006F5712 /* FBSDKCoreKit.framework in Frameworks */,
+				F26242D9C92B38A80BBFC014 /* Pods_RealTimeRunningTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +144,8 @@
 			children = (
 				FA77EDEB677191A8B3B61085 /* Pods-RealTimeRunning.debug.xcconfig */,
 				1470CD3C775CFC279C23ED3C /* Pods-RealTimeRunning.release.xcconfig */,
+				A209476DC16635C56BD40475 /* Pods-RealTimeRunningTests.debug.xcconfig */,
+				E03FA64D4A6A3E2D3BD9503F /* Pods-RealTimeRunningTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -226,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				79F7C1862193F743D04764FC /* Pods_RealTimeRunning.framework */,
+				54B04F00C144E9C6F830EF8A /* Pods_RealTimeRunningTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -258,9 +266,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D226B4C61C73B28400366800 /* Build configuration list for PBXNativeTarget "RealTimeRunningTests" */;
 			buildPhases = (
+				8BB5054FA1B08E16EF15C929 /* Check Pods Manifest.lock */,
 				D226B4B61C73B28400366800 /* Sources */,
 				D226B4B71C73B28400366800 /* Frameworks */,
 				D226B4B81C73B28400366800 /* Resources */,
+				EBA1EE22E06C01B94BC7D558 /* Embed Pods Frameworks */,
+				595D1BCD981AFB720744F575 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -284,7 +295,7 @@
 				TargetAttributes = {
 					D226B4A51C73B28400366800 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 2M48QV2N86;
+						DevelopmentTeam = TM5JB8724P;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -371,6 +382,36 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		595D1BCD981AFB720744F575 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RealTimeRunningTests/Pods-RealTimeRunningTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8BB5054FA1B08E16EF15C929 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		8F96CB215D198A0FA588D6B3 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -384,6 +425,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EBA1EE22E06C01B94BC7D558 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RealTimeRunningTests/Pods-RealTimeRunningTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -592,8 +648,13 @@
 		};
 		D226B4C71C73B28400366800 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A209476DC16635C56BD40475 /* Pods-RealTimeRunningTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = RealTimeRunningTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.scottashmore.RealTimeRunningTests;
@@ -604,8 +665,13 @@
 		};
 		D226B4C81C73B28400366800 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E03FA64D4A6A3E2D3BD9503F /* Pods-RealTimeRunningTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = RealTimeRunningTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.scottashmore.RealTimeRunningTests;

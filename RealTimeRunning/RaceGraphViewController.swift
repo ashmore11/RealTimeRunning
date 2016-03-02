@@ -59,7 +59,7 @@ class RaceGraphViewController: UIViewController {
                 // Convert from meters per second to kilometers per hour
                 topSpeed = topSpeed * 3.6
                 // Give the graph some headroom
-                topSpeed = topSpeed * 1.5
+                topSpeed = topSpeed * 1.2
                 if result.count > 1 {
                     let first = result.first as! RunData
                     let sDate = first.timeStamp

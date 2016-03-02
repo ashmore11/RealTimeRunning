@@ -14,6 +14,54 @@ import SwiftyJSON
 import Alamofire_SwiftyJSON
 import MBProgressHUD
 
+class raceTester {
+    var start = NSDate() // <- Start time
+    var runNumber = -1
+    var testRaces:[Race] = []
+    
+    init(runNo:Int) {
+        self.runNumber = runNo
+    }
+    
+    func readRacesTest() ->[Race] {
+
+        print("Executing readRacesTest for run \(self.runNumber)")
+        let manager = Manager.sharedInstance
+        
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        self.start = NSDate() // <- Start time
+        manager.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
+            let end = NSDate()   // <- End time
+            if let err = error{
+                print("Error:\(err)")
+                return
+            }
+            for (key, value) in json {
+                if  let raceId = value["_id"].string,
+                    let createdAt = value["createdAt"].string,
+                    let parsedDate = formatter.dateFromString(createdAt),
+                    let competitors = value["competitors"].arrayObject as? [String],
+                    let distance = value["distance"].int,
+                    let live = value["live"].bool {
+                        
+                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(key)!)
+                        
+                        self.testRaces.append(race)
+                        
+                }
+            }
+            let timeInterval: Double = end.timeIntervalSinceDate(self.start) // <- Difference in seconds (double)
+            print("RunNumber: \(self.runNumber) Time to read races from server is: \(timeInterval) seconds Total Races: \(self.testRaces.count)")
+            
+        })
+        return testRaces
+    }
+  
+    
+    
+}
+
 class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     // MARK: Properties
@@ -28,6 +76,9 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        //testSeverRead()
+
         
         SocketHandler.socket.connect()
         
@@ -250,6 +301,23 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         }
         
     }
+    
+    func testSeverRead() {
+        
+        let totalReads = 100
+        print("TEST RUN Started")
+        for i in 0...totalReads {
+            let newTester = raceTester(runNo: i)
+            _ = newTester.readRacesTest()
+        }
+        print("TEST RUN Finished")
+        
+       
+        
+    }
+    
+    
+    
 
 }
 
