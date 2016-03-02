@@ -71,7 +71,7 @@ class RacesTableViewController: UITableViewController {
         
         SocketIOManager.sharedInstance.reloadRaceCell { (index, id) -> Void in
 
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            dispatch_async(dispatch_get_main_queue(), { _ in
 
                 self.reloadTableViewCell(index, id: id)
                 

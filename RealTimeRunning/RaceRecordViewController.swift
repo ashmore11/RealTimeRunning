@@ -161,7 +161,7 @@ class RaceRecordViewController: UIViewController {
                     return
                 }
                 
-                SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, id: self.race.id) { () -> Void in
+                SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, id: self.race.id) { _ in
                  
                     print("emit complete")
                     
