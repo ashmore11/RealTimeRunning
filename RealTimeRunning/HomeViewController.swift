@@ -67,30 +67,15 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func setupLayout() {
-        
-        let gradientLayer = CAGradientLayer()
-        
-        gradientLayer.frame = self.view.bounds
-        
-        let color1 = UIColor(red: 0.878, green: 0.517, blue: 0.258, alpha: 1.0).CGColor as CGColorRef
-        let color2 = UIColor(red: 0.592, green: 0.172, blue: 0.070, alpha: 1.0).CGColor as CGColorRef
-        
-        gradientLayer.colors = [color1, color2]
-        gradientLayer.locations = [0.0, 0.75]
-        
-        self.view.layer.insertSublayer(gradientLayer, atIndex: 0)
+    
+        setViewGradient(self.view)
         
         topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
         
-        racesButton.layer.shadowColor = UIColor.blackColor().CGColor
-        racesButton.layer.shadowOffset = CGSizeMake(0, 0)
-        racesButton.layer.shadowRadius = 5
-        racesButton.layer.shadowOpacity = 0.5
+        setButtonGradient(racesButton)
         
         fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
         fbProfileImage.clipsToBounds = true
-        
-        racesButton.backgroundColor = UIColor.blackColor()
         
     }
     
@@ -118,6 +103,8 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         navigationItem.title = "SIGN IN"
         self.fbProfileImage.image = nil
+        racesButton.enabled = false
+        racesButton.alpha = 0
         
     }
     

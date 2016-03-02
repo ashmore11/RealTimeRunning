@@ -49,6 +49,20 @@ extension UIView {
     }
 }
 
+func setViewGradient(view: UIView) {
+    
+    let color1 = UIColor(red: 0.878, green: 0.517, blue: 0.258, alpha: 1.0).CGColor as CGColorRef
+    let color2 = UIColor(red: 0.592, green: 0.172, blue: 0.070, alpha: 1.0).CGColor as CGColorRef
+    
+    let gradientLayer = CAGradientLayer()
+    gradientLayer.frame = view.bounds
+    gradientLayer.colors = [color1, color2]
+    gradientLayer.locations = [0.0, 0.7]
+    
+    view.layer.insertSublayer(gradientLayer, atIndex: 0)
+    
+}
+
 func setTableViewBackgroundGradient(sender: UITableViewCell, topColor: UIColor, bottomColor: UIColor) {
     
     let gradientBackgroundColors = [topColor.CGColor, bottomColor.CGColor]
@@ -62,6 +76,32 @@ func setTableViewBackgroundGradient(sender: UITableViewCell, topColor: UIColor, 
     let backgroundView = UIView(frame: sender.bounds)
     backgroundView.layer.insertSublayer(gradientLayer, atIndex: 0)
     sender.backgroundView = backgroundView
+    
+}
+
+func setButtonGradient(buttons: UIButton...) {
+    
+    for button in buttons {
+     
+        let color1 = UIColor(red: 0.115, green: 0.115, blue: 0.115, alpha: 1).CGColor
+        let color2 = UIColor.blackColor().CGColor
+        
+        let gradientColors = [color1, color2, color1]
+        let gradientLocations = [0.0, 0.5, 1.0]
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = button.bounds
+        gradientLayer.colors = gradientColors
+        gradientLayer.locations = gradientLocations
+        
+        button.layer.insertSublayer(gradientLayer, atIndex: 0)
+        button.layer.shadowOffset = CGSizeMake(0, 0)
+        button.layer.shadowRadius = 5
+        button.layer.shadowOpacity = 0.5
+        
+        button.clipsToBounds = true
+    
+    }
     
 }
 
