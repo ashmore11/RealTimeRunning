@@ -104,6 +104,8 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             getData()
             
+            fadeRacesButton(1, delay: 0.25)
+            
         }
         
     }
@@ -115,9 +117,16 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
         
         setButtonGradient(racesButton)
+        racesButton.alpha = 0
         
         fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
         fbProfileImage.clipsToBounds = true
+        
+    }
+    
+    func fadeRacesButton(alpha: CGFloat, delay: NSTimeInterval) {
+        
+        UIView.animateWithDuration(0.3, delay: delay, options: [.CurveEaseInOut], animations: { self.racesButton.alpha = alpha }, completion: nil)
         
     }
     
@@ -127,7 +136,8 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         if error == nil {
             
-            print("Login complete.")
+            racesButton.enabled = true
+            fadeRacesButton(1, delay: 1)
             
             getData()
 
@@ -141,12 +151,11 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
         
-        print("User logged out...")
-        
         navigationItem.title = "SIGN IN"
         self.fbProfileImage.image = nil
+        
         racesButton.enabled = false
-        racesButton.alpha = 0
+        fadeRacesButton(0, delay: 0)
         
     }
     

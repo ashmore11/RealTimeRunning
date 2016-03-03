@@ -112,7 +112,7 @@ func getStartTime(index: Int) -> String {
     components.second = 0
     let startDate = NSCalendar.currentCalendar().dateFromComponents(components)
     
-    components.setValue(index + 1, forComponent: .Hour);
+    components.setValue(index + 1, forComponent: .Hour)
     let startTime = NSCalendar.currentCalendar().dateByAddingComponents(components, toDate: startDate!, options: NSCalendarOptions(rawValue: 0))
     
     let dateFormatter = NSDateFormatter()
@@ -131,6 +131,7 @@ func showActivityIndicator(view: UIView, text: String?) {
     
     if text != nil {
         loadingNotification.labelText = text
+        loadingNotification.labelFont = UIFont(name: "Oswald-Regular", size: 20)
     }
     
 }

@@ -24,6 +24,7 @@
             <string>Oswald-Regular</string>
             <string>Oswald-Regular</string>
             <string>Oswald-Regular</string>
+            <string>Oswald-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -136,6 +137,12 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Position" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CqQ-fc-M1I">
+                                        <rect key="frame" x="0.0" y="87" width="560" height="24"/>
+                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="f4N-CI-C6m">
@@ -232,6 +239,7 @@
                     <connections>
                         <outlet property="durationLabel" destination="D4I-aA-Vv1" id="ETM-Mj-9My"/>
                         <outlet property="joinRaceButton" destination="lwY-Zj-P3r" id="oH0-F8-axG"/>
+                        <outlet property="positionLabel" destination="CqQ-fc-M1I" id="b4A-od-UV4"/>
                         <outlet property="raceDataButton" destination="2wD-BG-Si8" id="anE-fg-f5g"/>
                         <outlet property="raceDistanceLabel" destination="RvV-Sq-jhZ" id="ien-ri-JNf"/>
                         <outlet property="speedLabel" destination="9Zx-3B-szD" id="xuU-rj-W5X"/>

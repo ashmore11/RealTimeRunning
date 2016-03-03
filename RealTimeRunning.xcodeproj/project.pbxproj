@@ -41,6 +41,10 @@
 		D2AFE2001C75EBC3009750A8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FF1C75EBC3009750A8 /* User.swift */; };
 		D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */; };
 		D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */; };
+		D2B3416C1C8843150024114C /* Oswald-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67821C81ABF800338D01 /* Oswald-ExtraLight.ttf */; };
+		D2B3416D1C8843150024114C /* Oswald-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67831C81ABF800338D01 /* Oswald-Light.ttf */; };
+		D2B3416E1C8843150024114C /* Oswald-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67841C81ABF800338D01 /* Oswald-Medium.ttf */; };
+		D2B3416F1C8843150024114C /* Oswald-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67851C81ABF800338D01 /* Oswald-Regular.ttf */; };
 		F26242D9C92B38A80BBFC014 /* Pods_RealTimeRunningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B04F00C144E9C6F830EF8A /* Pods_RealTimeRunningTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -332,6 +336,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2B3416C1C8843150024114C /* Oswald-ExtraLight.ttf in Resources */,
+				D2B3416D1C8843150024114C /* Oswald-Light.ttf in Resources */,
+				D2B3416E1C8843150024114C /* Oswald-Medium.ttf in Resources */,
+				D2B3416F1C8843150024114C /* Oswald-Regular.ttf in Resources */,
 				D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */,
 				D226B4B11C73B28400366800 /* Assets.xcassets in Resources */,
 				D226B4AF1C73B28400366800 /* Main.storyboard in Resources */,

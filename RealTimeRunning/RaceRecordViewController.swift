@@ -34,6 +34,7 @@ class RaceRecordViewController: UIViewController {
     var managedObjectContext:NSManagedObjectContext?
     var bLocationsReceived = false
     var runDetailObject:RunDetail?
+    var userPositions = [String: Double]()
 
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
@@ -42,6 +43,7 @@ class RaceRecordViewController: UIViewController {
     @IBOutlet weak var joinRaceButton: UIButton!
     @IBOutlet weak var raceDataButton: UIButton!
     @IBOutlet weak var viewMapButton: UIButton!
+    @IBOutlet weak var positionLabel: UILabel!
 
     func receiveLocationNotification(notification: NSNotification) {
         
@@ -66,9 +68,11 @@ class RaceRecordViewController: UIViewController {
             
             dispatch_async(dispatch_get_main_queue()) {
                 
-                self.durationLabel.text = String(format:"Duration: %@", self.durationString)
-                self.speedLabel.text = String(format:"Speed: %6.2f Kph", self.speed * 3.6)
-                self.raceDistanceLabel.text = String(format:"Distanced Raced: %6.2f Meters", self.distance)
+                self.durationLabel.text = "Duration: \(self.durationString)"
+                self.speedLabel.text = "Speed: \(self.speed * 3.6)"
+                self.raceDistanceLabel.text = "Distanced Raced: \(self.distance) Meters"
+                
+                SocketIOManager.sharedInstance.sendPositionUpdate(self.user.id, distance: self.distance, speed: self.speed)
             
             }
 
@@ -101,6 +105,30 @@ class RaceRecordViewController: UIViewController {
         if self.navigationController!.respondsToSelector("interactivePopGestureRecognizer") {
             
             self.navigationController!.interactivePopGestureRecognizer!.enabled = false
+            
+        }
+        
+        SocketIOManager.sharedInstance.getPositionUpdate { (id, distance, speed) -> Void in
+            
+            dispatch_async(dispatch_get_main_queue(), { _ in
+
+                self.userPositions[id] = distance
+                
+                let sortedPositions = self.userPositions.sort { $0.1 > $1.1 }
+                
+                let keys = sortedPositions.map { return $0.0 }
+                
+                for (index, element) in keys.enumerate() {
+                    
+                    if element == self.user.id {
+                        
+                        self.positionLabel.text = "Position: \(index + 1)"
+                        
+                    }
+                    
+                }
+                
+            })
             
         }
         
