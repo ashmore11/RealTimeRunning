@@ -35,6 +35,17 @@ class RaceRecordViewController: UIViewController {
     var bLocationsReceived = false
     var runDetailObject:RunDetail?
     var userPositions = [String: Double]()
+    var activityManager:CMMotionActivityManager?
+    var pedoMeter:CMPedometer?
+    var stepsTaken:Int = 0
+    var activity:String = ""
+    var pedDistance = 0.0
+    var currentPace = 0.0
+    var currentCadence = 0.0
+    var floorsAscended = 0.0
+    var floorsDescended = 0.0
+    var altitude:Double = 0.0
+    var pressure:Double = 0.0
 
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
@@ -44,6 +55,16 @@ class RaceRecordViewController: UIViewController {
     @IBOutlet weak var raceDataButton: UIButton!
     @IBOutlet weak var viewMapButton: UIButton!
     @IBOutlet weak var positionLabel: UILabel!
+    @IBOutlet weak var paceLabel: UILabel!
+
+    func receiveAltimeterNotification(notification:NSNotification) {
+        let userInfo:NSDictionary = notification.userInfo!
+        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
+        if let data = altimeterData {
+            pressure = Double(data.pressure)
+            altitude = Double(data.relativeAltitude)
+        }
+    }
 
     func receiveLocationNotification(notification: NSNotification) {
         
@@ -69,8 +90,8 @@ class RaceRecordViewController: UIViewController {
             dispatch_async(dispatch_get_main_queue()) {
                 
                 self.durationLabel.text = "Duration: \(self.durationString)"
-                self.speedLabel.text = "Speed: \(self.speed * 3.6)"
-                self.raceDistanceLabel.text = "Distanced Raced: \(self.distance) Meters"
+                self.speedLabel.text = String(format:"Speed: %6.2f Kph",self.speed * 3.6)
+                self.raceDistanceLabel.text = String(format:"Distanced Raced: %6.2f Meters",self.distance)
                 
                 SocketIOManager.sharedInstance.sendPositionUpdate(self.user.id, distance: self.distance, speed: self.speed)
             
@@ -100,6 +121,8 @@ class RaceRecordViewController: UIViewController {
             self.title = self.raceName
             
         }
+        self.activityManager = CMMotionActivityManager()
+        self.pedoMeter = CMPedometer()
 
         // disable the interactivePopGestureRecognizer so you cant slide from left to pop the current view
         if self.navigationController!.respondsToSelector("interactivePopGestureRecognizer") {
@@ -306,6 +329,14 @@ class RaceRecordViewController: UIViewController {
                     dataObject.longitude = self.lon
                     dataObject.speed = self.speed
                     dataObject.distance = self.distance
+                    dataObject.altitude = self.altitude
+
+                    dataObject.stepsTaken = self.stepsTaken
+                    dataObject.pedDistance = self.pedDistance
+                    dataObject.currentPace = self.currentPace
+                    dataObject.currentCadence = self.currentCadence
+                    dataObject.floorsAscended = self.floorsAscended
+                    dataObject.floorsDescended = self.floorsDescended
                     dataObject.runDataToRunDetail = runDetail
                     
                     self.saveData()
@@ -333,6 +364,7 @@ class RaceRecordViewController: UIViewController {
     }
 
     func willStartRace() {
+        setupMotionManage()
 
         // Hide the back button incase the user accidently hits it
         self.navigationItem.setHidesBackButton(true, animated: true)
@@ -354,6 +386,9 @@ class RaceRecordViewController: UIViewController {
     }
 
     func willStopRace() {
+        if let ped = self.pedoMeter {
+            ped.stopPedometerUpdates()
+        }
         
         let title = NSLocalizedString("Finished Race", comment: "")
 
@@ -394,5 +429,65 @@ class RaceRecordViewController: UIViewController {
         }
         
     }
+    
+    // This sets up the motion manager to return step data
+    func setupMotionManage() {
+        if(CMPedometer.isStepCountingAvailable()){
+            if let ped = self.pedoMeter {
+                ped.startPedometerUpdatesFromDate(NSDate()) { (data, error) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if(error == nil){
+                            if let stepData = data {
+                                self.stepsTaken = Int(stepData.numberOfSteps)
+                                if let dst = stepData.distance {
+                                    self.pedDistance = Double(dst)
+                                }
+                                if let pce = stepData.currentPace {
+                                    self.currentPace = Double(pce)
+                                }
+                                if let cad = stepData.currentCadence {
+                                    self.currentCadence = Double(cad)
+                                }
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    //self.stepsLabel.text = String(format:"Steps taken: %d",self.stepsTaken)
+                                    self.paceLabel.text = String(format:"Pace: %6.2f Sec. / Mtr.",self.currentPace)
+                                    //self.cadenceLabel.text = String(format:"Cadence: %6.2f Steps / Sec.",self.currentCadence)
+                                }
+                                
+                            }
+                        }
+                        else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
+                            self.didEncounterAuthorizationError()
+                        }
+                    })
+                }
+            }
+        }
+    }
+
+    func didEncounterAuthorizationError() {
+        let title = NSLocalizedString("Motion Activity Not Authorized", comment: "")
+        
+        let message = NSLocalizedString("To enable Motion features, please allow access to Motion & Fitness in Settings under Privacy.", comment: "")
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        let openSettingsAction = UIAlertAction(title: "Open Settings", style: .Default) { _ in
+            // Open the Settings app.
+            let url = NSURL(string: UIApplicationOpenSettingsURLString)!
+            
+            UIApplication.sharedApplication().openURL(url)
+        }
+        
+        alert.addAction(openSettingsAction)
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.presentViewController(alert, animated: true, completion:nil)
+        }
+    }
+
 
 }
