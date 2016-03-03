@@ -54,4 +54,20 @@ class SocketIOManager: NSObject {
         
     }
     
+    func sendPositionUpdate(id: String, distance: Double, speed: Double) {
+        
+        socket.emit("positionUpdate", id, distance, speed)
+        
+    }
+    
+    func getPositionUpdate(completionHandler: (id: String, distance: Double, speed: Double) -> Void) {
+        
+        socket.on("positionUpdateReceived") { (data, ack) -> Void in
+            
+            completionHandler(id: data[0] as! String, distance: data[1] as! Double, speed: data[2] as! Double)
+            
+        }
+        
+    }
+    
 }
