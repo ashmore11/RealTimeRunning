@@ -32,6 +32,8 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.backgroundColor = UIColor.blackColor()
+
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             self.managedObjectContext = delegate.managedObjectContext
         }

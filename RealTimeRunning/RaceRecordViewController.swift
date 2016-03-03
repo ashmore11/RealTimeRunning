@@ -245,7 +245,7 @@ class RaceRecordViewController: UIViewController {
         if let context = self.managedObjectContext {
             
             if let detailObject = NSEntityDescription.insertNewObjectForEntityForName("RunDetail", inManagedObjectContext: context) as? RunDetail {
-                
+                detailObject.date = NSDate()
                 detailObject.name = self.raceName
                 detailObject.distance = 10.0
                 detailObject.organiser = "East London athletics club"

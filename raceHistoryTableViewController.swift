@@ -27,7 +27,9 @@ class raceHistoryTableViewController: UITableViewController, NSFetchedResultsCon
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "All Races"
+        self.tableView.backgroundColor = UIColor.blackColor()
+
+        self.title = "My History"
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             self.managedObjectContext = delegate.managedObjectContext
         }
@@ -67,6 +69,8 @@ class raceHistoryTableViewController: UITableViewController, NSFetchedResultsCon
     
     func configureCell(cell:raceHistoryTableViewCell, indexPath:NSIndexPath) {
         // Configure the cell...
+        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1), bottomColor: UIColor.blackColor())
+
         if let rundetail = fetchedResultsController?.objectAtIndexPath(indexPath) as? RunDetail {
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "d MMM y"
@@ -79,6 +83,7 @@ class raceHistoryTableViewController: UITableViewController, NSFetchedResultsCon
                 raceName = name
             }
             cell.raceLabel.text = String(format:"%@  Name: %@",formattedDate,raceName)
+            cell.raceLabel.textColor = UIColor.whiteColor()
         }
     }
     

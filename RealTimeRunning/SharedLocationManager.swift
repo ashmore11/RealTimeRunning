@@ -180,6 +180,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
     // This delegate method is invoked when the location managed encounters an error condition.
     func locationManager(manager:CLLocationManager, didFailWithError error:NSError) {
         NSNotificationCenter.defaultCenter().postNotificationName("locationNotification", object:nil, userInfo:["Error":error])
+        /*
         if error.code == CLError.Denied.rawValue {
             // This error indicates that the user has denied the application's request to use location services.
             print("DEBUG Location error:Location services denied")
@@ -190,6 +191,50 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         } else {
             print("DEBUG Location error:%@",error.description)
         }
+        */
+        var errString = ""
+        switch error.code {
+        case CLError.LocationUnknown.rawValue:
+            errString = "The location manager was unable to obtain a location value right now."
+        case CLError.Denied.rawValue:
+            errString = "Access to the location service was denied by the user."
+            manager.stopUpdatingHeading()
+        case CLError.Network.rawValue:
+            errString = "The network was unavailable or a network error occurred."
+        case CLError.HeadingFailure.rawValue:
+            errString = "The heading could not be determined."
+        case CLError.RegionMonitoringDenied.rawValue:
+            errString = "Access to the region monitoring service was denied by the user."
+        case CLError.RegionMonitoringFailure.rawValue:
+            errString = "A registered region cannot be monitored."
+        case CLError.RegionMonitoringSetupDelayed.rawValue:
+            errString = "Core Location could not initialize the region monitoring feature immediately."
+        case CLError.RegionMonitoringResponseDelayed.rawValue:
+            errString = "Core Location will deliver events but they may be delayed."
+        case CLError.GeocodeFoundNoResult.rawValue:
+            errString = "The geocode request yielded no result."
+        case CLError.GeocodeFoundPartialResult.rawValue:
+            errString = "The geocode request yielded a partial result."
+        case CLError.GeocodeCanceled.rawValue:
+            errString = "The geocode request was canceled."
+        case CLError.DeferredFailed.rawValue:
+            errString = "The location manager did not enter deferred mode for an unknown reason. GPS may be unavialable"
+        case CLError.DeferredNotUpdatingLocation.rawValue:
+            errString = "The location manager did not enter deferred mode because location updates were already disabled or paused."
+        case CLError.DeferredAccuracyTooLow.rawValue:
+            errString = "Deferred mode is not supported for the requested accuracy."
+        case CLError.DeferredDistanceFiltered.rawValue:
+            errString = "Deferred mode does not support distance filters."
+        case CLError.DeferredCanceled.rawValue:
+            errString = "The request for deferred updates was canceled by your app or by the location manager."
+        case CLError.RangingUnavailable.rawValue:
+            errString = "Ranging is disabled."
+        case CLError.RangingFailure.rawValue:
+            errString = "A general ranging error occurred."
+        default:
+            errString = "An unknown error has occured"
+        }
+        print(errString)
     }
 
     func getVariation() -> Double {

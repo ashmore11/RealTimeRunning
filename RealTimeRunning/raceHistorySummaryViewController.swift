@@ -26,6 +26,7 @@ class raceHistorySummaryViewController: UIViewController {
     @IBOutlet weak var timeLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
+        setViewGradient(self.view)
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             self.managedObjectContext = delegate.managedObjectContext
         }
@@ -67,8 +68,13 @@ class raceHistorySummaryViewController: UIViewController {
                     }
                 }
                 
+                if(result.count > 1) {
                 averageSpeed = totalSpeed / Double(result.count)
                 averageSpeedLabel.text = String(format: "Average Speed: %6.2f Kph",averageSpeed  * 3.6)
+                }
+                else {
+                    averageSpeedLabel.text = "Average Speed: Unset"
+                }
                 distanceLabel.text = String(format: "Distance: %6.2f Meters",totaldistance)
                 totalStepsLabel.text = String(format: "Total Steps: %d",totalSteps)
                 timeLabel.text = String(format: "Race Time: %@",raceTime)
