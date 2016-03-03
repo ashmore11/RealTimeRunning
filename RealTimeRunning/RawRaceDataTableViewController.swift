@@ -73,10 +73,14 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
     
     func configureCell(cell:RawTableViewCell, indexPath:NSIndexPath) {
         // Configure the cell...
+        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1), bottomColor: UIColor.blackColor())
         if let rundata = fetchedResultsController?.objectAtIndexPath(indexPath) as? RunData {
             cell.latLonLabel.text = formatLatLonPrintA(CLLocationCoordinate2DMake(Double(rundata.lattitude!), Double(rundata.longitude!)) , type: .degreeDecimalMinutes)
             cell.gpsDataLabel.text = String(format:"Speed:%6.2f Kph Distance:%6.2f",Double(rundata.speed!) * 3.6, Double(rundata.distance!))
             cell.pedometerDataLabel.text = String(format:"Steps:%d Pace:%6.2f Altitude:%6.2f",Int(rundata.stepsTaken!), Double(rundata.currentPace!),Double(rundata.altitude!))
+            cell.latLonLabel.textColor = UIColor.whiteColor()
+            cell.gpsDataLabel.textColor = UIColor.whiteColor()
+            cell.pedometerDataLabel.textColor = UIColor.whiteColor()
         }
     }
 
