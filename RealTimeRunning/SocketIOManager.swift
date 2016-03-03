@@ -36,11 +36,9 @@ class SocketIOManager: NSObject {
     
     }
     
-    func raceUsersUpdated(index: Int, id: String, completionHandler: () -> Void) {
+    func raceUsersUpdated(index: Int, id: String) {
         
         socket.emit("raceUpdated", index, id)
-        
-        completionHandler()
         
     }
     
