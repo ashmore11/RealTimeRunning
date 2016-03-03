@@ -60,7 +60,7 @@ class RacesTableViewController: UITableViewController {
         race.startTime = getStartTime(indexPath.row)
         
         cell.startTimeLabel.text = race.startTime
-        cell.competitorsLabel.text = "competitors: \(race.competitors!.count)"
+        cell.competitorsLabel.text = "competitors: \(race.competitors!.count)".uppercaseString
         cell.distanceLabel.text = "\(race.distance)km"
 
         return cell

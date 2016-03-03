@@ -381,7 +381,7 @@ class RaceRecordViewController: UIViewController {
         
         // Start a timer that will run the updateLog function once every second
         self.logTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLog", userInfo: nil, repeats: true)
-        self.startStopButton.setTitle("Stop", forState: .Normal)
+        self.startStopButton.setTitle("STOP", forState: .Normal)
     
     }
 
@@ -412,7 +412,7 @@ class RaceRecordViewController: UIViewController {
             
             NSNotificationCenter.defaultCenter().removeObserver(self, name:"locationNotification", object:nil)
             
-            self.startStopButton.setTitle("Start", forState: .Normal)
+            self.startStopButton.setTitle("START", forState: .Normal)
             self.myLocationManager?.workInBackground(false)
             self.myLocationManager = nil
             
