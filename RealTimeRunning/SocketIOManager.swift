@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SocketIOManager.swift
 //  RealTimeRunning
 //
 //  Created by Scott Ashmore on 26/02/2016.
@@ -17,6 +17,8 @@ class SocketIOManager: NSObject {
     override init() {
     
         super.init()
+        
+        listenForEvents()
     
     }
     
@@ -42,29 +44,42 @@ class SocketIOManager: NSObject {
         
     }
     
-    func reloadRaceCell(completionHandler: (index: Int, id: String) -> Void) {
-        
-        socket.on("reloadRaceView") { (data, ack) -> Void in
-            
-            completionHandler(index: data[0] as! Int, id: data[1] as! String)
-            
-        }
-        
-    }
-    
     func sendPositionUpdate(id: String, distance: Double, speed: Double) {
         
         socket.emit("positionUpdate", id, distance, speed)
         
     }
     
-    func getPositionUpdate(completionHandler: (id: String, distance: Double, speed: Double) -> Void) {
+    private func listenForEvents() {
+        
+        socket.on("reloadRaceView") { (data, ack) -> Void in
+            
+            let object = [
+                "index": data[0],
+                "id": data[1]
+            ]
+            
+            self.postNotification("reloadRaceView", object: object)
+            
+        }
         
         socket.on("positionUpdateReceived") { (data, ack) -> Void in
             
-            completionHandler(id: data[0] as! String, distance: data[1] as! Double, speed: data[2] as! Double)
+            let object = [
+                "id": data[0],
+                "distance": data[1],
+                "speed": data[2]
+            ]
+            
+            self.postNotification("positionUpdateReceived", object: object)
             
         }
+        
+    }
+    
+    func postNotification(name: String, object: [String: AnyObject]) {
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(name, object: object)
         
     }
     
