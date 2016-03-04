@@ -131,29 +131,7 @@ class RaceRecordViewController: UIViewController {
             
         }
         
-        SocketIOManager.sharedInstance.getPositionUpdate { (id, distance, speed) -> Void in
-            
-            dispatch_async(dispatch_get_main_queue(), { _ in
-
-                self.userPositions[id] = distance
-                
-                let sortedPositions = self.userPositions.sort { $0.1 > $1.1 }
-                
-                let keys = sortedPositions.map { return $0.0 }
-                
-                for (index, element) in keys.enumerate() {
-                    
-                    if element == self.user.id {
-                        
-                        self.positionLabel.text = "Position: \(index + 1)"
-                        
-                    }
-                    
-                }
-                
-            })
-            
-        }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePositions:", name: "positionUpdateReceived", object: nil)
         
     }
 
@@ -219,6 +197,30 @@ class RaceRecordViewController: UIViewController {
                 self.updateCompetitorsArray()
             
         })
+        
+    }
+    
+    func updatePositions(notification: NSNotification) {
+        
+        if let items = notification.object, let id = items["id"] as? String, let distance = items["distance"] as? Double {
+            
+            self.userPositions[id] = distance
+            
+            let sortedPositions = self.userPositions.sort { $0.1 > $1.1 }
+            
+            let keys = sortedPositions.map { return $0.0 }
+            
+            for (index, element) in keys.enumerate() {
+                
+                if element == self.user.id {
+                    
+                    self.positionLabel.text = "Position: \(index + 1)"
+                    
+                }
+                
+            }
+            
+        }
         
     }
     

@@ -27,7 +27,7 @@ class RacesTableViewController: UITableViewController {
         
         self.tableView.backgroundColor = UIColor.blackColor()
         
-        bindEvents()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "reloadRaceView", object: nil)
         
     }
 
@@ -51,7 +51,7 @@ class RacesTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! RaceTableViewCell
         
-        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1), bottomColor: UIColor.blackColor())
+        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
         
         cell.backgroundColor = UIColor.clearColor()
         
@@ -67,36 +67,26 @@ class RacesTableViewController: UITableViewController {
         
     }
     
-    func bindEvents() {
+    func reloadTableViewCell(notification: NSNotification) {
         
-        SocketIOManager.sharedInstance.reloadRaceCell { (index, id) -> Void in
+        if let items = notification.object, let index = items["index"] as? Int, let id = items["id"] as? String {
+        
+            let requestURL = "http://real-time-running.herokuapp.com/api/races/\(id)"
 
-            dispatch_async(dispatch_get_main_queue(), { _ in
+            Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
+                        
+                if let competitors = json[0]["competitors"].arrayObject as? [String] {
+                    
+                    self.races[index].competitors = competitors
 
-                self.reloadTableViewCell(index, id: id)
+                }
                 
+                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+
             })
             
         }
-        
-    }
-    
-    func reloadTableViewCell(index: Int, id: String) {
-        
-        let requestURL = "http://real-time-running.herokuapp.com/api/races/\(id)"
-
-        Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
-                    
-            if let competitors = json[0]["competitors"].arrayObject as? [String] {
-                
-                self.races[index].competitors = competitors
-
-            }
-            
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-
-        })
         
     }
     
