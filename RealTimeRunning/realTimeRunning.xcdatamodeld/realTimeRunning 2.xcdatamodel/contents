@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 7.0">
+    <entity name="ErrorLog" representedClassName=".ErrorLog" syncable="YES">
+        <attribute name="logDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="logMessage" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="RunData" representedClassName=".RunData" syncable="YES">
+        <attribute name="altitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="currentCadence" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="currentPace" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="distance" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="floorsAscended" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="floorsDescended" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="lattitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="pedDistance" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="stepsTaken" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="runDataToRunDetail" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RunDetail" inverseName="runDetailToRunData" inverseEntity="RunDetail" syncable="YES"/>
+    </entity>
+    <entity name="RunDetail" representedClassName=".RunDetail" syncable="YES">
+        <attribute name="contact" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="distance" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="organiser" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="startLat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="startLon" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="runDetailToRunData" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="RunData" inverseName="runDataToRunDetail" inverseEntity="RunData" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="RunData" positionX="-54" positionY="27" width="128" height="240"/>
+        <element name="RunDetail" positionX="-36" positionY="81" width="128" height="165"/>
+        <element name="ErrorLog" positionX="-45" positionY="135" width="128" height="75"/>
+    </elements>
+</model>
