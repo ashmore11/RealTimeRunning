@@ -9,8 +9,9 @@
 import UIKit
 import CoreData
 import CoreLocation
+import MessageUI
 
-class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, MFMailComposeViewControllerDelegate {
     var managedObjectContext: NSManagedObjectContext!
     var runDetail:RunDetail?
     
@@ -33,6 +34,9 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.backgroundColor = UIColor.blackColor()
+        
+        let newButton  = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "processAction:")
+        navigationItem.rightBarButtonItem = newButton
 
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             self.managedObjectContext = delegate.managedObjectContext
@@ -142,6 +146,97 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
             }
         default:break
         }
+    }
+    
+    func processAction(sender: AnyObject) {
+        if let context = self.managedObjectContext {
+            let fetchRequest = NSFetchRequest(entityName: "RunData")
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: true)]
+            fetchRequest.predicate = NSPredicate(format:"runDataToRunDetail = %@", self.runDetail!)
+            
+            do {
+                let xfetchedObjects = try context.executeFetchRequest(fetchRequest)
+                if(xfetchedObjects.count == 0) {
+                    return
+                }
+                if let dir : NSString = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.AllDomainsMask, true).first {
+                    let path = dir.stringByAppendingPathComponent("myrun.kml")
+                    
+                    
+                    let url = NSURL(fileURLWithPath: path)
+                   
+                    let fileManager = NSFileManager.defaultManager()
+                    
+                    // Delete 'hello.swift' file
+                    
+                    do {
+                        try fileManager.removeItemAtPath(path)
+                    }
+                    catch let error as NSError {
+                        logError("File to delete did no exist: \(error)")
+                    }
+                    
+                    do {
+                        // Write the new KML file
+                        let fileHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<kml xmlns=\"http://earth.google.com/kml/2.1\" xmlns:trails=\"http://www.google.com/kml/trails/1.0\">\r\n<Document>\r\n<name>track.kml</name>\r\n<Placemark>\r\n<name>RealTimeRunning data</name>\r\n<Style>\r\n<LineStyle>\r\n<color>ff0000ff</color>\r\n<width>1</width>\r\n</LineStyle>\r\n</Style>\r\n<MultiGeometry>\r\n<LineString>\r\n<tessellate>1</tessellate>\r\n<coordinates>\r\n"
+                        try fileHeader.appendLineToURL(url)
+                        for object in xfetchedObjects {
+                            if let runData = object as? RunData {
+                                let sentence = String(format:"%f,%f,0.0\r\n", Double(runData.longitude!), Double(runData.lattitude!))
+                                try sentence.appendLineToURL(url)
+                            }
+                        }
+                        let fileTrailer = "</coordinates>\r\n</LineString>\r\n</MultiGeometry>\r\n</Placemark>\r\n</Document>\r\n</kml>\r\n";
+                        try fileTrailer.appendLineToURL(url)
+                        
+                        sendEmail(path)
+
+                    }
+                    catch {
+                         logError("Error creating the KML file: \(error)")
+                    }
+                }
+            } catch let error as NSError {
+                logError("Fetch failed when creating kml output: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func sendEmail(filePath:String) {
+        if let fData = NSData(contentsOfFile: filePath) {
+            if MFMailComposeViewController.canSendMail() {
+                let mail = MFMailComposeViewController()
+                mail.mailComposeDelegate = self
+                mail.setToRecipients(["hello@scottashmore.net"])
+                //mail.setToRecipients(["bob.ashmore@dunluce.com"])
+                mail.setMessageBody("<p>Hi Just thought you like to see my latest run</p>", isHTML: true)
+                mail.setSubject("My Run in Google Earth format")
+                mail.addAttachmentData(fData, mimeType:"text/csv", fileName:"myrun.kml")
+
+                presentViewController(mail, animated: true, completion: nil)
+            } else {
+                logError("Mail send from race history failed: cannot send mail")
+            }
+        }
+    }
+    
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+        if let myError = error {
+            logError("Mail send from race history failed: \(myError.localizedDescription)")
+        }
+        switch(result.rawValue) {
+            case MFMailComposeResultCancelled.rawValue:
+                logError("Mail send from race history: Cancelled")
+            case MFMailComposeResultFailed.rawValue:
+                logError("Mail send from race history: Failed")
+            case MFMailComposeResultSaved.rawValue:
+                logError("Mail send from race history: Saved")
+            case MFMailComposeResultSent.rawValue:
+                logError("Mail send from race history: Sent")
+            default:
+                logError("Mail send from race history: Default")
+        }
+        controller.dismissViewControllerAnimated(true, completion: nil)
     }
     
 }
