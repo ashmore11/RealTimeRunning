@@ -212,11 +212,7 @@ class RaceRecordViewController: UIViewController {
                     return
                 }
                 
-                SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, id: self.race.id) { _ in
-                 
-                    print("emit complete")
-                    
-                }
+                SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, id: self.race.id)
                 
                 hideActivityIndicator(self.view)
                 
@@ -246,11 +242,11 @@ class RaceRecordViewController: UIViewController {
         
         if race.competitors!.contains(user.id) {
             
-            self.joinRaceButton.setTitle("Leave Race", forState: .Normal)
+            self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
             
         } else {
             
-            self.joinRaceButton.setTitle("Join Race", forState: .Normal)
+            self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
             
         }
         
@@ -386,7 +382,7 @@ class RaceRecordViewController: UIViewController {
         
         // Start a timer that will run the updateLog function once every second
         self.logTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLog", userInfo: nil, repeats: true)
-        self.startStopButton.setTitle("Stop", forState: .Normal)
+        self.startStopButton.setTitle("STOP", forState: .Normal)
     
     }
 
@@ -418,7 +414,7 @@ class RaceRecordViewController: UIViewController {
             
             NSNotificationCenter.defaultCenter().removeObserver(self, name:"locationNotification", object:nil)
             
-            self.startStopButton.setTitle("Start", forState: .Normal)
+            self.startStopButton.setTitle("START", forState: .Normal)
             self.myLocationManager?.workInBackground(false)
             self.myLocationManager = nil
             

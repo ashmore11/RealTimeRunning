@@ -84,11 +84,11 @@ func setButtonGradient(buttons: UIButton...) {
     
     for button in buttons {
      
-        let color1 = UIColor(red: 0.115, green: 0.115, blue: 0.115, alpha: 1).CGColor
+        let color1 = UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1).CGColor
         let color2 = UIColor.blackColor().CGColor
         
         let gradientColors = [color1, color2, color1]
-        let gradientLocations = [0.0, 0.5, 1.0]
+        let gradientLocations = [0.0, 0.4, 1.0]
         
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = button.bounds
@@ -96,9 +96,6 @@ func setButtonGradient(buttons: UIButton...) {
         gradientLayer.locations = gradientLocations
         
         button.layer.insertSublayer(gradientLayer, atIndex: 0)
-        button.layer.shadowOffset = CGSizeMake(0, 0)
-        button.layer.shadowRadius = 5
-        button.layer.shadowOpacity = 0.5
         
         button.clipsToBounds = true
     
