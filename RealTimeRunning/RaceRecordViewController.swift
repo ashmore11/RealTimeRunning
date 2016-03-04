@@ -369,6 +369,7 @@ class RaceRecordViewController: UIViewController {
 
     func willStartRace() {
         setupMotionManage()
+        logError("Race Started")
 
         // Hide the back button incase the user accidently hits it
         self.navigationItem.setHidesBackButton(true, animated: true)
@@ -390,6 +391,7 @@ class RaceRecordViewController: UIViewController {
     }
 
     func willStopRace() {
+        logError("Race Stoped")
         if let ped = self.pedoMeter {
             ped.stopPedometerUpdates()
         }

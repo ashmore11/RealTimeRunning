@@ -13,6 +13,7 @@ class settingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Settings"
+        self.tableView.backgroundColor = UIColor.blackColor()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -30,23 +31,33 @@ class settingsTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return 1
     }
 
-    /*
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("settingsMenuCell", forIndexPath: indexPath) as! settingsTableViewCell
+        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1), bottomColor: UIColor.blackColor())
 
         // Configure the cell...
-
+        if(indexPath.row == 0) {
+            cell.menuLabel?.text = "Show Error Log"
+            cell.menuLabel?.textColor = UIColor.whiteColor()
+        }
         return cell
     }
-    */
+    
+    // Make the seperator lines between cells go all the way to the view's left edge
+    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.layoutMargins = UIEdgeInsetsZero
+        tableView.separatorInset = UIEdgeInsetsZero
+        tableView.layoutMargins = UIEdgeInsetsZero
+    }
 
     /*
     // Override to support conditional editing of the table view.
@@ -84,13 +95,18 @@ class settingsTableViewController: UITableViewController {
     */
 
     /*
-    // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        // showSummary
+        if segue.identifier == "showSummary" {
+            if let controller = segue.destinationViewController as? ErrorLogTableViewController {
+                if let indexPath = self.tableView.indexPathForSelectedRow {
+                }
+            }
+        }
     }
-    */
+*/
 
 }

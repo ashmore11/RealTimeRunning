@@ -40,7 +40,7 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
         do {
             try fetchedResultsController?.performFetch()
         } catch {
-            print("An error occurred")
+            logError("An error occurred getting results from fetchedResultsController in RawRaceDataTableViewController")
         }
     }
 

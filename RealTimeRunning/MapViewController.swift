@@ -61,7 +61,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        print("Failed to find user's location: \(error.localizedDescription)")
+        logError("Failed to find user's location: \(error.localizedDescription)")
     }
 
     override func didReceiveMemoryWarning() {

@@ -81,7 +81,7 @@ class raceHistorySummaryViewController: UIViewController {
                 
             } catch {
                 let fetchError = error as NSError
-                print(fetchError)
+                logError(fetchError.description)
             }
         }
     }

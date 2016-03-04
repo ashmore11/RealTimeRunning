@@ -234,7 +234,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
         default:
             errString = "An unknown error has occured"
         }
-        print(errString)
+        logError(errString)
     }
 
     func getVariation() -> Double {

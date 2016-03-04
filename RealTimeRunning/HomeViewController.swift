@@ -34,7 +34,7 @@ class raceTester {
         manager.request(.GET, "http://real-time-running.herokuapp.com/api/races").responseSwiftyJSON({ (request, response, json, error) in
             let end = NSDate()   // <- End time
             if let err = error{
-                print("Error:\(err)")
+                logError("Error:\(err)")
                 return
             }
             for (key, value) in json {
@@ -168,7 +168,7 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
             
             if error != nil {
-                print(error.localizedDescription)
+                logError(error.localizedDescription)
                 return
             }
             

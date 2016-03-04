@@ -75,7 +75,7 @@ class RaceGraphViewController: UIViewController {
                 self.graphView.dataPoints = speedArray
             } catch {
                 let fetchError = error as NSError
-                print(fetchError)
+                logError(fetchError.description)
             }
         }
     }

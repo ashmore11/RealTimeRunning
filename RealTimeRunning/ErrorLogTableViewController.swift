@@ -1,22 +1,22 @@
 //
-//  raceHistoryTableViewController.swift
+//  ErrorLogTableViewController.swift
 //  RealTimeRunning
 //
-//  Created by bob.ashmore on 25/02/2016.
+//  Created by bob.ashmore on 03/03/2016.
 //  Copyright © 2016 Scott Ashmore. All rights reserved.
 //
 
 import UIKit
 import CoreData
-import CoreLocation
 
-class raceHistoryTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class ErrorLogTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+
     var managedObjectContext: NSManagedObjectContext!
     
     lazy var fetchedResultsController: NSFetchedResultsController? = {
         if let context = self.managedObjectContext {
-            let fetchRequest = NSFetchRequest(entityName: "RunDetail")
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+            let fetchRequest = NSFetchRequest(entityName: "ErrorLog")
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "logDate", ascending: true)]
             
             let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
             frc.delegate = self
@@ -28,15 +28,19 @@ class raceHistoryTableViewController: UITableViewController, NSFetchedResultsCon
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.backgroundColor = UIColor.blackColor()
+        
+        self.title = "Error Log"
+        
+        let newButton  = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "processAction:")
+        navigationItem.rightBarButtonItem = newButton
 
-        self.title = "My History"
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             self.managedObjectContext = delegate.managedObjectContext
         }
         do {
             try fetchedResultsController?.performFetch()
         } catch {
-            logError("An error occurred getting results from fetchedResultsController in raceHistoryTableViewController")
+            print("An error occurred")
         }
     }
     
@@ -62,28 +66,31 @@ class raceHistoryTableViewController: UITableViewController, NSFetchedResultsCon
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("raceHistoryCell", forIndexPath: indexPath) as! raceHistoryTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("errorLogCell", forIndexPath: indexPath) as! ErrorLogTableViewCell
         self.configureCell(cell, indexPath: indexPath)
         return cell
     }
     
-    func configureCell(cell:raceHistoryTableViewCell, indexPath:NSIndexPath) {
+    func configureCell(cell:ErrorLogTableViewCell, indexPath:NSIndexPath) {
         // Configure the cell...
         setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1), bottomColor: UIColor.blackColor())
-
-        if let rundetail = fetchedResultsController?.objectAtIndexPath(indexPath) as? RunDetail {
+        
+        if let errdetail = fetchedResultsController?.objectAtIndexPath(indexPath) as? ErrorLog {
             let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "d MMM y"
+            dateFormatter.dateFormat = "d MMM y   HH:m:s"
             var formattedDate = "Unset"
-            var raceName = "Unset"
-            if let raceDate = rundetail.date {
-                formattedDate = dateFormatter.stringFromDate(raceDate) // if date conversion fails this returns nil and that's OK
+            var logMessage = "Unset"
+            if let logDate = errdetail.logDate {
+                formattedDate = dateFormatter.stringFromDate(logDate) // if date conversion fails this returns nil and that's OK
             }
-            if let name = rundetail.name {
-                raceName = name
+            if let message = errdetail.logMessage {
+                logMessage = message
             }
-            cell.raceLabel.text = String(format:"%@  Name: %@",formattedDate,raceName)
-            cell.raceLabel.textColor = UIColor.whiteColor()
+            cell.dateLabel!.text = String(format:"%@",formattedDate)
+            cell.dateLabel!.textColor = UIColor.whiteColor()
+            cell.logLabel!.text = String(format:"Log Entry: %@",logMessage)
+            cell.logLabel!.textColor = UIColor.whiteColor()
+            cell.logLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         }
     }
     
@@ -136,8 +143,8 @@ class raceHistoryTableViewController: UITableViewController, NSFetchedResultsCon
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         switch editingStyle {
         case .Delete:
-            let race = fetchedResultsController!.objectAtIndexPath(indexPath) as! RunDetail
-            managedObjectContext.deleteObject(race)
+            let object = fetchedResultsController!.objectAtIndexPath(indexPath) as! ErrorLog
+            managedObjectContext.deleteObject(object)
             do {
                 try managedObjectContext.save()
             } catch let error as NSError {
@@ -146,23 +153,21 @@ class raceHistoryTableViewController: UITableViewController, NSFetchedResultsCon
         default:break
         }
     }
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        // showSummary
-        if segue.identifier == "showSummary" {
-            if let controller = segue.destinationViewController as? raceHistorySummaryViewController {
-                if let indexPath = self.tableView.indexPathForSelectedRow {
-                    let race = fetchedResultsController!.objectAtIndexPath(indexPath) as! RunDetail
-                    controller.runDetail = race
-                }
+    
+    func processAction(sender: AnyObject) {
+        if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            delegate.removeEntityData("ErrorLog")
+            fetchedResultsController = nil
+            //NSFetchedResultsController.deleteCacheWithName("ErrorLogCache")
+            do {
+                try fetchedResultsController?.performFetch()
+            } catch {
+                print("An error occurred")
             }
+            tableView.reloadData()
         }
+
     }
-   
+
 
 }

@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import MBProgressHUD
+import CoreData
 
 func stringFromTimeInterval(interval:NSTimeInterval) -> String {
     let ti = NSInteger(interval)
@@ -141,3 +142,30 @@ func hideActivityIndicator(view: UIView) {
     MBProgressHUD.hideAllHUDsForView(view, animated: true)
     
 }
+
+func logError(errorString:String)  {
+    
+    if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+        let context = delegate.managedObjectContext
+        
+        if let logObject = NSEntityDescription.insertNewObjectForEntityForName("ErrorLog", inManagedObjectContext: context) as? ErrorLog {
+            logObject.logDate = NSDate()
+            logObject.logMessage = errorString
+            
+            do {
+                
+                try context.save()
+                
+            } catch {
+                
+                fatalError("Failure to save context: \(error)")
+                
+            }
+            
+        }
+        
+    }
+    
+
+}
+
