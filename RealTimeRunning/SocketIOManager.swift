@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SocketIOManager.swift
 //  RealTimeRunning
 //
 //  Created by Scott Ashmore on 26/02/2016.

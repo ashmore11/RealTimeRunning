@@ -56,6 +56,7 @@ class RaceRecordViewController: UIViewController {
     @IBOutlet weak var viewMapButton: UIButton!
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var paceLabel: UILabel!
+    @IBOutlet weak var statsViewArea: UIView!
 
     func receiveAltimeterNotification(notification:NSNotification) {
         let userInfo:NSDictionary = notification.userInfo!
@@ -89,9 +90,9 @@ class RaceRecordViewController: UIViewController {
             
             dispatch_async(dispatch_get_main_queue()) {
                 
-                self.durationLabel.text = "Duration: \(self.durationString)"
-                self.speedLabel.text = String(format:"Speed: %6.2f Kph",self.speed * 3.6)
-                self.raceDistanceLabel.text = String(format:"Distanced Raced: %6.2f Meters",self.distance)
+                self.durationLabel.text = self.durationString
+                self.speedLabel.text = String(format: "%6.2f Kph", self.speed * 3.6)
+                self.raceDistanceLabel.text = String(format: "%6.2f Km", self.distance / 1000)
                 
                 SocketIOManager.sharedInstance.sendPositionUpdate(self.user.id, distance: self.distance, speed: self.speed)
             
@@ -108,6 +109,7 @@ class RaceRecordViewController: UIViewController {
         setViewGradient(self.view)
         setButtonGradient(startStopButton, joinRaceButton, raceDataButton, viewMapButton)
         updateJoinRaceButton()
+        statsViewArea .backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
         
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
@@ -202,6 +204,9 @@ class RaceRecordViewController: UIViewController {
     
     func updatePositions(notification: NSNotification) {
         
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .OrdinalStyle
+        
         if let items = notification.object, let id = items["id"] as? String, let distance = items["distance"] as? Double {
             
             self.userPositions[id] = distance
@@ -214,7 +219,7 @@ class RaceRecordViewController: UIViewController {
                 
                 if element == self.user.id {
                     
-                    self.positionLabel.text = "Position: \(index + 1)"
+                    self.positionLabel.text = formatter.stringFromNumber(index + 1)
                     
                 }
                 
@@ -454,7 +459,7 @@ class RaceRecordViewController: UIViewController {
                                 }
                                 dispatch_async(dispatch_get_main_queue()) {
                                     //self.stepsLabel.text = String(format:"Steps taken: %d",self.stepsTaken)
-                                    self.paceLabel.text = String(format:"Pace: %6.2f Sec. / Mtr.",self.currentPace)
+                                    self.paceLabel.text = String(format:"%6.2f Sec/Mtr", self.currentPace)
                                     //self.cadenceLabel.text = String(format:"Cadence: %6.2f Steps / Sec.",self.currentCadence)
                                 }
                                 
