@@ -198,33 +198,17 @@
 			children = (
 				D235C3401C809B8B00893BB6 /* Resources */,
 				D226B4A91C73B28400366800 /* AppDelegate.swift */,
-				C4EC43011C7F5C1B00A458E3 /* utilityFunctions.swift */,
-				D226B4AB1C73B28400366800 /* HomeViewController.swift */,
-				C48647EB1C78A593005AB06F /* MapViewController.swift */,
-				C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */,
-				C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */,
-				C4EC42FB1C7F2DF200A458E3 /* raceHistoryTableViewController.swift */,
-				C4EC42FD1C7F402D00A458E3 /* raceHistorySummaryViewController.swift */,
-				C4EC42FF1C7F5ABC00A458E3 /* RaceGraphViewController.swift */,
-				C4EC43051C7F5FF600A458E3 /* UIGraphView.swift */,
-				C4EC43071C7F77AD00A458E3 /* settingsTableViewController.swift */,
-				C4E24C501C899F64006F5712 /* settingsTableViewCell.swift */,
-				C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */,
-				C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */,
-				D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */,
-				D2AFE1FD1C75EA06009750A8 /* Race.swift */,
-				D2AFE1FF1C75EBC3009750A8 /* User.swift */,
-				D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */,
-				C48647E71C78983C005AB06F /* SharedLocationManager.swift */,
-				C42C38941C7E13E20080BFFC /* latLonFormats.swift */,
-				C4E24C4C1C88E082006F5712 /* ErrorLogTableViewController.swift */,
-				C4E24C4E1C88E441006F5712 /* ErrorLogTableViewCell.swift */,
+				D2B341751C89A2620024114C /* Utilities */,
+				D2B341711C89A1DF0024114C /* Controllers */,
+				D2B341741C89A2420024114C /* Components */,
+				D2B341721C89A21B0024114C /* Views */,
+				D2B341701C89A1B30024114C /* Models */,
+				D2B341731C89A2300024114C /* Logging */,
 				D226B4B01C73B28400366800 /* Assets.xcassets */,
 				D226B4AD1C73B28400366800 /* Main.storyboard */,
 				D226B4B21C73B28400366800 /* LaunchScreen.storyboard */,
 				C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */,
 				D226B4B51C73B28400366800 /* Info.plist */,
-				D235C33E1C8098EA00893BB6 /* SocketIOManager.swift */,
 			);
 			path = RealTimeRunning;
 			sourceTree = "<group>";
@@ -247,6 +231,70 @@
 				D27D67851C81ABF800338D01 /* Oswald-Regular.ttf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		D2B341701C89A1B30024114C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D2AFE1FD1C75EA06009750A8 /* Race.swift */,
+				D2AFE1FF1C75EBC3009750A8 /* User.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		D2B341711C89A1DF0024114C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				D226B4AB1C73B28400366800 /* HomeViewController.swift */,
+				C48647EB1C78A593005AB06F /* MapViewController.swift */,
+				C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */,
+				C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */,
+				C4EC42FB1C7F2DF200A458E3 /* raceHistoryTableViewController.swift */,
+				C4EC42FD1C7F402D00A458E3 /* raceHistorySummaryViewController.swift */,
+				C4EC42FF1C7F5ABC00A458E3 /* RaceGraphViewController.swift */,
+				C4EC43071C7F77AD00A458E3 /* settingsTableViewController.swift */,
+				D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		D2B341721C89A21B0024114C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C4E24C501C899F64006F5712 /* settingsTableViewCell.swift */,
+				C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */,
+				C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */,
+				D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		D2B341731C89A2300024114C /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				C4E24C4C1C88E082006F5712 /* ErrorLogTableViewController.swift */,
+				C4E24C4E1C88E441006F5712 /* ErrorLogTableViewCell.swift */,
+			);
+			name = Logging;
+			sourceTree = "<group>";
+		};
+		D2B341741C89A2420024114C /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C4EC43051C7F5FF600A458E3 /* UIGraphView.swift */,
+				C48647E71C78983C005AB06F /* SharedLocationManager.swift */,
+				C42C38941C7E13E20080BFFC /* latLonFormats.swift */,
+				D235C33E1C8098EA00893BB6 /* SocketIOManager.swift */,
+			);
+			name = Components;
+			sourceTree = "<group>";
+		};
+		D2B341751C89A2620024114C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				C4EC43011C7F5C1B00A458E3 /* utilityFunctions.swift */,
+			);
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 		FA057A9457C69F1EB1E0CAD8 /* Frameworks */ = {
