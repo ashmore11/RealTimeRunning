@@ -34,6 +34,7 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.backgroundColor = UIColor.blackColor()
+        tableView.allowsSelection = false
         
         let newButton  = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "processAction:")
         navigationItem.rightBarButtonItem = newButton
@@ -97,6 +98,7 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
     // Make the seperator lines between cells go all the way to the view's left edge
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
+        cell.separatorInset = UIEdgeInsetsZero
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
     }

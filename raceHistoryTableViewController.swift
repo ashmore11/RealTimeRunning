@@ -84,6 +84,7 @@ class raceHistoryTableViewController: UITableViewController, NSFetchedResultsCon
             }
             cell.raceLabel.text = String(format:"%@  Name: %@",formattedDate,raceName)
             cell.raceLabel.textColor = UIColor.whiteColor()
+            cell.accessoryType = .DisclosureIndicator
         }
     }
     

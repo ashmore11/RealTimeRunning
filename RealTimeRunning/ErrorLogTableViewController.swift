@@ -91,6 +91,8 @@ class ErrorLogTableViewController: UITableViewController, NSFetchedResultsContro
             cell.logLabel!.text = String(format:"Log Entry: %@",logMessage)
             cell.logLabel!.textColor = UIColor.whiteColor()
             cell.logLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+            // Dont show any cell selection but still allow the user to delete a cell
+            cell.selectionStyle = .None
         }
     }
     
@@ -103,6 +105,7 @@ class ErrorLogTableViewController: UITableViewController, NSFetchedResultsContro
     // Make the seperator lines between cells go all the way to the view's left edge
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
+        cell.separatorInset = UIEdgeInsetsZero
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
     }

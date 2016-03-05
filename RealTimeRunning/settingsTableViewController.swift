@@ -48,6 +48,8 @@ class settingsTableViewController: UITableViewController {
         if(indexPath.row == 0) {
             cell.menuLabel?.text = "Show Error Log"
             cell.menuLabel?.textColor = UIColor.whiteColor()
+            cell.accessoryType = .DisclosureIndicator
+
         }
         return cell
     }
@@ -55,6 +57,7 @@ class settingsTableViewController: UITableViewController {
     // Make the seperator lines between cells go all the way to the view's left edge
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
+        cell.separatorInset = UIEdgeInsetsZero
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
     }
