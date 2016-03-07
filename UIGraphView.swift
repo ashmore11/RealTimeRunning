@@ -24,25 +24,44 @@ class UIGraphView: UIView {
     var yMax:CGFloat = 0.0
     var dataPoints: [Double] = []
     var lineColor = UIColor.redColor()
-    var graphHeader = "Speed vs Time"
-    var numeralColor = UIColor.blackColor()
+    var graphHeader = "Speed (Kph)"
+    var numeralColor = UIColor.whiteColor()
     var divSize:CGFloat = 0.0
     var topSize:CGFloat = 0.0
+    let startColor =  UIColor.darkGrayColor()
+    let endColor   =  UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
+    var faceGradient: CGGradientRef?
+
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func drawRect(rect: CGRect) {
         // Drawing code
         if let context = UIGraphicsGetCurrentContext() {
+            processGradient(context, startColor: startColor, endColor: endColor, gradient: faceGradient)
+
             self.layer.borderWidth = 2
             self.layer.cornerRadius = 12
             self.layer.masksToBounds = true
-            self.layer.borderColor = UIColor.blackColor().CGColor
+            self.layer.borderColor = UIColor.whiteColor().CGColor
             self.drawGrid(context)
             self.drawLine(context, pointsArray: dataPoints, lineColor: lineColor)
             drawNormalText(graphHeader, context:context, origin:CGPointMake(self.bounds.width/2.0, 15), x1:0.0, y1:0.0, align: .ctAlignCenterCenter, fontName:"Helvetica", fontSize:20.0, textColor:numeralColor)
 
         }
     }
+    
+    func processGradient(context: CGContextRef, startColor: UIColor, endColor: UIColor, var gradient:CGGradientRef?) {
+        if(gradient == nil) {
+            let gradientColors: [AnyObject] = [startColor.CGColor, endColor.CGColor]
+            let flocations: [CGFloat] = [ 0.0, 1.0 ]
+            let rgbColorspace = CGColorSpaceCreateDeviceRGB()
+            gradient = CGGradientCreateWithColors(rgbColorspace, gradientColors, flocations)
+        }
+        if let grad = gradient {
+            CGContextDrawLinearGradient(context, grad, CGPointMake(self.bounds.size.width/2.0, 0), CGPointMake(self.bounds.size.width/2.0, self.bounds.size.height),[])
+        }
+    }
+
     
     func drawGrid(context:CGContextRef) {
         switch yMax {
@@ -74,7 +93,7 @@ class UIGraphView: UIView {
             scaledPoint = (CGFloat(self.bounds.size.height) / self.topSize) * delta
             CGPathMoveToPoint(path, nil, 0.0, floor(self.bounds.size.height - scaledPoint)+0.5)
             CGPathAddLineToPoint(path,nil,CGFloat(self.bounds.size.width-1),floor(self.bounds.size.height - scaledPoint)+0.5)
-            let sx = String(format: "%02.1fKph",CGFloat(y) * self.divSize )
+            let sx = String(format: "%02.1f",CGFloat(y) * self.divSize )
             drawNormalText(sx, context:context, origin:CGPointMake(4.0, floor(self.bounds.size.height - scaledPoint)+0.5), x1:0.0, y1:0.0, align: .ctAlignBottomLeft, fontName:"Helvetica", fontSize:10.0, textColor:numeralColor)
         }
         CGContextBeginPath(context)
