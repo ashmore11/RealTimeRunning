@@ -19,6 +19,9 @@
 		C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E71C78983C005AB06F /* SharedLocationManager.swift */; };
 		C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */; };
 		C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647EB1C78A593005AB06F /* MapViewController.swift */; };
+		C496BC641C8E01F800DF2187 /* gear_24.png in Resources */ = {isa = PBXBuildFile; fileRef = C496BC611C8E01F800DF2187 /* gear_24.png */; };
+		C496BC651C8E01F800DF2187 /* history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C496BC621C8E01F800DF2187 /* history@2x.png */; };
+		C496BC661C8E01F800DF2187 /* runner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C496BC631C8E01F800DF2187 /* runner@2x.png */; };
 		C4E24C411C86F92E006F5712 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */; };
 		C4E24C421C86F93B006F5712 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */; };
 		C4E24C4A1C88BDA4006F5712 /* ErrorLog+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E24C481C88BDA4006F5712 /* ErrorLog+CoreDataProperties.swift */; };
@@ -95,6 +98,9 @@
 		C48647E71C78983C005AB06F /* SharedLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedLocationManager.swift; sourceTree = "<group>"; };
 		C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceRecordViewController.swift; sourceTree = "<group>"; };
 		C48647EB1C78A593005AB06F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		C496BC611C8E01F800DF2187 /* gear_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear_24.png; sourceTree = "<group>"; };
+		C496BC621C8E01F800DF2187 /* history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "history@2x.png"; sourceTree = "<group>"; };
+		C496BC631C8E01F800DF2187 /* runner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "runner@2x.png"; sourceTree = "<group>"; };
 		C4E24C431C88BB15006F5712 /* realTimeRunning 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "realTimeRunning 2.xcdatamodel"; sourceTree = "<group>"; };
 		C4E24C481C88BDA4006F5712 /* ErrorLog+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ErrorLog+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C4E24C491C88BDA4006F5712 /* ErrorLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorLog.swift; sourceTree = "<group>"; };
@@ -209,6 +215,9 @@
 				D2B341701C89A1B30024114C /* Models */,
 				D2B341731C89A2300024114C /* Logging */,
 				D226B4B01C73B28400366800 /* Assets.xcassets */,
+				C496BC611C8E01F800DF2187 /* gear_24.png */,
+				C496BC621C8E01F800DF2187 /* history@2x.png */,
+				C496BC631C8E01F800DF2187 /* runner@2x.png */,
 				D226B4AD1C73B28400366800 /* Main.storyboard */,
 				D226B4B21C73B28400366800 /* LaunchScreen.storyboard */,
 				C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */,
@@ -408,10 +417,13 @@
 			files = (
 				D2B3416C1C8843150024114C /* Oswald-ExtraLight.ttf in Resources */,
 				D2B3416D1C8843150024114C /* Oswald-Light.ttf in Resources */,
+				C496BC641C8E01F800DF2187 /* gear_24.png in Resources */,
 				D2B3416E1C8843150024114C /* Oswald-Medium.ttf in Resources */,
 				D2B3416F1C8843150024114C /* Oswald-Regular.ttf in Resources */,
 				D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */,
+				C496BC651C8E01F800DF2187 /* history@2x.png in Resources */,
 				D226B4B11C73B28400366800 /* Assets.xcassets in Resources */,
+				C496BC661C8E01F800DF2187 /* runner@2x.png in Resources */,
 				D226B4AF1C73B28400366800 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
