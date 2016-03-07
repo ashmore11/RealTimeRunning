@@ -209,6 +209,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func getTableViewData() {
         
+        self.competitorsData = [[String: AnyObject]]()
+        
         for id in race.competitors! {
     
             let url = "http://real-time-running.herokuapp.com/api/users/\(id)"

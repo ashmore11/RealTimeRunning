@@ -77,7 +77,7 @@ class SocketIOManager: NSObject {
         
     }
     
-    func postNotification(name: String, object: [String: AnyObject]) {
+    func postNotification(name: String, object: [String: AnyObject]?) {
         
         NSNotificationCenter.defaultCenter().postNotificationName(name, object: object)
         
