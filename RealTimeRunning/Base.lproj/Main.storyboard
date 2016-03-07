@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Oswald-Medium.ttf">
@@ -658,96 +659,103 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1aL-0C-THL">
-                                <rect key="frame" x="20" y="404" width="560" height="47"/>
-                                <color key="backgroundColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
-                                <state key="normal" title="Race Route">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="QNf-cC-SPw" kind="show" identifier="showMap" id="91q-TJ-sWv"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jjs-YQ-E6Z">
-                                <rect key="frame" x="20" y="337" width="560" height="47"/>
-                                <color key="backgroundColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
-                                <state key="normal" title="Raw Data">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="5wx-Rr-LPU" kind="show" identifier="showRaw" id="7L9-EX-Xz4"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJ9-N4-65Q">
-                                <rect key="frame" x="20" y="270" width="560" height="47"/>
-                                <color key="backgroundColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
-                                <state key="normal" title="Graph Speed vs Time">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="vZQ-Qb-z7v" kind="show" identifier="showGraph" id="uZA-1B-JeG"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Race Stats" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cne-Co-5in">
-                                <rect key="frame" x="20" y="8" width="560" height="35"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dN4-wp-R5x">
-                                <rect key="frame" x="20" y="51" width="560" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average Speed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vUN-4R-PHN">
-                                <rect key="frame" x="20" y="78" width="560" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pmf-vz-50g">
-                                <rect key="frame" x="20" y="106" width="560" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Steps" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rqZ-rU-YuQ">
-                                <rect key="frame" x="20" y="134.5" width="560" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BG7-LP-CFj" customClass="UIPanelView" customModule="RealTimeRunning" customModuleProvider="target">
+                                <rect key="frame" x="60" y="20" width="480" height="219"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="OKY-L0-9VE">
+                                        <rect key="frame" x="5" y="79" width="470" height="82"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" text="Average Speed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vUN-4R-PHN">
+                                                <rect key="frame" x="0.0" y="0.0" width="470" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" text="Distance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dN4-wp-R5x">
+                                                <rect key="frame" x="0.0" y="21" width="470" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pmf-vz-50g">
+                                                <rect key="frame" x="0.0" y="41" width="470" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Total Steps" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rqZ-rU-YuQ">
+                                                <rect key="frame" x="0.0" y="62" width="470" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="749" text="Race Stats" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cne-Co-5in">
+                                        <rect key="frame" x="172" y="1" width="137.5" height="35"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="cne-Co-5in" firstAttribute="centerX" secondItem="BG7-LP-CFj" secondAttribute="centerX" id="6Qt-Jh-eaS"/>
+                                    <constraint firstItem="cne-Co-5in" firstAttribute="top" secondItem="BG7-LP-CFj" secondAttribute="top" constant="1" id="ApY-p9-OIp"/>
+                                    <constraint firstItem="OKY-L0-9VE" firstAttribute="centerX" secondItem="BG7-LP-CFj" secondAttribute="centerX" id="eyV-id-82p"/>
+                                    <constraint firstItem="OKY-L0-9VE" firstAttribute="leading" secondItem="BG7-LP-CFj" secondAttribute="leading" constant="5" id="gge-IZ-5KR"/>
+                                    <constraint firstItem="dN4-wp-R5x" firstAttribute="centerY" secondItem="BG7-LP-CFj" secondAttribute="centerY" id="if9-O4-DED"/>
+                                </constraints>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="O1Z-LY-TTy">
+                                <rect key="frame" x="60" y="351" width="480" height="131"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJ9-N4-65Q">
+                                        <rect key="frame" x="0.0" y="0.0" width="480" height="42"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <state key="normal" title="  Graph Speed vs Time  ">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="vZQ-Qb-z7v" kind="show" identifier="showGraph" id="uZA-1B-JeG"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jjs-YQ-E6Z">
+                                        <rect key="frame" x="0.0" y="45" width="480" height="42"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <state key="normal" title="Raw Data">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="5wx-Rr-LPU" kind="show" identifier="showRaw" id="7L9-EX-Xz4"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1aL-0C-THL">
+                                        <rect key="frame" x="0.0" y="90" width="480" height="41"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                        <state key="normal" title="Race Route">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="QNf-cC-SPw" kind="show" identifier="showMap" id="91q-TJ-sWv"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="Jjs-YQ-E6Z" secondAttribute="trailing" id="0dA-va-nOE"/>
-                            <constraint firstItem="vUN-4R-PHN" firstAttribute="leading" secondItem="dN4-wp-R5x" secondAttribute="leading" id="5UJ-hp-vh1"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="1aL-0C-THL" secondAttribute="leading" id="6v6-hA-XE6"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="cne-Co-5in" secondAttribute="leading" id="EKl-p7-XO7"/>
-                            <constraint firstItem="Jjs-YQ-E6Z" firstAttribute="top" secondItem="KJ9-N4-65Q" secondAttribute="bottom" constant="20" id="JJw-Ki-rbK"/>
-                            <constraint firstItem="rqZ-rU-YuQ" firstAttribute="top" secondItem="pmf-vz-50g" secondAttribute="bottom" constant="8" id="Kud-AA-wcp"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="rqZ-rU-YuQ" secondAttribute="trailing" id="NBU-IX-VWH"/>
-                            <constraint firstItem="pmf-vz-50g" firstAttribute="top" secondItem="vUN-4R-PHN" secondAttribute="bottom" constant="7" id="OyY-J3-eM9"/>
-                            <constraint firstItem="cne-Co-5in" firstAttribute="top" secondItem="0bt-2v-T2k" secondAttribute="bottom" constant="8" id="StA-ZC-dNZ"/>
-                            <constraint firstItem="fkc-9Q-e9X" firstAttribute="top" secondItem="1aL-0C-THL" secondAttribute="bottom" constant="36" id="TyW-pY-dOB"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="KJ9-N4-65Q" secondAttribute="trailing" id="Z1z-ZN-xLU"/>
-                            <constraint firstItem="vUN-4R-PHN" firstAttribute="top" secondItem="dN4-wp-R5x" secondAttribute="bottom" constant="7" id="ZfD-YR-mep"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="dN4-wp-R5x" secondAttribute="leading" id="aLd-a6-wgP"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="pmf-vz-50g" secondAttribute="leading" id="cvv-Ji-ZQG"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="rqZ-rU-YuQ" secondAttribute="leading" id="ix8-dR-jd0"/>
-                            <constraint firstItem="vUN-4R-PHN" firstAttribute="trailing" secondItem="dN4-wp-R5x" secondAttribute="trailing" id="jTs-j1-QXO"/>
-                            <constraint firstItem="1aL-0C-THL" firstAttribute="top" secondItem="Jjs-YQ-E6Z" secondAttribute="bottom" constant="20" id="jUa-Fi-Mjg"/>
-                            <constraint firstItem="dN4-wp-R5x" firstAttribute="top" secondItem="cne-Co-5in" secondAttribute="bottom" constant="8" id="nkn-pe-ENF"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="1aL-0C-THL" secondAttribute="trailing" id="pup-eK-HbN"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="Jjs-YQ-E6Z" secondAttribute="leading" id="tsv-Yr-HbE"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="pmf-vz-50g" secondAttribute="trailing" id="wAx-hc-VIM"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="cne-Co-5in" secondAttribute="trailing" id="wM5-NX-gkW"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="dN4-wp-R5x" secondAttribute="trailing" id="yhK-Wa-HFV"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="KJ9-N4-65Q" secondAttribute="leading" id="ylI-N4-S4A"/>
+                            <constraint firstItem="BG7-LP-CFj" firstAttribute="height" secondItem="ppx-10-XcT" secondAttribute="height" multiplier="0.45" id="0LJ-TJ-fMe"/>
+                            <constraint firstItem="O1Z-LY-TTy" firstAttribute="centerX" secondItem="ppx-10-XcT" secondAttribute="centerX" id="2Lj-h8-4c4"/>
+                            <constraint firstItem="fkc-9Q-e9X" firstAttribute="top" secondItem="O1Z-LY-TTy" secondAttribute="bottom" constant="5" id="Bee-Tf-Gmd"/>
+                            <constraint firstItem="O1Z-LY-TTy" firstAttribute="width" secondItem="BG7-LP-CFj" secondAttribute="width" id="dvU-ao-kyc"/>
+                            <constraint firstItem="O1Z-LY-TTy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="BG7-LP-CFj" secondAttribute="bottom" constant="5" id="eAa-qQ-GaH"/>
+                            <constraint firstItem="BG7-LP-CFj" firstAttribute="width" secondItem="ppx-10-XcT" secondAttribute="width" multiplier="0.8" id="ki2-i0-8OU"/>
+                            <constraint firstItem="BG7-LP-CFj" firstAttribute="centerX" secondItem="ppx-10-XcT" secondAttribute="centerX" id="kw5-jJ-zZr"/>
+                            <constraint firstItem="BG7-LP-CFj" firstAttribute="top" secondItem="0bt-2v-T2k" secondAttribute="bottom" constant="20" id="xe4-SL-LyH"/>
                         </constraints>
                     </view>
                     <connections>

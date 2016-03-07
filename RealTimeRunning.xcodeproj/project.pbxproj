@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C42839EE1C8DB18300049B7C /* UIPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42839ED1C8DB18300049B7C /* UIPanelView.swift */; };
 		C42C383E1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */; };
 		C42C38891C7E0B660080BFFC /* RawRaceDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */; };
 		C42C388B1C7E0D150080BFFC /* RawTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */; };
@@ -81,6 +82,7 @@
 		54B04F00C144E9C6F830EF8A /* Pods_RealTimeRunningTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealTimeRunningTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		79F7C1862193F743D04764FC /* Pods_RealTimeRunning.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealTimeRunning.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A209476DC16635C56BD40475 /* Pods-RealTimeRunningTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealTimeRunningTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RealTimeRunningTests/Pods-RealTimeRunningTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C42839ED1C8DB18300049B7C /* UIPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPanelView.swift; sourceTree = "<group>"; };
 		C42C383D1C7DC3C70080BFFC /* realTimeRunning.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = realTimeRunning.xcdatamodel; sourceTree = "<group>"; };
 		C42C38881C7E0B660080BFFC /* RawRaceDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawRaceDataTableViewController.swift; sourceTree = "<group>"; };
 		C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawTableViewCell.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				C4EC43051C7F5FF600A458E3 /* UIGraphView.swift */,
+				C42839ED1C8DB18300049B7C /* UIPanelView.swift */,
 				C48647E71C78983C005AB06F /* SharedLocationManager.swift */,
 				C42C38941C7E13E20080BFFC /* latLonFormats.swift */,
 				D235C33E1C8098EA00893BB6 /* SocketIOManager.swift */,
@@ -547,6 +550,7 @@
 				C4E24C4D1C88E082006F5712 /* ErrorLogTableViewController.swift in Sources */,
 				C4EC42FC1C7F2DF200A458E3 /* raceHistoryTableViewController.swift in Sources */,
 				C4EC43061C7F5FF600A458E3 /* UIGraphView.swift in Sources */,
+				C42839EE1C8DB18300049B7C /* UIPanelView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
