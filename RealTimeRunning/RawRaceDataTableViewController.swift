@@ -215,7 +215,7 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
                 mail.setSubject("My Run in Google Earth format")
                 mail.addAttachmentData(fData, mimeType:"text/csv", fileName:"myrun.kml")
 
-                presentViewController(mail, animated: true, completion: nil)
+                self.presentViewController(mail, animated: true, completion: nil)
             } else {
                 logError("Mail send from race history failed: cannot send mail")
             }

@@ -18,8 +18,11 @@ class raceHistorySummaryViewController: UIViewController {
     var totaldistance = 0.0
     var totalSteps = 0
     var totalSpeed = 0.0
+    var totalPace = 0.0
+    var averagePace = 0.0
     var raceTime:String = ""
     
+    @IBOutlet weak var averagePaceLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var averageSpeedLabel: UILabel!
     @IBOutlet weak var totalStepsLabel: UILabel!
@@ -52,6 +55,10 @@ class raceHistorySummaryViewController: UIViewController {
                         if let distance = data.distance {
                             totaldistance = Double(distance)
                         }
+                        
+                        if let pace = data.currentPace {
+                            totalPace += Double(pace)
+                        }
                         if let lat = data.lattitude, let lon = data.longitude {
                             let x = CLLocationCoordinate2DMake(Double(lat), Double(lon))
                             geoEvents.append(x)
@@ -69,8 +76,10 @@ class raceHistorySummaryViewController: UIViewController {
                 }
                 
                 if(result.count > 1) {
-                averageSpeed = totalSpeed / Double(result.count)
-                averageSpeedLabel.text = String(format: "Average Speed: %6.2f Kph",averageSpeed  * 3.6)
+                    averageSpeed = totalSpeed / Double(result.count)
+                    averageSpeedLabel.text = String(format: "Average Speed: %6.2f Kph",averageSpeed  * 3.6)
+                    averagePace = totalPace / Double(result.count)
+                    averagePaceLabel.text = String(format: "Average Pace: %6.2f Sec/M",averagePace)
                 }
                 else {
                     averageSpeedLabel.text = "Average Speed: Unset"
@@ -118,6 +127,32 @@ class raceHistorySummaryViewController: UIViewController {
             }
         }
 
+    }
+    
+    func getAveragePace() -> Double {
+        var average:Double = 0.0
+        if let context = self.managedObjectContext {
+            let expressionDesc = NSExpressionDescription()
+            expressionDesc.name = "avgOfpace"
+            expressionDesc.expression = NSExpression(forFunction: "avg:",
+                arguments:[NSExpression(forKeyPath: "pace")])
+            expressionDesc.expressionResultType = .DoubleAttributeType
+            
+            let fetchRequest = NSFetchRequest(entityName: "RunDetail")
+            fetchRequest.propertiesToFetch = [expressionDesc]
+            fetchRequest.resultType = .DictionaryResultType
+            
+            do {
+                let results = try context.executeFetchRequest(fetchRequest)
+                let dict = results[0] as! [String:Double]
+                average = dict["avgOfpace"]!
+                print(average)
+            } catch {
+                let fetchError = error as NSError
+                logError(fetchError.description)
+            }
+        }
+        return average
     }
 
 }
