@@ -16,12 +16,13 @@ import Alamofire_SwiftyJSON
 import MBProgressHUD
 import AVFoundation
 
-class RaceRecordViewController: UIViewController {
+class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: Properties
     
     var user: User!
     var race: Race!
+    var competitorsData: [[String: AnyObject]] = []
     var geoEvents:[CLLocationCoordinate2D] = []
     var lat:Double = 0.0
     var lon:Double = 0.0
@@ -58,6 +59,7 @@ class RaceRecordViewController: UIViewController {
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var paceLabel: UILabel!
     @IBOutlet weak var statsViewArea: UIView!
+    @IBOutlet weak var competitorsTableView: UITableView!
 
     func receiveAltimeterNotification(notification:NSNotification) {
         let userInfo:NSDictionary = notification.userInfo!
@@ -106,6 +108,14 @@ class RaceRecordViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        
+        self.getTableViewData()
+        
+        competitorsTableView.delegate = self
+        competitorsTableView.dataSource = self
+        competitorsTableView.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.3)
         
         setViewGradient(self.view)
         setButtonGradient(startStopButton, joinRaceButton, raceDataButton, viewMapButton)
@@ -157,6 +167,70 @@ class RaceRecordViewController: UIViewController {
         super.didReceiveMemoryWarning()
         
         // Dispose of any resources that can be recreated.
+        
+    }
+    
+    // MARK: - Table view data source
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        
+        return 1
+        
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return competitorsData.count
+        
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cellIdentifier = "CompetitorsTableViewCell"
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! CompetitorsTableViewCell
+        
+        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
+        
+        cell.backgroundColor = UIColor.clearColor()
+        
+        let competitor = competitorsData[indexPath.row]
+        
+        if let name = competitor["name"] as? String, let image = competitor["image"] as? UIImage {
+            
+            cell.nameLabel.text = name
+            cell.profileImage.image = image
+            
+        }
+        
+        return cell
+        
+    }
+    
+    func getTableViewData() {
+        
+        for id in race.competitors! {
+    
+            let url = "http://real-time-running.herokuapp.com/api/users/\(id)"
+
+            Alamofire.request(.GET, url).responseSwiftyJSON({ (request, response, json, error) in
+
+                if let name = json[0]["name"].string, let imageURL = json[0]["profileImage"].string, let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
+                    
+                    let data = [
+                        "name": name,
+                        "image": image
+                    ]
+                    
+                    self.competitorsData.append(data)
+                    
+                    self.competitorsTableView.reloadData()
+
+                }
+                
+            })
+            
+        }
         
     }
     

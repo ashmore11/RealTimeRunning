@@ -86,7 +86,11 @@ class raceHistorySummaryViewController: UIViewController {
         }
     }
     
-
+    // This will redraw the gradient layer after a rotation
+    override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        self.view.layer.sublayers?.first?.frame = self.view.bounds
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
