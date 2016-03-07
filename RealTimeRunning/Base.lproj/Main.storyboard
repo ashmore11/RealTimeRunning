@@ -746,7 +746,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="BG7-LP-CFj" firstAttribute="height" secondItem="ppx-10-XcT" secondAttribute="height" multiplier="0.45" id="0LJ-TJ-fMe"/>
                             <constraint firstItem="O1Z-LY-TTy" firstAttribute="centerX" secondItem="ppx-10-XcT" secondAttribute="centerX" id="2Lj-h8-4c4"/>
