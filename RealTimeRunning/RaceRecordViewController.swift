@@ -14,6 +14,7 @@ import Alamofire
 import SwiftyJSON
 import Alamofire_SwiftyJSON
 import MBProgressHUD
+import AVFoundation
 
 class RaceRecordViewController: UIViewController {
     
@@ -109,7 +110,7 @@ class RaceRecordViewController: UIViewController {
         setViewGradient(self.view)
         setButtonGradient(startStopButton, joinRaceButton, raceDataButton, viewMapButton)
         updateJoinRaceButton()
-        statsViewArea .backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
+        statsViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
         
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
@@ -371,6 +372,10 @@ class RaceRecordViewController: UIViewController {
     func willStartRace() {
         setupMotionManage()
         logError("Race Started")
+        
+        let voice = AVSpeechSynthesizer()
+        let myUtterance = AVSpeechUtterance(string: "Your race has begun")
+        voice.speakUtterance(myUtterance)
 
         // Hide the back button incase the user accidently hits it
         self.navigationItem.setHidesBackButton(true, animated: true)

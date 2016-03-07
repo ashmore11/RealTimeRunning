@@ -69,7 +69,7 @@ class raceHistoryTableViewController: UITableViewController, NSFetchedResultsCon
     
     func configureCell(cell:raceHistoryTableViewCell, indexPath:NSIndexPath) {
         // Configure the cell...
-        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.133, green: 0.133, blue: 0.133, alpha: 1), bottomColor: UIColor.blackColor())
+        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
 
         if let rundetail = fetchedResultsController?.objectAtIndexPath(indexPath) as? RunDetail {
             let dateFormatter = NSDateFormatter()
