@@ -62,8 +62,8 @@ class RaceRecordViewController: UIViewController {
         let userInfo:NSDictionary = notification.userInfo!
         let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
         if let data = altimeterData {
-            pressure = Double(data.pressure)
-            altitude = Double(data.relativeAltitude)
+            self.pressure = Double(data.pressure)
+            self.altitude = Double(data.relativeAltitude)
         }
     }
 
@@ -132,8 +132,6 @@ class RaceRecordViewController: UIViewController {
             self.navigationController!.interactivePopGestureRecognizer!.enabled = false
             
         }
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePositions:", name: "positionUpdateReceived", object: nil)
         
     }
 
@@ -379,6 +377,7 @@ class RaceRecordViewController: UIViewController {
         self.bLocationsReceived = false
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveAltimeterNotification:", name:"altimeterNotification", object:nil)
 
         geoEvents = []
         myLocationManager = SharedLocationManager.sharedInstance
@@ -420,6 +419,7 @@ class RaceRecordViewController: UIViewController {
             }
             
             NSNotificationCenter.defaultCenter().removeObserver(self, name:"locationNotification", object:nil)
+            NSNotificationCenter.defaultCenter().removeObserver(self, name:"altimeterNotification", object:nil)
             
             self.startStopButton.setTitle("START", forState: .Normal)
             self.myLocationManager?.workInBackground(false)
