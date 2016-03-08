@@ -38,9 +38,9 @@ class SocketIOManager: NSObject {
     
     }
     
-    func raceUsersUpdated(index: Int, id: String) {
+    func raceUsersUpdated(index: Int, raceId: String, userId: String) {
         
-        socket.emit("raceUpdated", index, id)
+        socket.emit("raceUpdated", index, raceId, userId)
         
     }
     
@@ -52,14 +52,15 @@ class SocketIOManager: NSObject {
     
     private func listenForEvents() {
         
-        socket.on("reloadRaceView") { (data, ack) -> Void in
+        socket.on("reloadCompetitors") { (data, ack) -> Void in
             
             let object = [
                 "index": data[0],
-                "id": data[1]
+                "raceId": data[1],
+                "userId": data[2]
             ]
             
-            self.postNotification("reloadRaceView", object: object)
+            self.postNotification("reloadCompetitors", object: object)
             
         }
         

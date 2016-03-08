@@ -109,9 +109,16 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         super.viewDidLoad()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "competitorsUpdated:", name: "reloadCompetitors", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePositions:", name: "positionUpdateReceived", object: nil)
+        
         self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        self.getTableViewData()
+        self.getTableViewData { () -> Void in
+        
+            self.competitorsTableView.reloadData()
+            
+        }
         
         competitorsTableView.delegate = self
         competitorsTableView.dataSource = self
@@ -207,35 +214,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func getTableViewData() {
-        
-        self.competitorsData = [[String: AnyObject]]()
-        
-        for id in race.competitors! {
-    
-            let url = "http://real-time-running.herokuapp.com/api/users/\(id)"
-
-            Alamofire.request(.GET, url).responseSwiftyJSON({ (request, response, json, error) in
-
-                if let name = json[0]["name"].string, let imageURL = json[0]["profileImage"].string, let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
-                    
-                    let data = [
-                        "name": name,
-                        "image": image
-                    ]
-                    
-                    self.competitorsData.append(data)
-                    
-                    self.competitorsTableView.reloadData()
-
-                }
-                
-            })
-            
-        }
-        
-    }
-    
     // MARK: Actions
     
     @IBAction func startStopPressed(sender: AnyObject) {
@@ -267,13 +245,80 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     return
                 }
                 
-                SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, id: self.race.id)
+                SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, raceId: self.race.id, userId: self.user.id)
                 
                 hideActivityIndicator(self.view)
-                
-                self.updateCompetitorsArray()
             
         })
+        
+    }
+    
+    func getTableViewData(completionHandler: () -> Void) {
+        
+        self.competitorsData = [[String: AnyObject]]()
+        
+        for id in race.competitors! {
+            
+            let url = "http://real-time-running.herokuapp.com/api/users/\(id)"
+            
+            Alamofire.request(.GET, url).responseSwiftyJSON({ (request, response, json, error) in
+                
+                if let id = json[0]["fbid"].string, let name = json[0]["name"].string, let imageURL = json[0]["profileImage"].string, let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
+                    
+                    let data = [
+                        "id": id,
+                        "name": name,
+                        "image": image
+                    ]
+                    
+                    self.competitorsData.append(data)
+                    
+                    if self.race.competitors!.count == self.competitorsData.count {
+                        
+                        completionHandler()
+                        
+                    }
+                    
+                }
+                
+            })
+            
+        }
+        
+    }
+    
+    func competitorsUpdated(notification: NSNotification) {
+        
+        if let items = notification.object, let id = items["userId"] as? String {
+            
+            let keys = self.competitorsData.map { $0["id"] as! String }
+            
+            if let index = keys.indexOf(id), let competitor = race.competitors?.indexOf(id) {
+                
+                race.competitors?.removeAtIndex(competitor)
+                
+                self.getTableViewData { () -> Void in
+                    
+                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                    self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                    
+                }
+                
+            } else {
+                
+                race.competitors?.append(id)
+                
+                self.getTableViewData { () -> Void in
+                    
+                    self.competitorsTableView.reloadData()
+                    
+                }
+                
+            }
+            
+            self.updateJoinRaceButton()
+            
+        }
         
     }
     
@@ -301,22 +346,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             }
             
         }
-        
-    }
-    
-    func updateCompetitorsArray() {
-        
-        if let index = race.competitors?.indexOf(user.id) {
-            
-            race.competitors?.removeAtIndex(index)
-            
-        } else {
-            
-            race.competitors?.append(user.id)
-            
-        }
-        
-        updateJoinRaceButton()
         
     }
     

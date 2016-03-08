@@ -27,7 +27,7 @@ class RacesTableViewController: UITableViewController {
         
         self.tableView.backgroundColor = UIColor.blackColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "reloadRaceView", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "reloadCompetitors", object: nil)
         
     }
 
@@ -69,7 +69,7 @@ class RacesTableViewController: UITableViewController {
     
     func reloadTableViewCell(notification: NSNotification) {
         
-        if let items = notification.object, let index = items["index"] as? Int, let id = items["id"] as? String {
+        if let items = notification.object, let index = items["index"] as? Int, let id = items["raceId"] as? String {
         
             let requestURL = "http://real-time-running.herokuapp.com/api/races/\(id)"
 
