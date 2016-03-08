@@ -15,7 +15,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var geoEvents:[CLLocationCoordinate2D] = []
     let manager = CLLocationManager()
     var managedObjectContext: NSManagedObjectContext!
-    var runDetail:RunDetail?
     
     @IBOutlet weak var myMapView: MKMapView!
     override func viewDidLoad() {
@@ -28,56 +27,26 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.managedObjectContext = delegate.managedObjectContext
         }
         // Get lat lon data for the race to pass to the map
-        geoEvents = []
-        if let context = self.managedObjectContext {
-            let fetchRequest = NSFetchRequest(entityName: "RunData")
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: true)]
-            fetchRequest.predicate = NSPredicate(format:"runDataToRunDetail = %@", self.runDetail!)
+        if self.geoEvents.count > 0 {
+            let coordinateRegion = self.mapRegion() // MKCoordinateRegionMakeWithDistance(geoEvents.last!, 5000, 5000)
+            self.myMapView.setRegion(coordinateRegion, animated: true)
+            let runPoly = MKPolyline(coordinates: &self.geoEvents, count:self.geoEvents.count)
+            self.myMapView.addOverlay(runPoly)
             
-            do {
-                //let result = try context.executeFetchRequest(fetchRequest)
-                let asyncRequest = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) {
-                    results in
-               
-                    if let results = results.finalResult {
-                        for rundata in results  {
-                            if let data = rundata as? RunData {
-                                if let lat = data.lattitude, let lon = data.longitude {
-                                    let x = CLLocationCoordinate2DMake(Double(lat), Double(lon))
-                                    self.geoEvents.append(x)
-                                }
-                            }
-                        }
-                        dispatch_async(dispatch_get_main_queue()) {
-                            if self.geoEvents.count > 0 {
-                                let coordinateRegion = self.mapRegion() // MKCoordinateRegionMakeWithDistance(geoEvents.last!, 5000, 5000)
-                                self.myMapView.setRegion(coordinateRegion, animated: true)
-                                let runPoly = MKPolyline(coordinates: &self.geoEvents, count:self.geoEvents.count)
-                                self.myMapView.addOverlay(runPoly)
-                                
-                                // Drop a pin at the start location
-                                let anotation = MKPointAnnotation()
-                                anotation.coordinate = self.geoEvents[0]
-                                anotation.title = "Race Start"
-                                anotation.subtitle = "This is the Start location"
-                                self.myMapView.addAnnotation(anotation)
-                            }
-                            else {
-                                // We have no data in the array so get our current location
-                                // and set map center to it
-                                self.manager.delegate = self
-                                self.manager.requestLocation()
-                            }
-                        }
-                    }
-                }
-                try context.executeRequest(asyncRequest)
-
-            } catch {
-                let fetchError = error as NSError
-                logError("Error while getting race data for Map display: \(fetchError.description)")
-            }
+            // Drop a pin at the start location
+            let anotation = MKPointAnnotation()
+            anotation.coordinate = self.geoEvents[0]
+            anotation.title = "Race Start"
+            anotation.subtitle = "This is the Start location"
+            self.myMapView.addAnnotation(anotation)
         }
+        else {
+            // We have no data in the array so get our current location
+            // and set map center to it
+            self.manager.delegate = self
+            self.manager.requestLocation()
+        }
+
     }
 
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

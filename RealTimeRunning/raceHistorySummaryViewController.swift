@@ -13,6 +13,7 @@ import CoreData
 class raceHistorySummaryViewController: UIViewController {
     var managedObjectContext: NSManagedObjectContext!
     var runDetail:RunDetail?
+    var geoEvents:[CLLocationCoordinate2D] = []
     
     @IBOutlet weak var averagePaceLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
@@ -29,6 +30,38 @@ class raceHistorySummaryViewController: UIViewController {
             self.managedObjectContext = delegate.managedObjectContext
         }
         getRunSummaryData()
+        
+        if let context = self.managedObjectContext {
+            let fetchRequest = NSFetchRequest(entityName: "RunData")
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: true)]
+            fetchRequest.predicate = NSPredicate(format:"runDataToRunDetail = %@", self.runDetail!)
+            
+            do {
+                //let result = try context.executeFetchRequest(fetchRequest)
+                let asyncRequest = NSAsynchronousFetchRequest(fetchRequest: fetchRequest) {
+                    results in
+                    
+                    if let results = results.finalResult {
+                        for rundata in results  {
+                            if let data = rundata as? RunData {
+                                if let lat = data.lattitude, let lon = data.longitude {
+                                    let x = CLLocationCoordinate2DMake(Double(lat), Double(lon))
+                                    self.geoEvents.append(x)
+                                }
+                            }
+                        }
+                        dispatch_async(dispatch_get_main_queue()) {
+                        }
+                    }
+                }
+                try context.executeRequest(asyncRequest)
+                
+            } catch {
+                let fetchError = error as NSError
+                logError("Error while getting race data for Map display: \(fetchError.description)")
+            }
+        }
+
     }
     
     // This will redraw the gradient layer after a rotation
@@ -49,8 +82,7 @@ class raceHistorySummaryViewController: UIViewController {
         // Pass the selected object to the new view controller.
         if segue.identifier == "showMap" {
             if let controller = segue.destinationViewController as? MapViewController {
-                //controller.geoEvents = geoEvents
-                controller.runDetail = self.runDetail
+                controller.geoEvents = geoEvents
             }
         }
         if segue.identifier == "showRaw" {
