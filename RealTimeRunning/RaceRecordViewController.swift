@@ -22,7 +22,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     var user: User!
     var race: Race!
-    var competitorsData: [[String: AnyObject]] = []
+    var competitorsData = [String: [String: AnyObject]]()
     var geoEvents:[CLLocationCoordinate2D] = []
     var lat:Double = 0.0
     var lon:Double = 0.0
@@ -62,12 +62,15 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var competitorsTableView: UITableView!
 
     func receiveAltimeterNotification(notification:NSNotification) {
+    
         let userInfo:NSDictionary = notification.userInfo!
         let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
+        
         if let data = altimeterData {
             self.pressure = Double(data.pressure)
             self.altitude = Double(data.relativeAltitude)
         }
+    
     }
 
     func receiveLocationNotification(notification: NSNotification) {
@@ -126,8 +129,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         setViewGradient(self.view)
         setButtonGradient(startStopButton, joinRaceButton, raceDataButton, viewMapButton)
-        updateJoinRaceButton()
         statsViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
+        
+        updateJoinRaceButton()
         
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             
@@ -201,12 +205,19 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         cell.backgroundColor = UIColor.clearColor()
         
-        let competitor = competitorsData[indexPath.row]
+        let competitor = Array(competitorsData.values)[indexPath.row]
         
         if let name = competitor["name"] as? String, let image = competitor["image"] as? UIImage {
             
             cell.nameLabel.text = name
             cell.profileImage.image = image
+            cell.positionLabel.text = ""
+            
+            if let position = competitor["position"] as? String {
+                
+                cell.positionLabel.text = position
+                
+            }
             
         }
         
@@ -255,7 +266,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func getTableViewData(completionHandler: () -> Void) {
         
-        self.competitorsData = [[String: AnyObject]]()
+        self.competitorsData = [String: [String: AnyObject]]()
         
         for id in race.competitors! {
             
@@ -266,12 +277,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 if let id = json[0]["fbid"].string, let name = json[0]["name"].string, let imageURL = json[0]["profileImage"].string, let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
                     
                     let data = [
-                        "id": id,
                         "name": name,
                         "image": image
                     ]
                     
-                    self.competitorsData.append(data)
+                    self.competitorsData[id] = data
                     
                     if self.race.competitors!.count == self.competitorsData.count {
                         
@@ -291,7 +301,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let items = notification.object, let id = items["userId"] as? String {
             
-            let keys = self.competitorsData.map { $0["id"] as! String }
+            let keys = Array(self.competitorsData.keys)
             
             if let index = keys.indexOf(id), let competitor = race.competitors?.indexOf(id) {
                 
@@ -343,6 +353,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     
                 }
                 
+                self.competitorsData[element]!["position"] = formatter.stringFromNumber(index + 1)
+                
+                self.competitorsTableView.reloadData()
+                
             }
             
         }
@@ -355,9 +369,17 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
             self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
             
+            startStopButton.enabled = true
+            
+            UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
+            
         } else {
             
             self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
+            
+            startStopButton.enabled = false
+            
+            UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
             
         }
         
