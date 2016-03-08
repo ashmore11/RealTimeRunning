@@ -13,86 +13,22 @@ import CoreData
 class raceHistorySummaryViewController: UIViewController {
     var managedObjectContext: NSManagedObjectContext!
     var runDetail:RunDetail?
-    var geoEvents:[CLLocationCoordinate2D] = []
-    var averageSpeed = 0.0
-    var totaldistance = 0.0
-    var totalSteps = 0
-    var totalSpeed = 0.0
-    var totalPace = 0.0
-    var averagePace = 0.0
-    var raceTime:String = ""
     
     @IBOutlet weak var averagePaceLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var averageSpeedLabel: UILabel!
     @IBOutlet weak var totalStepsLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var raceNameLabel: UILabel!
+    
+    @IBOutlet weak var raceLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         setViewGradient(self.view)
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             self.managedObjectContext = delegate.managedObjectContext
         }
-        
-        // Get data for the race and summerise it
-        if let context = self.managedObjectContext {
-            let fetchRequest = NSFetchRequest(entityName: "RunData")
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: true)]
-            fetchRequest.predicate = NSPredicate(format:"runDataToRunDetail = %@", self.runDetail!)
-            
-            do {
-                let result = try context.executeFetchRequest(fetchRequest)
-                
-                for rundata in result  {
-                    if let data = rundata as? RunData {
-                        if let steps = data.stepsTaken {
-                            totalSteps = Int(steps)
-                        }
-                        if let speed = data.speed {
-                            totalSpeed += Double(speed)
-                        }
-
-                        if let distance = data.distance {
-                            totaldistance = Double(distance)
-                        }
-                        
-                        if let pace = data.currentPace {
-                            totalPace += Double(pace)
-                        }
-                        if let lat = data.lattitude, let lon = data.longitude {
-                            let x = CLLocationCoordinate2DMake(Double(lat), Double(lon))
-                            geoEvents.append(x)
-                        }
-                    }
-                }
-                if result.count > 1 {
-                    let first = result.first as! RunData
-                    let sDate = first.timeStamp
-                    let last = result.last as! RunData
-                    let eDate = last.timeStamp
-                    if let sd = sDate,let ed = eDate {
-                        raceTime = stringFromTimeInterval(ed.timeIntervalSinceDate(sd))
-                    }
-                }
-                
-                if(result.count > 1) {
-                    averageSpeed = totalSpeed / Double(result.count)
-                    averageSpeedLabel.text = String(format: "Average Speed: %6.2f Kph",averageSpeed  * 3.6)
-                    averagePace = totalPace / Double(result.count)
-                    averagePaceLabel.text = String(format: "Average Pace: %6.2f Sec/M",averagePace)
-                }
-                else {
-                    averageSpeedLabel.text = "Average Speed: Unset"
-                }
-                distanceLabel.text = String(format: "Distance: %6.2f Meters",totaldistance)
-                totalStepsLabel.text = String(format: "Total Steps: %d",totalSteps)
-                timeLabel.text = String(format: "Race Time: %@",raceTime)
-                
-            } catch {
-                let fetchError = error as NSError
-                logError(fetchError.description)
-            }
-        }
+        getRunSummaryData()
     }
     
     // This will redraw the gradient layer after a rotation
@@ -113,7 +49,8 @@ class raceHistorySummaryViewController: UIViewController {
         // Pass the selected object to the new view controller.
         if segue.identifier == "showMap" {
             if let controller = segue.destinationViewController as? MapViewController {
-                controller.geoEvents = geoEvents
+                //controller.geoEvents = geoEvents
+                controller.runDetail = self.runDetail
             }
         }
         if segue.identifier == "showRaw" {
@@ -126,33 +63,104 @@ class raceHistorySummaryViewController: UIViewController {
                 controller.runDetail = self.runDetail
             }
         }
-
     }
     
-    func getAveragePace() -> Double {
-        var average:Double = 0.0
+    func getRunSummaryData() {
+        // Create an array of AnyObject since it needs to contain multiple types
         if let context = self.managedObjectContext {
-            let expressionDesc = NSExpressionDescription()
-            expressionDesc.name = "avgOfpace"
-            expressionDesc.expression = NSExpression(forFunction: "avg:",
-                arguments:[NSExpression(forKeyPath: "pace")])
-            expressionDesc.expressionResultType = .DoubleAttributeType
+            var expressionDescriptions = [AnyObject]()
             
-            let fetchRequest = NSFetchRequest(entityName: "RunDetail")
-            fetchRequest.propertiesToFetch = [expressionDesc]
-            fetchRequest.resultType = .DictionaryResultType
+            var expressionDescription = NSExpressionDescription()
+            expressionDescription.name = "averageSpeed"
+            expressionDescription.expression = NSExpression(format: "@avg.speed")
+            expressionDescription.expressionResultType = .DoubleAttributeType
+            expressionDescriptions.append(expressionDescription)
             
+            expressionDescription = NSExpressionDescription()
+            expressionDescription.name = "averagePace"
+            expressionDescription.expression = NSExpression(format: "@avg.currentPace")
+            expressionDescription.expressionResultType = .DoubleAttributeType
+            expressionDescriptions.append(expressionDescription)
+            
+            expressionDescription = NSExpressionDescription()
+            expressionDescription.name = "totalDistance"
+            expressionDescription.expression = NSExpression(format: "@max.distance")
+            expressionDescription.expressionResultType = .DoubleAttributeType
+            expressionDescriptions.append(expressionDescription)
+
+            expressionDescription = NSExpressionDescription()
+            expressionDescription.name = "totalSteps"
+            expressionDescription.expression = NSExpression(format: "@max.stepsTaken")
+            expressionDescription.expressionResultType = .Integer64AttributeType
+            expressionDescriptions.append(expressionDescription)
+           
+            expressionDescription = NSExpressionDescription()
+            expressionDescription.name = "pedDistance"
+            expressionDescription.expression = NSExpression(format: "@max.pedDistance")
+            expressionDescription.expressionResultType = .DoubleAttributeType
+            expressionDescriptions.append(expressionDescription)
+
+            expressionDescription = NSExpressionDescription()
+            expressionDescription.name = "timeStampFirst"
+            expressionDescription.expression = NSExpression(format: "@min.timeStamp")
+            expressionDescription.expressionResultType = .DateAttributeType
+            expressionDescriptions.append(expressionDescription)
+
+            expressionDescription = NSExpressionDescription()
+            expressionDescription.name = "timeStampLast"
+            expressionDescription.expression = NSExpression(format: "@max.timeStamp")
+            expressionDescription.expressionResultType = .DateAttributeType
+            expressionDescriptions.append(expressionDescription)
+            
+            let request = NSFetchRequest(entityName: "RunData")
+            request.resultType = .DictionaryResultType
+            request.propertiesToFetch = expressionDescriptions
+            request.predicate = NSPredicate(format:"runDataToRunDetail = %@", self.runDetail!)
+           
+            // Perform an Async fetch
             do {
-                let results = try context.executeFetchRequest(fetchRequest)
-                let dict = results[0] as! [String:Double]
-                average = dict["avgOfpace"]!
-                print(average)
+                let asyncRequest = NSAsynchronousFetchRequest(fetchRequest: request) {
+                    results in
+                    if let results = results.finalResult {
+                        let dict = results[0] as! [String:AnyObject]
+                        let averageSpeed = dict["averageSpeed"]! as! Double
+                        let averagePace = dict["averagePace"]! as! Double
+                        let totalDistance = dict["totalDistance"]! as! Double
+                        let totalSteps = dict["totalSteps"]! as! Int
+                        //let pedDistance = dict["pedDistance"]! as! Double
+                        let sDate = dict["timeStampFirst"]! as? NSDate
+                        let eDate = dict["timeStampLast"]! as? NSDate
+                        var myRaceTime:String = ""
+                        if let sd = sDate,let ed = eDate {
+                            myRaceTime = stringFromTimeInterval(ed.timeIntervalSinceDate(sd))
+                        }
+                     
+                        dispatch_async(dispatch_get_main_queue()) {
+                            let dateFormatter = NSDateFormatter()
+                            dateFormatter.dateFormat = "d MMM y"
+                            var formattedDate = "Unset"
+                            var raceName = "Unset"
+                            if let raceDate = self.runDetail!.date {
+                                formattedDate = dateFormatter.stringFromDate(raceDate) // if date conversion fails this returns nil and that's OK
+                            }
+                            if let name = self.runDetail!.name {
+                                raceName = name
+                            }
+                            self.raceNameLabel.text = String(format:"Race: %@ %@",formattedDate,raceName)
+                            self.averageSpeedLabel.text = String(format: "Average Speed: %6.2f Kph",averageSpeed  * 3.6)
+                            self.averagePaceLabel.text = String(format: "Pace: %6.2f Min. / Km",(averagePace * 1000.0) / 60.0)
+                            self.distanceLabel.text = String(format: "Distance: %6.2f Meters",totalDistance)
+                            self.totalStepsLabel.text = String(format: "Total Steps: %d",totalSteps)
+                            self.timeLabel.text = String(format: "Race Time: %@",myRaceTime)
+                        }
+                    }
+                }
+                try context.executeRequest(asyncRequest)
             } catch {
                 let fetchError = error as NSError
                 logError(fetchError.description)
             }
         }
-        return average
     }
 
 }
