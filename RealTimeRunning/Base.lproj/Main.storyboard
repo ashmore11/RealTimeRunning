@@ -55,22 +55,22 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="RAq-42-iHd">
-                                            <rect key="frame" x="8" y="24" width="584" height="87"/>
+                                            <rect key="frame" x="253" y="25.5" width="94" height="84.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="start time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRd-5D-qFX">
-                                                    <rect key="frame" x="245" y="0.0" width="94" height="38"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="start time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRd-5D-qFX">
+                                                    <rect key="frame" x="0.0" y="0.0" width="94" height="35.5"/>
                                                     <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="26"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="competitors" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zuq-io-jXJ">
-                                                    <rect key="frame" x="262" y="43" width="61" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="competitors" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zuq-io-jXJ">
+                                                    <rect key="frame" x="16" y="40" width="61" height="19.5"/>
                                                     <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
                                                     <color key="textColor" red="0.48627450980392156" green="0.73333333333333328" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="distance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eOS-LT-TzH">
-                                                    <rect key="frame" x="271" y="68" width="43" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="distance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eOS-LT-TzH">
+                                                    <rect key="frame" x="25" y="65" width="43" height="19.5"/>
                                                     <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
                                                     <color key="textColor" red="0.65490196078431373" green="0.94117647058823528" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -79,27 +79,9 @@
                                         </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottomMargin" secondItem="RAq-42-iHd" secondAttribute="bottom" constant="23" id="LIC-uB-i22"/>
-                                        <constraint firstItem="RAq-42-iHd" firstAttribute="leading" secondItem="e3J-En-sa3" secondAttribute="leadingMargin" id="MsO-nR-ERt"/>
-                                        <constraint firstItem="RAq-42-iHd" firstAttribute="top" secondItem="e3J-En-sa3" secondAttribute="topMargin" id="RmU-0Y-1EO"/>
-                                        <constraint firstItem="RAq-42-iHd" firstAttribute="top" secondItem="e3J-En-sa3" secondAttribute="topMargin" constant="16" id="XtE-YL-4cj"/>
-                                        <constraint firstItem="RAq-42-iHd" firstAttribute="top" secondItem="e3J-En-sa3" secondAttribute="topMargin" constant="3" id="ijZ-xM-MXx"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="RAq-42-iHd" secondAttribute="trailing" id="nOK-VN-qVN"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="RAq-42-iHd" secondAttribute="bottom" id="owD-lu-boD"/>
-                                        <constraint firstItem="RAq-42-iHd" firstAttribute="centerY" secondItem="e3J-En-sa3" secondAttribute="centerY" id="se5-be-9am"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="RAq-42-iHd" secondAttribute="bottom" constant="16" id="tbQ-En-SCK"/>
-                                        <constraint firstItem="RAq-42-iHd" firstAttribute="top" secondItem="e3J-En-sa3" secondAttribute="topMargin" constant="24" id="wmM-JX-mWl"/>
+                                        <constraint firstItem="RAq-42-iHd" firstAttribute="centerY" secondItem="e3J-En-sa3" secondAttribute="centerY" id="C58-uw-x1e"/>
+                                        <constraint firstItem="RAq-42-iHd" firstAttribute="centerX" secondItem="e3J-En-sa3" secondAttribute="centerX" id="w9q-j4-fRl"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="LIC-uB-i22"/>
-                                            <exclude reference="RmU-0Y-1EO"/>
-                                            <exclude reference="ijZ-xM-MXx"/>
-                                            <exclude reference="owD-lu-boD"/>
-                                            <exclude reference="se5-be-9am"/>
-                                            <exclude reference="wmM-JX-mWl"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
