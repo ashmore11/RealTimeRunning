@@ -204,30 +204,14 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
         
         cell.backgroundColor = UIColor.clearColor()
+            
+        let competitor = getSortedCompetitors()[indexPath.row]
         
-        var competitor = [String: AnyObject]()
-        
-        if getSortedCompetitors().count > 0 {
-            
-            competitor = getSortedCompetitors()[indexPath.row]
-            
-        } else {
-            
-            competitor = Array(competitorsData.values)[indexPath.row]
-            
-        }
-        
-        if let name = competitor["name"] as? String, let image = competitor["image"] as? UIImage {
+        if let name = competitor["name"] as? String, let image = competitor["image"] as? UIImage, let position = competitor["position"] as? String {
             
             cell.nameLabel.text = name
             cell.profileImage.image = image
-            cell.positionLabel.text = ""
-            
-            if let position = competitor["position"] as? String {
-                
-                cell.positionLabel.text = position
-                
-            }
+            cell.positionLabel.text = position
             
         }
         
@@ -294,7 +278,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     
                     let data = [
                         "name": name,
-                        "image": image
+                        "image": image,
+                        "position": ""
                     ]
                     
                     self.competitorsData[id] = data
@@ -361,15 +346,15 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
             let keys = sortedPositions.map { return $0.0 }
             
-            for (index, element) in keys.enumerate() {
+            for (index, id) in keys.enumerate() {
                 
-                if element == self.user.id {
+                if id == self.user.id {
                     
                     self.positionLabel.text = formatter.stringFromNumber(index + 1)
                     
                 }
                 
-                self.competitorsData[element]!["position"] = formatter.stringFromNumber(index + 1)
+                self.competitorsData[id]!["position"] = formatter.stringFromNumber(index + 1)
                 
                 self.competitorsTableView.reloadData()
                 
