@@ -370,7 +370,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             if let controller = segue.destinationViewController as? MapViewController {
 
                 controller.geoEvents = geoEvents
-
             }
 
         } else if segue.identifier == "showRaw" {
