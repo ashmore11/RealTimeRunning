@@ -205,7 +205,17 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         cell.backgroundColor = UIColor.clearColor()
         
-        let competitor = Array(competitorsData.values)[indexPath.row]
+        var competitor = [String: AnyObject]()
+        
+        if getSortedCompetitors().count > 0 {
+            
+            competitor = getSortedCompetitors()[indexPath.row]
+            
+        } else {
+            
+            competitor = Array(competitorsData.values)[indexPath.row]
+            
+        }
         
         if let name = competitor["name"] as? String, let image = competitor["image"] as? UIImage {
             
@@ -222,6 +232,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
         return cell
+        
+    }
+    
+    func getSortedCompetitors() -> [[String: AnyObject]] {
+        
+        return competitorsData.values.sort { ($0["position"] as? String) < ($1["position"] as? String) }
         
     }
     
@@ -499,9 +515,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         setupMotionManage()
         logError("Race Started")
         
-        let voice = AVSpeechSynthesizer()
-        let myUtterance = AVSpeechUtterance(string: "Your race has begun")
-        voice.speakUtterance(myUtterance)
+//        let voice = AVSpeechSynthesizer()
+//        let myUtterance = AVSpeechUtterance(string: "Your race has begun")
+//        voice.speakUtterance(myUtterance)
 
         // Hide the back button incase the user accidently hits it
         self.navigationItem.setHidesBackButton(true, animated: true)
