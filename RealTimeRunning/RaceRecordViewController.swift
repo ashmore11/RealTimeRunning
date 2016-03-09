@@ -310,6 +310,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    // MARK: WebSockets
+    
     func competitorsUpdated(notification: NSNotification) {
         
         if let items = notification.object, let id = items["userId"] as? String {
@@ -637,9 +639,14 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                                     self.currentCadence = Double(cad)
                                 }
                                 dispatch_async(dispatch_get_main_queue()) {
-                                    //self.stepsLabel.text = String(format:"Steps taken: %d",self.stepsTaken)
-                                    self.paceLabel.text = String(format:"%6.2f Sec/Mtr", self.currentPace)
-                                    //self.cadenceLabel.text = String(format:"Cadence: %6.2f Steps / Sec.",self.currentCadence)
+                                    
+                                    let paceStr = String(self.currentPace * 16.6667)
+                                    let paceArr = paceStr.componentsSeparatedByString(".")
+                                    let minutes = paceArr[0]
+                                    let seconds = paceArr[1]
+                                    
+                                    self.paceLabel.text = String(format:"%6.2f' %6.2f\"", minutes, seconds)
+                                    
                                 }
                                 
                             }

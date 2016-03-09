@@ -14,13 +14,14 @@ import SwiftyJSON
 import Alamofire_SwiftyJSON
 import MBProgressHUD
 
-class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
+class HomeViewController: UIViewController {
     
     // MARK: Properties
     
     @IBOutlet weak var fbProfileImage: UIImageView!
     @IBOutlet weak var topViewArea: UIView!
     @IBOutlet weak var racesButton: UIButton!
+    @IBOutlet weak var fbLoginButton: UIButton!
     
     var user: User?
     var races = [Race]()
@@ -29,32 +30,25 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         super.viewDidLoad()
         
-        setupLayout()
+        self.setupLayout()
         
         navigationItem.title = "Real Time Running"
         
         if let user = user {
             
-            fbProfileImage.image = user.profileImage
+            self.fbProfileImage.image = user.profileImage
+            
             navigationItem.title = user.name
             
         }
         
-        let loginButton: FBSDKLoginButton = FBSDKLoginButton()
-        
-        loginButton.readPermissions = ["public_profile", "email"]
-        loginButton.delegate = self
-        
-        loginButton.center = self.view.center
-        loginButton.frame.origin.y = topViewArea.frame.size.height + loginButton.frame.size.height + 50
-        
-        self.view.addSubview(loginButton)
-        
         if (FBSDKAccessToken.currentAccessToken() != nil) {
             
-            getData()
+            self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
             
-            fadeRacesButton(1, delay: 0.25)
+            self.fadeRacesButton(1, delay: 0.25)
+            
+            self.getData()
             
         }
         
@@ -64,13 +58,13 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     
         setViewGradient(self.view)
         
-        topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
+        self.topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
         
-        setButtonGradient(racesButton)
-        racesButton.alpha = 0
+        setButtonGradient(self.racesButton, self.fbLoginButton)
+        self.racesButton.alpha = 0.5
         
-        fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
-        fbProfileImage.clipsToBounds = true
+        self.fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
+        self.fbProfileImage.clipsToBounds = true
         
     }
     
@@ -82,30 +76,57 @@ class HomeViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     // MARK: - Facebook Delegate Methods
     
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+    @IBAction func fbLoginButtonPushed(sender: UIButton) {
+    
+        let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
         
-        if error == nil {
+        if (FBSDKAccessToken.currentAccessToken() != nil) {
             
-            racesButton.enabled = true
-            fadeRacesButton(1, delay: 1)
+            fbLoginManager.logOut()
             
-            getData()
-
+            self.userLoggedOut()
+            
         } else {
             
-            print(error.localizedDescription)
-            
+            fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) -> Void in
+                
+                if error != nil {
+                    print(error)
+                    return
+                }
+                
+                let fbloginresult: FBSDKLoginManagerLoginResult = result
+                
+                if(fbloginresult.grantedPermissions.contains("email")) {
+                    
+                    self.userLoggedIn()
+                    
+                }
+            })
         }
         
     }
     
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+    func userLoggedOut() {
         
-        navigationItem.title = "SIGN IN"
+        self.fbLoginButton.setTitle("SIGN IN" , forState: .Normal)
+        
+        navigationItem.title = "REAL TIME RACING"
         self.fbProfileImage.image = nil
         
-        racesButton.enabled = false
-        fadeRacesButton(0, delay: 0)
+        self.racesButton.enabled = false
+        self.fadeRacesButton(0.5, delay: 0)
+        
+    }
+    
+    func userLoggedIn() {
+            
+        self.getData()
+        
+        self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
+        
+        self.racesButton.enabled = true
+        self.fadeRacesButton(1, delay: 1)
         
     }
     
