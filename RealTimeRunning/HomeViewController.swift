@@ -32,7 +32,7 @@ class HomeViewController: UIViewController {
         
         self.setupLayout()
         
-        navigationItem.title = "Real Time Running"
+        self.navigationItem.title = "REAL TIME RUNNING"
         
         if let user = user {
             
@@ -110,10 +110,8 @@ class HomeViewController: UIViewController {
     func userLoggedOut() {
         
         self.fbLoginButton.setTitle("SIGN IN" , forState: .Normal)
-        
-        navigationItem.title = "REAL TIME RACING"
+        self.navigationItem.title = "REAL TIME RUNNING"
         self.fbProfileImage.image = nil
-        
         self.racesButton.enabled = false
         self.fadeRacesButton(0.5, delay: 0)
         
@@ -122,9 +120,7 @@ class HomeViewController: UIViewController {
     func userLoggedIn() {
             
         self.getData()
-        
         self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
-        
         self.racesButton.enabled = true
         self.fadeRacesButton(1, delay: 1)
         
@@ -158,7 +154,7 @@ class HomeViewController: UIViewController {
                 name = firstName + " " + lastName
             }
             
-            self.navigationItem.title = name
+            self.navigationItem.title = name.uppercaseString
             
             // if all optionals unwrap OK then we can setup the image
             if let imageURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {

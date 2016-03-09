@@ -512,7 +512,7 @@
             </objects>
             <point key="canvasLocation" x="4730" y="1274"/>
         </scene>
-        <!--PROFILE-->
+        <!--REAL TIME RUNNING-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController storyboardIdentifier="HomeView" id="BYZ-38-t0r" customClass="HomeViewController" customModule="RealTimeRunning" customModuleProvider="target" sceneMemberID="viewController">
@@ -672,7 +672,7 @@
                             <constraint firstItem="rcw-25-dI8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="vmR-5a-hc4"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="PROFILE" id="Fem-3k-9mf"/>
+                    <navigationItem key="navigationItem" title="REAL TIME RUNNING" id="Fem-3k-9mf"/>
                     <connections>
                         <outlet property="fbLoginButton" destination="yio-Kp-maW" id="OHP-BT-LIr"/>
                         <outlet property="fbProfileImage" destination="0oc-bL-rm4" id="jPr-En-tXr"/>
