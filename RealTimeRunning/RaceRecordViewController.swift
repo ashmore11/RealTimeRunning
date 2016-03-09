@@ -219,6 +219,16 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    func updateTableView(index: Int) {
+        
+        competitorsTableView.beginUpdates()
+        
+        competitorsTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Fade)
+
+        competitorsTableView.endUpdates()
+        
+    }
+    
     func getSortedCompetitors() -> [[String: AnyObject]] {
         
         return competitorsData.values.sort { ($0["position"] as? String) < ($1["position"] as? String) }
@@ -268,31 +278,43 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         self.competitorsData = [String: [String: AnyObject]]()
         
-        for id in race.competitors! {
+        if let competitors = race.competitors {
             
-            let url = "http://real-time-running.herokuapp.com/api/users/\(id)"
-            
-            Alamofire.request(.GET, url).responseSwiftyJSON({ (request, response, json, error) in
+            if competitors.count == 0 {
                 
-                if let id = json[0]["fbid"].string, let name = json[0]["name"].string, let imageURL = json[0]["profileImage"].string, let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
+                completionHandler()
+            
+                return
+            
+            }
+        
+            for id in competitors {
+                
+                let url = "http://real-time-running.herokuapp.com/api/users/\(id)"
+                
+                Alamofire.request(.GET, url).responseSwiftyJSON({ (request, response, json, error) in
                     
-                    let data = [
-                        "name": name,
-                        "image": image,
-                        "position": ""
-                    ]
-                    
-                    self.competitorsData[id] = data
-                    
-                    if self.race.competitors!.count == self.competitorsData.count {
+                    if let id = json[0]["fbid"].string, let name = json[0]["name"].string, let imageURL = json[0]["profileImage"].string, let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
                         
-                        completionHandler()
+                        let data = [
+                            "name": name,
+                            "image": image,
+                            "position": ""
+                        ]
+                        
+                        self.competitorsData[id] = data
+                        
+                        if self.race.competitors!.count == self.competitorsData.count {
+                            
+                            completionHandler()
+                            
+                        }
                         
                     }
                     
-                }
+                })
                 
-            })
+            }
             
         }
         
@@ -302,15 +324,13 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let items = notification.object, let id = items["userId"] as? String {
             
-            let keys = Array(self.competitorsData.keys)
-            
-            if let index = keys.indexOf(id), let competitor = race.competitors?.indexOf(id) {
+            if let cdIndex = Array(self.competitorsData.keys).indexOf(id), let rcIndex = race.competitors?.indexOf(id) {
                 
-                race.competitors?.removeAtIndex(competitor)
+                race.competitors?.removeAtIndex(rcIndex)
                 
                 self.getTableViewData { () -> Void in
                     
-                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                    let indexPath = NSIndexPath(forRow: cdIndex, inSection: 0)
                     self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
                     
                 }
@@ -321,7 +341,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
                 self.getTableViewData { () -> Void in
                     
-                    self.competitorsTableView.reloadData()
+                    if let index = Array(self.competitorsData.keys).indexOf(id) {
+                    
+                        self.updateTableView(index)
+                        
+                    }
                     
                 }
                 
@@ -354,7 +378,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     
                 }
                 
-                self.competitorsData[id]!["position"] = formatter.stringFromNumber(index + 1)
+                self.competitorsData[id]?["position"] = formatter.stringFromNumber(index + 1)
                 
                 self.competitorsTableView.reloadData()
                 
@@ -366,24 +390,27 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func updateJoinRaceButton() {
         
-        if race.competitors!.contains(user.id) {
-            
-            self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
-            
-            startStopButton.enabled = true
-            
-            UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
-            
-        } else {
-            
-            self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
-            
-            startStopButton.enabled = false
-            
-            UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
-            
-        }
+        if let competitors = race.competitors {
         
+            if competitors.contains(user.id) {
+                
+                self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
+                
+                startStopButton.enabled = true
+                
+                UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
+                
+            } else {
+                
+                self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
+                
+                startStopButton.enabled = false
+                
+                UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
+                
+            }
+
+        }
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
