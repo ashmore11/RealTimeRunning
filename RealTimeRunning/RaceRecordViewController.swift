@@ -24,8 +24,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     var race: Race!
     var competitors: [Competitor] = [] {
         didSet(item) {
-            print(item)
-            self.competitorsTableView.reloadData()
             self.updateJoinRaceButton()
         }
     }
@@ -196,6 +194,20 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if editingStyle == .Delete {
+            
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+            
+        } else if editingStyle == .Insert {
+            
+            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: indexPath.row, inSection: 0)], withRowAnimation: .Middle)
+            
+        }
+        
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cellIdentifier = "CompetitorsTableViewCell"
@@ -216,23 +228,35 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func updateTableView(index: Int, insert: Bool) {
+    func updateTableView(competitor: Competitor, insert: Bool) {
+        
+        competitorsTableView.beginUpdates()
         
         if insert == true {
-                
-            competitorsTableView.beginUpdates()
             
-            competitorsTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Middle)
-
-            competitorsTableView.endUpdates()
+            self.competitors.append(competitor)
+            
+            if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
+            
+                competitorsTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Middle)
+            
+            }
         
         } else {
             
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            
-            self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+            if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
+                
+                self.competitors.removeAtIndex(index)
+                
+                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                
+                self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+                
+            }
             
         }
+        
+        competitorsTableView.endUpdates()
         
     }
     
@@ -252,22 +276,19 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
 
     func getSortedCompetitors() -> [Competitor] {
         
-        let sortedCompetitors = self.competitors.sort { (a, b) -> Bool in
+        let sortedCompetitors = self.competitors.sort { (p1, p2) -> Bool in
             
-            let p1 = a.position
-            let p2 = b.position
-            
-            if p1.isEmpty {
+            if p1.position.isEmpty {
                 
                 return false
                 
-            } else if p2.isEmpty {
+            } else if p2.position.isEmpty {
                 
                 return true
                 
             } else {
                 
-                return p1.localizedCaseInsensitiveCompare(p2) == .OrderedAscending
+                return p1.position.localizedCaseInsensitiveCompare(p2.position) == .OrderedAscending
                 
             }
             
@@ -291,8 +312,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 let image = UIImage(data:data) {
                     
                     let competitor = Competitor(id: id, image: image, name: name)
-                    
-                    self.competitors.append(competitor)
+                        
+                    self.updateTableView(competitor, insert: true)
 
             }
         })
@@ -300,9 +321,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func removeCompetitor(id: String) {
         
-        if let index = self.competitors.indexOf({ $0.id == id }) {
-        
-            self.competitors.removeAtIndex(index)
+        if let competitor = self.getCompetitor(id) {
+            
+            self.updateTableView(competitor, insert: false)
             
         }
         
@@ -353,7 +374,13 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
             if let index = sortedCompetitors.indexOf({ $0.id == id }), let position = formatter.stringFromNumber(index + 1) {
             
-                competitor.position = position
+                competitor.position = competitor.distance > 0.0 ? position : ""
+
+                dispatch_async(dispatch_get_main_queue()) {
+
+                    self.competitorsTableView.reloadData()
+                    
+                }
             
             }
         }
