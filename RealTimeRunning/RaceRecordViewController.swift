@@ -117,7 +117,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "competitorsUpdated:", name: "reloadCompetitors", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePositions:", name: "positionUpdateReceived", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePosition:", name: "positionUpdateReceived", object: nil)
         
         self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
@@ -194,20 +194,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if editingStyle == .Delete {
-            
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-            
-        } else if editingStyle == .Insert {
-            
-            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: indexPath.row, inSection: 0)], withRowAnimation: .Middle)
-            
-        }
-        
-    }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cellIdentifier = "CompetitorsTableViewCell"
@@ -215,8 +201,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! CompetitorsTableViewCell
         
         setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
-        
-        cell.backgroundColor = UIColor.clearColor()
         
         let competitor = getSortedCompetitors()[indexPath.row]
         
@@ -237,8 +221,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.competitors.append(competitor)
             
             if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
+                
+                let indexPath = NSIndexPath(forRow: index, inSection: 0)
             
-                competitorsTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Middle)
+                competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             
             }
         
@@ -257,6 +243,18 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
         competitorsTableView.endUpdates()
+        
+    }
+    
+    func reloadCell(competitor: Competitor) {
+        
+        if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
+        
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            
+            self.competitorsTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            
+        }
         
     }
     
@@ -359,9 +357,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
             }
         }
+        
+        hideActivityIndicator(self.view)
+        
     }
     
-    func updatePositions(notification: NSNotification) {
+    func updatePosition(notification: NSNotification) {
         
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .OrdinalStyle
@@ -375,12 +376,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             if let index = sortedCompetitors.indexOf({ $0.id == id }), let position = formatter.stringFromNumber(index + 1) {
             
                 competitor.position = competitor.distance > 0.0 ? position : ""
-
-                dispatch_async(dispatch_get_main_queue()) {
-
-                    self.competitorsTableView.reloadData()
-                    
-                }
+                
+                self.reloadCell(competitor)
             
             }
         }
@@ -439,8 +436,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
                 
                 SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, raceId: self.race.id, userId: self.user.id)
-                
-                hideActivityIndicator(self.view)
                 
             })
     }
