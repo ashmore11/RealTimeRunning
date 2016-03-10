@@ -268,7 +268,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
             for id in competitors {
             
-                self.addCompetitor(id)
+                self.addCompetitors(id)
             
             }
         
@@ -300,23 +300,29 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func addCompetitor(id: String) {
+    func addCompetitors(ids: String...) {
                 
-        let url = "http://real-time-running.herokuapp.com/api/users/\(id)"
+        let url = "http://real-time-running.herokuapp.com/api/users/"
         
-        Alamofire.request(.GET, url).responseSwiftyJSON({ (request, response, json, error) in
+        Alamofire.request(.PUT, url, parameters: ["ids": ids]).responseSwiftyJSON({ (request, response, json, error) in
             
-            if let id = json[0]["fbid"].string,
-                let name = json[0]["name"].string,
-                let imageURL = json[0]["profileImage"].string,
-                let nsurl = NSURL(string: imageURL),
-                let data = NSData(contentsOfURL:nsurl),
-                let image = UIImage(data:data) {
-                    
-                    let competitor = Competitor(id: id, image: image, name: name)
-                        
-                    self.updateTableView(competitor, insert: true)
+            if let users = json.array {
+            
+                for user in users {
+                
+                    if let id = user["fbid"].string,
+                        let name = user["name"].string,
+                        let imageURL = user["profileImage"].string,
+                        let nsurl = NSURL(string: imageURL),
+                        let data = NSData(contentsOfURL:nsurl),
+                        let image = UIImage(data:data) {
+                            
+                            let competitor = Competitor(id: id, image: image, name: name)
+                                
+                            self.updateTableView(competitor, insert: true)
 
+                    }
+                }
             }
         })
     }
@@ -357,7 +363,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
 
             } else {
                 
-                self.addCompetitor(id)
+                self.addCompetitors(id)
                 
             }
         }
