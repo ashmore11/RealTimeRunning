@@ -101,7 +101,7 @@ class HomeViewController: UIViewController {
             fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) -> Void in
                 
                 if error != nil {
-                    print(error)
+                    print("Error in fbLoginManager.logInWithReadPermissionserror:\(error)")
                     return
                 }
                 
@@ -208,7 +208,7 @@ class HomeViewController: UIViewController {
                 Alamofire.request(.POST, postURL, parameters: parameters, encoding: .JSON)
                     .responseSwiftyJSON({ (request, response, json, error) in
                     
-                        print(json["message"])
+                        print("Reply from Alamofire in createUser: \(json["message"])")
                     
                 })
                 
