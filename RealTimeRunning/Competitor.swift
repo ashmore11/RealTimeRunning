@@ -17,6 +17,7 @@ class Competitor {
     var name: String
     var position: String = ""
     var distance: Double = 0.0
+    var pace: String = ""
     
     init(id: String, image: UIImage, name: String) {
         
@@ -26,22 +27,33 @@ class Competitor {
         
     }
     
-    func setPosition(index: Int) {
+    func setDistance(distance: Double) {
+        
+        self.distance = distance
+        
+    }
     
+    func setPace(pace: Double) {
+        
+        let paceStr = String(pace * 16.6667)
+        let paceArr = paceStr.componentsSeparatedByString(".")
+        let minutes = paceArr[0]
+        let seconds = String(paceArr[1].characters.prefix(2))
+        
+        self.pace = "\(minutes)'\(seconds)\"/km"
+        
+    }
+    
+    func setPosition(index: Int) {
+        
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .OrdinalStyle
         
         if let position = formatter.stringFromNumber(index + 1) {
-            
-            self.position = position
+        
+            self.position = self.distance > 0.0 ? position : ""
             
         }
-        
-    }
-    
-    func setDistance(distance: Double) {
-        
-        self.distance = distance
         
     }
     

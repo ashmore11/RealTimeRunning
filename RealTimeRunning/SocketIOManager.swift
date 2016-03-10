@@ -44,9 +44,9 @@ class SocketIOManager: NSObject {
         
     }
     
-    func sendPositionUpdate(id: String, distance: Double, speed: Double) {
+    func sendPositionUpdate(id: String, distance: Double, pace: Double) {
         
-        socket.emit("positionUpdate", id, distance, speed)
+        socket.emit("positionUpdate", id, distance, pace)
         
     }
     
