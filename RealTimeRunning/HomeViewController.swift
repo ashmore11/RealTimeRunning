@@ -23,12 +23,15 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var racesButton: UIButton!
     @IBOutlet weak var fbLoginButton: UIButton!
     
+    @IBOutlet weak var userNameField: UITextField!
     var user: User?
     var races = [Race]()
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        self.addToolbarOnKeyboard(userNameField, action: "addedUserName", buttonText: "Add User")
         
         self.setupLayout()
         
@@ -52,6 +55,13 @@ class HomeViewController: UIViewController {
             
         }
         
+    }
+    
+    func addedUserName() {
+        self.userNameField.resignFirstResponder()
+        if let userName = self.userNameField.text {
+            print("Added a username \(userName)")
+        }
     }
     
     func setupLayout() {
@@ -265,6 +275,27 @@ class HomeViewController: UIViewController {
                 
             }
             
+        }
+        
+    }
+    
+    func addToolbarOnKeyboard(view: UIView?, action:Selector, buttonText:String) {
+        
+        let toolbar: UIToolbar = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
+        toolbar.barStyle = UIBarStyle.BlackTranslucent
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        let done: UIBarButtonItem = UIBarButtonItem(title: buttonText, style: UIBarButtonItemStyle.Plain, target: self, action: action)
+        let cancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: view, action:  "resignFirstResponder")
+        
+        toolbar.items = [flexSpace,cancel,done]
+        toolbar.sizeToFit()
+        
+        if let accessorizedView = view as? UITextView {
+            accessorizedView.inputAccessoryView = toolbar
+            accessorizedView.inputAccessoryView = toolbar
+        } else if let accessorizedView = view as? UITextField {
+            accessorizedView.inputAccessoryView = toolbar
+            accessorizedView.inputAccessoryView = toolbar
         }
         
     }
