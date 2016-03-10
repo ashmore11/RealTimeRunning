@@ -50,8 +50,6 @@ class raceHistorySummaryViewController: UIViewController {
                                 }
                             }
                         }
-                        dispatch_async(dispatch_get_main_queue()) {
-                        }
                     }
                 }
                 try context.executeRequest(asyncRequest)
