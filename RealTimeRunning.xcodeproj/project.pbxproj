@@ -47,6 +47,7 @@
 		D2830BD91C73D52B00B1B1A8 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */; };
 		D2830BDB1C73D53500B1B1A8 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */; };
 		D299ABF21C8DD76500FE219C /* CompetitorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299ABF01C8DD76500FE219C /* CompetitorsTableViewCell.swift */; };
+		D299ABF51C91756000FE219C /* Competitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299ABF41C91755F00FE219C /* Competitor.swift */; };
 		D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FD1C75EA06009750A8 /* Race.swift */; };
 		D2AFE2001C75EBC3009750A8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FF1C75EBC3009750A8 /* User.swift */; };
 		D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */; };
@@ -132,6 +133,7 @@
 		D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		D299ABF01C8DD76500FE219C /* CompetitorsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompetitorsTableViewCell.swift; sourceTree = "<group>"; };
+		D299ABF41C91755F00FE219C /* Competitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Competitor.swift; sourceTree = "<group>"; };
 		D2AFE1FD1C75EA06009750A8 /* Race.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Race.swift; sourceTree = "<group>"; };
 		D2AFE1FF1C75EBC3009750A8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RacesTableViewController.swift; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 			children = (
 				D2AFE1FD1C75EA06009750A8 /* Race.swift */,
 				D2AFE1FF1C75EBC3009750A8 /* User.swift */,
+				D299ABF41C91755F00FE219C /* Competitor.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -566,6 +569,7 @@
 				C4E24C4D1C88E082006F5712 /* ErrorLogTableViewController.swift in Sources */,
 				C4EC42FC1C7F2DF200A458E3 /* raceHistoryTableViewController.swift in Sources */,
 				C4EC43061C7F5FF600A458E3 /* UIGraphView.swift in Sources */,
+				D299ABF51C91756000FE219C /* Competitor.swift in Sources */,
 				C42839EE1C8DB18300049B7C /* UIPanelView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
