@@ -104,7 +104,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 self.speedLabel.text = String(format: "%6.2f Kph", self.speed * 3.6)
                 self.raceDistanceLabel.text = String(format: "%6.2f Km", self.distance / 1000)
                 
-                SocketIOManager.sharedInstance.sendPositionUpdate(self.user.id, distance: self.distance, speed: self.speed)
+                SocketIOManager.sharedInstance.sendPositionUpdate(self.user.id, distance: self.distance, pace: self.currentPace)
             
             }
 
@@ -117,7 +117,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "competitorsUpdated:", name: "reloadCompetitors", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePositions:", name: "positionUpdateReceived", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePosition:", name: "positionUpdateReceived", object: nil)
         
         self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
@@ -194,20 +194,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if editingStyle == .Delete {
-            
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-            
-        } else if editingStyle == .Insert {
-            
-            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: indexPath.row, inSection: 0)], withRowAnimation: .Middle)
-            
-        }
-        
-    }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cellIdentifier = "CompetitorsTableViewCell"
@@ -215,8 +201,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! CompetitorsTableViewCell
         
         setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
-        
-        cell.backgroundColor = UIColor.clearColor()
         
         let competitor = getSortedCompetitors()[indexPath.row]
         
@@ -230,33 +214,51 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func updateTableView(competitor: Competitor, insert: Bool) {
         
-        competitorsTableView.beginUpdates()
-        
-        if insert == true {
+        dispatch_async(dispatch_get_main_queue()) {
             
-            self.competitors.append(competitor)
+            self.competitorsTableView.beginUpdates()
             
-            if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
+            if insert == true {
+                
+                self.competitors.append(competitor)
+                
+                if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
+                    
+                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                
+                    self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+                
+                }
             
-                competitorsTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Middle)
-            
+            } else {
+                
+                if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
+                    
+                    self.competitors.removeAtIndex(index)
+                    
+                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                    
+                    self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+                    
+                }
+                
             }
-        
-        } else {
             
-            if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
-                
-                self.competitors.removeAtIndex(index)
-                
-                let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                
-                self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-                
-            }
+            self.competitorsTableView.endUpdates()
             
         }
         
-        competitorsTableView.endUpdates()
+    }
+    
+    func reloadCell(competitor: Competitor) {
+        
+        if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
+        
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            
+            self.competitorsTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            
+        }
         
     }
     
@@ -359,51 +361,56 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
             }
         }
+        
+        hideActivityIndicator(self.view)
+        
     }
     
-    func updatePositions(notification: NSNotification) {
+    func updatePosition(notification: NSNotification) {
         
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .OrdinalStyle
-        
-        if let items = notification.object, let id = items["id"] as? String, let distance = items["distance"] as? Double, let competitor = getCompetitor(id) {
+        if let items = notification.object, let id = items["id"] as? String, let distance = items["distance"] as? Double, let pace = items["pace"] as? Double, let competitor = getCompetitor(id) {
             
-            competitor.distance = distance
+            competitor.setDistance(distance)
+            competitor.setPace(pace)
             
             let sortedCompetitors = self.competitors.sort { $0.distance > $1.distance }
                 
-            if let index = sortedCompetitors.indexOf({ $0.id == id }), let position = formatter.stringFromNumber(index + 1) {
+            if let index = sortedCompetitors.indexOf({ $0.id == id }) {
             
-                competitor.position = competitor.distance > 0.0 ? position : ""
-
+                competitor.setPosition(index)
+                
                 dispatch_async(dispatch_get_main_queue()) {
-
+                
                     self.competitorsTableView.reloadData()
-                    
+                
                 }
-            
+                
             }
         }
     }
     
     func updateJoinRaceButton() {
         
-        if getCompetitor(user.id) != nil {
-            
-            self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
-            
-            UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
-            
-            startStopButton.enabled = true
-            
-        } else {
-            
-            self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
-            
-            UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
-            
-            startStopButton.enabled = false
-            
+        dispatch_async(dispatch_get_main_queue()) {
+        
+            if self.getCompetitor(self.user.id) != nil {
+                
+                self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
+                
+                UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
+                
+                self.startStopButton.enabled = true
+                
+            } else {
+                
+                self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
+                
+                UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
+                
+                self.startStopButton.enabled = false
+                
+            }
+        
         }
 
     }
@@ -439,8 +446,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
                 
                 SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, raceId: self.race.id, userId: self.user.id)
-                
-                hideActivityIndicator(self.view)
                 
             })
     }
