@@ -20,7 +20,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // MARK: Properties
     
-    var user: User!
+    var userId: String?
     var race: Race!
     var competitors: [Competitor] = []
     var geoEvents:[CLLocationCoordinate2D] = []
@@ -100,7 +100,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 self.speedLabel.text = String(format: "%6.2f Kph", self.speed * 3.6)
                 self.raceDistanceLabel.text = String(format: "%6.2f Km", self.distance / 1000)
                 
-                SocketIOManager.sharedInstance.sendPositionUpdate(self.user.id, distance: self.distance, pace: self.currentPace)
+                if let userId = self.userId {
+                
+                    SocketIOManager.sharedInstance.sendPositionUpdate(userId, distance: self.distance, pace: self.currentPace)
+                
+                }
             
             }
 
@@ -198,7 +202,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
         
-        let competitor = getSortedCompetitors()[indexPath.row]
+        let competitor = self.competitors[indexPath.row]
         
         cell.nameLabel.text = competitor.name.uppercaseString
         cell.positionLabel.text = competitor.position
@@ -250,11 +254,15 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func reloadCell(competitor: Competitor) {
         
-        if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
+        dispatch_async(dispatch_get_main_queue()) {
         
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
             
-            self.competitorsTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                
+                self.competitorsTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                
+            }
             
         }
         
@@ -270,28 +278,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
             }
         
-        }
-        
-    }
-
-    func getSortedCompetitors() -> [Competitor] {
-        
-        return self.competitors.sort { (p1, p2) -> Bool in
-            
-            if p1.position.isEmpty {
-                
-                return false
-                
-            } else if p2.position.isEmpty {
-                
-                return true
-                
-            } else {
-                
-                return p1.position.localizedCaseInsensitiveCompare(p2.position) == .OrderedAscending
-                
-            }
-            
         }
         
     }
@@ -372,20 +358,16 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let items = notification.object, let id = items["id"] as? String, let distance = items["distance"] as? Double, let pace = items["pace"] as? Double, let competitor = getCompetitor(id) {
             
+            self.competitors.sortInPlace { $0.distance > $1.distance }
+            
             competitor.setDistance(distance)
             competitor.setPace(pace)
-            
-            let sortedCompetitors = self.competitors.sort { $0.distance > $1.distance }
                 
-            if let index = sortedCompetitors.indexOf({ $0.id == id }) {
+            if let index = self.competitors.indexOf({ $0.id == id }) {
             
                 competitor.setPosition(index)
                 
-                dispatch_async(dispatch_get_main_queue()) {
-                
-                    self.competitorsTableView.reloadData()
-                
-                }
+                self.reloadCell(competitor)
                 
             }
         }
@@ -395,22 +377,26 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         dispatch_async(dispatch_get_main_queue()) {
         
-            if self.getCompetitor(self.user.id) != nil {
+            if let userId = self.userId {
                 
-                self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
-                
-                UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
-                
-                self.startStopButton.enabled = true
-                
-            } else {
-                
-                self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
-                
-                UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
-                
-                self.startStopButton.enabled = false
-                
+                if self.getCompetitor(userId) != nil {
+                    
+                    self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
+                    
+                    UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
+                    
+                    self.startStopButton.enabled = true
+                    
+                } else {
+                    
+                    self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
+                    
+                    UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
+                    
+                    self.startStopButton.enabled = false
+                    
+                }
+            
             }
         
         }
@@ -436,20 +422,23 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         showActivityIndicator(self.view, text: nil)
         
-        let requestURL = "http://real-time-running.herokuapp.com/api/races/\(race.id)"
-        let parameters = ["id": user.id]
-        
-        Alamofire.request(.PUT, requestURL, parameters: parameters, encoding: .JSON)
-            .responseSwiftyJSON({ (request, response, json, error) in
-                
-                if (error != nil) {
-                    print(".PUT error: (couldn't add user to race) ", error)
-                    return
-                }
-                
-                SocketIOManager.sharedInstance.raceUsersUpdated(self.race.index, raceId: self.race.id, userId: self.user.id)
-                
-            })
+        if let userId = self.userId {
+            
+            let requestURL = "http://real-time-running.herokuapp.com/api/races/\(race.id)"
+            let parameters = ["id": userId]
+            
+            Alamofire.request(.PUT, requestURL, parameters: parameters, encoding: .JSON)
+                .responseSwiftyJSON({ (request, response, json, error) in
+                    
+                    if (error != nil) {
+                        print(".PUT error: (couldn't add user to race) ", error)
+                        return
+                    }
+                    
+                    SocketIOManager.sharedInstance.raceUsersUpdated(self.race.id, userId: userId)
+                    
+                })
+        }
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -561,6 +550,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func willStartRace() {
+        
         setupMotionManage()
         logError("Race Started")
         
@@ -589,7 +579,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func willStopRace() {
+        
         logError("Race Stoped")
+        
         if let ped = self.pedoMeter {
             ped.stopPedometerUpdates()
         }
@@ -637,22 +629,33 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // This sets up the motion manager to return step data
     func setupMotionManage() {
+        
         if(CMPedometer.isStepCountingAvailable()){
+            
             if let ped = self.pedoMeter {
+                
                 ped.startPedometerUpdatesFromDate(NSDate()) { (data, error) -> Void in
+                    
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        if(error == nil){
+                        
+                        if(error == nil) {
+                            
                             if let stepData = data {
+                                
                                 self.stepsTaken = Int(stepData.numberOfSteps)
+                                
                                 if let dst = stepData.distance {
                                     self.pedDistance = Double(dst)
                                 }
+                                
                                 if let pce = stepData.currentPace {
                                     self.currentPace = Double(pce)
                                 }
+                                
                                 if let cad = stepData.currentCadence {
                                     self.currentCadence = Double(cad)
                                 }
+                                
                                 dispatch_async(dispatch_get_main_queue()) {
                                     
                                     let paceStr = String(self.currentPace * 16.6667)
@@ -666,6 +669,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                                 
                             }
                         }
+                            
                         else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
                             self.didEncounterAuthorizationError()
                         }
@@ -676,6 +680,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func didEncounterAuthorizationError() {
+        
         let title = NSLocalizedString("Motion Activity Not Authorized", comment: "")
         
         let message = NSLocalizedString("To enable Motion features, please allow access to Motion & Fitness in Settings under Privacy.", comment: "")
@@ -697,7 +702,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         dispatch_async(dispatch_get_main_queue()) {
             self.presentViewController(alert, animated: true, completion:nil)
         }
+        
     }
-
 
 }

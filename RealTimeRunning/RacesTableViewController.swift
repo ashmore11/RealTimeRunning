@@ -17,7 +17,7 @@ class RacesTableViewController: UITableViewController {
     
     // MARK: Properties
 
-    var user: User!
+    var userId: String?
     var races = [Race]()
 
     
@@ -57,9 +57,7 @@ class RacesTableViewController: UITableViewController {
         
         let race = races[indexPath.row]
         
-        race.startTime = getStartTime(indexPath.row)
-        
-        cell.startTimeLabel.text = race.startTime
+        cell.startTimeLabel.text = "\(race.getStartTime(indexPath.row))"
         cell.competitorsLabel.text = "competitors: \(race.competitors!.count)".uppercaseString
         cell.distanceLabel.text = "\(race.distance)km"
 
@@ -69,20 +67,29 @@ class RacesTableViewController: UITableViewController {
     
     func reloadTableViewCell(notification: NSNotification) {
         
-        if let items = notification.object, let index = items["index"] as? Int, let id = items["raceId"] as? String {
+        if let items = notification.object, let id = items["raceId"] as? String {
         
             let requestURL = "http://real-time-running.herokuapp.com/api/races/\(id)"
 
             Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
+                
+                if error != nil {
+                    print(error)
+                    return
+                }
                         
-                if let competitors = json[0]["competitors"].arrayObject as? [String] {
+                if let index = self.races.indexOf({ $0.id == id }), let competitors = json[0]["competitors"].arrayObject as? [String] {
                     
                     self.races[index].competitors = competitors
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                    
+                        let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+                        
+                    }
 
                 }
-                
-                let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
 
             })
             
@@ -100,10 +107,10 @@ class RacesTableViewController: UITableViewController {
                 
                 let race = races[indexPath.row]
                 
-                if let controller = segue.destinationViewController as? RaceRecordViewController {
+                if let controller = segue.destinationViewController as? RaceRecordViewController, let userId = self.userId {
                     
                     controller.race = race
-                    controller.user = user
+                    controller.userId = userId
                     
                 }
                 

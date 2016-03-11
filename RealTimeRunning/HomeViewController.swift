@@ -22,9 +22,9 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var topViewArea: UIView!
     @IBOutlet weak var racesButton: UIButton!
     @IBOutlet weak var fbLoginButton: UIButton!
-    
     @IBOutlet weak var userNameField: UITextField!
-    var user: User?
+    
+    var userId: String?
     var races = [Race]()
     
     override func viewDidLoad() {
@@ -36,14 +36,6 @@ class HomeViewController: UIViewController {
         self.setupLayout()
         
         self.navigationItem.title = "REAL TIME RUNNING"
-        
-        if let user = user {
-            
-            self.fbProfileImage.image = user.profileImage
-            
-            navigationItem.title = user.name
-            
-        }
         
         if (FBSDKAccessToken.currentAccessToken() != nil) {
             
@@ -181,7 +173,7 @@ class HomeViewController: UIViewController {
                 email = fbEmail
             }
             
-            self.user = User(id: id, profileImage: profileImage, name: name, email: email)
+            self.userId = id
             
             self.createUser(id, name: name, email: email, profileImageURL: profileImageURL)
             
@@ -241,8 +233,6 @@ class HomeViewController: UIViewController {
                     let competitors = value["competitors"].arrayObject as? [String],
                     let distance = value["distance"].int,
                     let live = value["live"].bool {
-                        
-                        print(raceId, competitors)
                     
                         let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(key)!)
                     
@@ -272,7 +262,7 @@ class HomeViewController: UIViewController {
             
             if let controller = segue.destinationViewController as? RacesTableViewController {
                 
-                controller.user = self.user
+                controller.userId = self.userId
                 controller.races = self.races
                 
             }
