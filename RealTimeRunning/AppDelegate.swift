@@ -15,7 +15,9 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var displayUnits:String = "metric"
+    var loggingFrequency:Int = 1
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
         logError("Application started all OK")
