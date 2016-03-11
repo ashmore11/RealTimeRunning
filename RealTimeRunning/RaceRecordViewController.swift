@@ -22,11 +22,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     var user: User!
     var race: Race!
-    var competitors: [Competitor] = [] {
-        didSet(item) {
-            self.updateJoinRaceButton()
-        }
-    }
+    var competitors: [Competitor] = []
     var geoEvents:[CLLocationCoordinate2D] = []
     var lat:Double = 0.0
     var lon:Double = 0.0
@@ -79,8 +75,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
 
     func receiveLocationNotification(notification: NSNotification) {
         
-        let userInfo:NSDictionary = notification.userInfo!
-        let location:CLLocation? = userInfo.objectForKey("Location") as? CLLocation
+        let userInfo: NSDictionary = notification.userInfo!
+        let location: CLLocation? = userInfo.objectForKey("Location") as? CLLocation
 
         if let loc = location  {
             
@@ -135,7 +131,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         }
         
-        if let theRace = race, let startTime = theRace.startTime {
+        if let race = self.race, let startTime = race.startTime {
             
             self.raceName = startTime
             self.title = self.raceName
@@ -204,9 +200,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         let competitor = getSortedCompetitors()[indexPath.row]
         
-        cell.nameLabel.text = competitor.name
-        cell.profileImage.image = competitor.image
+        cell.nameLabel.text = competitor.name.uppercaseString
         cell.positionLabel.text = competitor.position
+        cell.profileImage.image = competitor.image
         
         return cell
         
@@ -244,6 +240,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
             }
             
+            self.updateJoinRaceButton()
+            
             self.competitorsTableView.endUpdates()
             
         }
@@ -278,7 +276,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
 
     func getSortedCompetitors() -> [Competitor] {
         
-        let sortedCompetitors = self.competitors.sort { (p1, p2) -> Bool in
+        return self.competitors.sort { (p1, p2) -> Bool in
             
             if p1.position.isEmpty {
                 
@@ -295,8 +293,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             }
             
         }
-        
-        return sortedCompetitors
         
     }
     

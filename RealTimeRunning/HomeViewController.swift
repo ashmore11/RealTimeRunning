@@ -241,6 +241,8 @@ class HomeViewController: UIViewController {
                     let competitors = value["competitors"].arrayObject as? [String],
                     let distance = value["distance"].int,
                     let live = value["live"].bool {
+                        
+                        print(raceId, competitors)
                     
                         let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(key)!)
                     
