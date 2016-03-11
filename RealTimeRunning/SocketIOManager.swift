@@ -17,8 +17,6 @@ class SocketIOManager: NSObject {
     override init() {
     
         super.init()
-        
-        listenForEvents()
     
     }
     
@@ -26,7 +24,13 @@ class SocketIOManager: NSObject {
     
         socket.connect()
         
-        print("socket connected")
+        socket.on("connect") {data, ack in
+            
+            print("socket connected")
+            
+            self.listenForEvents()
+        
+        }
     
     }
     
@@ -38,9 +42,9 @@ class SocketIOManager: NSObject {
     
     }
     
-    func raceUsersUpdated(index: Int, raceId: String, userId: String) {
+    func raceUsersUpdated(raceId: String, userId: String) {
         
-        socket.emit("raceUpdated", index, raceId, userId)
+        socket.emit("raceUpdated", raceId, userId)
         
     }
     
@@ -55,9 +59,8 @@ class SocketIOManager: NSObject {
         socket.on("reloadCompetitors") { (data, ack) -> Void in
             
             let object = [
-                "index": data[0],
-                "raceId": data[1],
-                "userId": data[2]
+                "raceId": data[0],
+                "userId": data[1]
             ]
             
             self.postNotification("reloadCompetitors", object: object)
@@ -69,7 +72,7 @@ class SocketIOManager: NSObject {
             let object = [
                 "id": data[0],
                 "distance": data[1],
-                "speed": data[2]
+                "pace": data[2]
             ]
             
             self.postNotification("positionUpdateReceived", object: object)
