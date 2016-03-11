@@ -1029,6 +1029,57 @@
                                             <outlet property="menuLabel" destination="aax-YX-syB" id="sUQ-b1-CT5"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="settingsMenuCellLogFrequency" rowHeight="65" id="eDI-fe-3eW" customClass="settingsTableViewCell" customModule="RealTimeRunning" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="130" width="600" height="65"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eDI-fe-3eW" id="MDj-uy-6Jg">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="64.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GPS Log Frequency" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TFK-wY-Kxk">
+                                                    <rect key="frame" x="8" y="10" width="160" height="44.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="60" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kdj-WI-t5H">
+                                                    <rect key="frame" x="552" y="22" width="22" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Frequency measured in Seconds" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lcx-pR-hb0">
+                                                    <rect key="frame" x="8" y="43" width="157.5" height="12"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="60" translatesAutoresizingMaskIntoConstraints="NO" id="ugf-qP-gp5">
+                                                    <rect key="frame" x="181" y="18" width="364.5" height="31"/>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <connections>
+                                                        <action selector="logFrequencyChanged:" destination="jv2-n5-a5S" eventType="valueChanged" id="niQ-xG-kXu"/>
+                                                    </connections>
+                                                </slider>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="kdj-WI-t5H" firstAttribute="centerY" secondItem="ugf-qP-gp5" secondAttribute="centerY" id="7MN-Gf-nPu"/>
+                                                <constraint firstItem="ugf-qP-gp5" firstAttribute="centerY" secondItem="TFK-wY-Kxk" secondAttribute="centerY" id="GGG-hP-rUL"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="kdj-WI-t5H" secondAttribute="trailing" constant="18" id="PlZ-aa-FCu"/>
+                                                <constraint firstItem="ugf-qP-gp5" firstAttribute="leading" secondItem="TFK-wY-Kxk" secondAttribute="trailing" constant="15.5" id="TNl-ae-Idw"/>
+                                                <constraint firstItem="kdj-WI-t5H" firstAttribute="leading" secondItem="ugf-qP-gp5" secondAttribute="trailing" constant="8.5" id="Y9H-rU-oDD"/>
+                                                <constraint firstItem="TFK-wY-Kxk" firstAttribute="centerY" secondItem="MDj-uy-6Jg" secondAttribute="centerY" id="YZy-nI-MYP"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="TFK-wY-Kxk" secondAttribute="leading" id="fsc-EE-dhn"/>
+                                                <constraint firstItem="TFK-wY-Kxk" firstAttribute="top" secondItem="MDj-uy-6Jg" secondAttribute="topMargin" constant="2" id="jMk-NZ-lk4"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="lcx-pR-hb0" secondAttribute="leading" id="kBU-4X-ekl"/>
+                                                <constraint firstItem="lcx-pR-hb0" firstAttribute="top" secondItem="TFK-wY-Kxk" secondAttribute="bottom" constant="-11.5" id="tuG-fe-S3t"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="menuLabel" destination="TFK-wY-Kxk" id="crW-jG-QW9"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -1039,6 +1090,8 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="dXg-bm-CZD"/>
                     <connections>
+                        <outlet property="logFrequencyLabel" destination="kdj-WI-t5H" id="LBx-dD-JdV"/>
+                        <outlet property="logFrequencySlider" destination="ugf-qP-gp5" id="Oka-np-LtL"/>
                         <outlet property="metricOrImperialSegmentCtl" destination="wl9-W9-Fo8" id="nAh-p4-Qy0"/>
                     </connections>
                 </tableViewController>

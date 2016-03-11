@@ -12,6 +12,11 @@ class settingsTableViewController: UITableViewController {
 
     @IBOutlet weak var metricOrImperialSegmentCtl: UISegmentedControl!
 
+    @IBOutlet weak var logFrequencySlider: UISlider!
+    @IBOutlet weak var logFrequencyLabel: UILabel!
+    
+    var logFrequency = 20
+    
     @IBAction func didChangeMeasure(sender: AnyObject) {
     
         switch metricOrImperialSegmentCtl.selectedSegmentIndex
@@ -21,17 +26,22 @@ class settingsTableViewController: UITableViewController {
             case 1:
                 print("Segment Changed Imperial selected")
             default:
-                break 
+                break
         }
     }
     
+    @IBAction func logFrequencyChanged(sender: UISlider) {
+        self.logFrequency = Int(sender.value)
+        self.logFrequencyLabel.text = "\(logFrequency)"       
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Settings"
         self.tableView.backgroundColor = UIColor.blackColor()
         
         metricOrImperialSegmentCtl.selectedSegmentIndex = 0
-
+        self.logFrequencySlider.setValue(Float(logFrequency), animated:true)
+        self.logFrequencyLabel.text = "\(logFrequency)"
     }
 
     override func didReceiveMemoryWarning() {
