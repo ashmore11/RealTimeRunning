@@ -16,6 +16,12 @@
 		C42C38921C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */; };
 		C42C38931C7E0F0B0080BFFC /* RunDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */; };
 		C42C38951C7E13E20080BFFC /* latLonFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C38941C7E13E20080BFFC /* latLonFormats.swift */; };
+		C454E7111C94617B0095C077 /* realtimeruner.ai in Resources */ = {isa = PBXBuildFile; fileRef = C454E70B1C94617B0095C077 /* realtimeruner.ai */; };
+		C454E7121C94617B0095C077 /* realtimeruner58.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E70C1C94617B0095C077 /* realtimeruner58.png */; };
+		C454E7131C94617B0095C077 /* realtimeruner80.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E70D1C94617B0095C077 /* realtimeruner80.png */; };
+		C454E7141C94617B0095C077 /* realtimeruner87.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E70E1C94617B0095C077 /* realtimeruner87.png */; };
+		C454E7151C94617B0095C077 /* realtimeruner120.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E70F1C94617B0095C077 /* realtimeruner120.png */; };
+		C454E7161C94617B0095C077 /* realtimeruner180.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E7101C94617B0095C077 /* realtimeruner180.png */; };
 		C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E71C78983C005AB06F /* SharedLocationManager.swift */; };
 		C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */; };
 		C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647EB1C78A593005AB06F /* MapViewController.swift */; };
@@ -98,6 +104,12 @@
 		C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RunDetail+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunDetail.swift; sourceTree = "<group>"; };
 		C42C38941C7E13E20080BFFC /* latLonFormats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = latLonFormats.swift; sourceTree = "<group>"; };
+		C454E70B1C94617B0095C077 /* realtimeruner.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = realtimeruner.ai; sourceTree = "<group>"; };
+		C454E70C1C94617B0095C077 /* realtimeruner58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner58.png; sourceTree = "<group>"; };
+		C454E70D1C94617B0095C077 /* realtimeruner80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner80.png; sourceTree = "<group>"; };
+		C454E70E1C94617B0095C077 /* realtimeruner87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner87.png; sourceTree = "<group>"; };
+		C454E70F1C94617B0095C077 /* realtimeruner120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner120.png; sourceTree = "<group>"; };
+		C454E7101C94617B0095C077 /* realtimeruner180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner180.png; sourceTree = "<group>"; };
 		C48647E71C78983C005AB06F /* SharedLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedLocationManager.swift; sourceTree = "<group>"; };
 		C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceRecordViewController.swift; sourceTree = "<group>"; };
 		C48647EB1C78A593005AB06F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -251,6 +263,12 @@
 				D27D67831C81ABF800338D01 /* Oswald-Light.ttf */,
 				D27D67841C81ABF800338D01 /* Oswald-Medium.ttf */,
 				D27D67851C81ABF800338D01 /* Oswald-Regular.ttf */,
+				C454E70B1C94617B0095C077 /* realtimeruner.ai */,
+				C454E70C1C94617B0095C077 /* realtimeruner58.png */,
+				C454E70D1C94617B0095C077 /* realtimeruner80.png */,
+				C454E70E1C94617B0095C077 /* realtimeruner87.png */,
+				C454E70F1C94617B0095C077 /* realtimeruner120.png */,
+				C454E7101C94617B0095C077 /* realtimeruner180.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -427,14 +445,20 @@
 			files = (
 				D2B3416C1C8843150024114C /* Oswald-ExtraLight.ttf in Resources */,
 				D2B3416D1C8843150024114C /* Oswald-Light.ttf in Resources */,
+				C454E7121C94617B0095C077 /* realtimeruner58.png in Resources */,
 				C496BC641C8E01F800DF2187 /* gear_24.png in Resources */,
+				C454E7141C94617B0095C077 /* realtimeruner87.png in Resources */,
 				D2B3416E1C8843150024114C /* Oswald-Medium.ttf in Resources */,
 				D2B3416F1C8843150024114C /* Oswald-Regular.ttf in Resources */,
+				C454E7111C94617B0095C077 /* realtimeruner.ai in Resources */,
 				D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */,
 				C496BC651C8E01F800DF2187 /* history@2x.png in Resources */,
+				C454E7151C94617B0095C077 /* realtimeruner120.png in Resources */,
 				D226B4B11C73B28400366800 /* Assets.xcassets in Resources */,
 				C496BC661C8E01F800DF2187 /* runner@2x.png in Resources */,
+				C454E7131C94617B0095C077 /* realtimeruner80.png in Resources */,
 				D226B4AF1C73B28400366800 /* Main.storyboard in Resources */,
+				C454E7161C94617B0095C077 /* realtimeruner180.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
