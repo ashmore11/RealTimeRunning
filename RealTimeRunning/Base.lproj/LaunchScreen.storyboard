@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -16,7 +17,38 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RealTimeRunning" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FgS-sy-H0A">
+                                <rect key="frame" x="20" y="51" width="560" height="45.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="38"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright © Scott Ashmore 2016" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hJI-4U-dF0">
+                                <rect key="frame" x="20" y="566" width="560" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchImage.png" translatesAutoresizingMaskIntoConstraints="NO" id="qCF-Of-qY2">
+                                <rect key="frame" x="150" y="150" width="300" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="8WX-UR-mDO"/>
+                                    <constraint firstAttribute="height" constant="300" id="hon-Rn-hHh"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.87450980392156863" green="0.51764705882352935" blue="0.25882352941176467" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="leadingMargin" secondItem="hJI-4U-dF0" secondAttribute="leading" id="cxU-xu-NHK"/>
+                            <constraint firstItem="FgS-sy-H0A" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="31" id="dLI-BS-EW0"/>
+                            <constraint firstItem="qCF-Of-qY2" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="dQA-lK-Djr"/>
+                            <constraint firstItem="qCF-Of-qY2" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="hC9-aZ-rjY"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="FgS-sy-H0A" secondAttribute="leading" id="hLg-2n-z5T"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="hJI-4U-dF0" secondAttribute="bottom" constant="13" id="mRl-mI-exw"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="FgS-sy-H0A" secondAttribute="trailing" id="pd5-UT-Ka4"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="hJI-4U-dF0" secondAttribute="trailing" id="y4o-pB-Lf6"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -24,4 +56,7 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="launchImage.png" width="300" height="300"/>
+    </resources>
 </document>
