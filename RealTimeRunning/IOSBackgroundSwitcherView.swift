@@ -10,18 +10,9 @@ import UIKit
 
 class IOSBackgroundSwitcherView: UIView {
 
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-        // Drawing code
-    }
-    */
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupView()
-        
     }
 
     override init (frame : CGRect) {
@@ -82,16 +73,16 @@ class IOSBackgroundSwitcherView: UIView {
     func setupImageConstraints(subView:UIView, mainView:UIView) {
         subView.translatesAutoresizingMaskIntoConstraints = false
         
-        let widthConstraint = NSLayoutConstraint(item:subView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 300)
+        let widthConstraint = NSLayoutConstraint(item:subView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 300)
         mainView.addConstraint(widthConstraint)
         
-        let heightConstraint = NSLayoutConstraint(item: subView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 300)
+        let heightConstraint = NSLayoutConstraint(item: subView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 300)
         mainView.addConstraint(heightConstraint)
         
-        let top:NSLayoutConstraint = NSLayoutConstraint(item: subView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: mainView, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
+        let top:NSLayoutConstraint = NSLayoutConstraint(item: subView, attribute: .CenterX, relatedBy: .Equal, toItem: mainView, attribute: .CenterX, multiplier: 1, constant: 0)
         mainView.addConstraint(top)
         
-        let bottom:NSLayoutConstraint = NSLayoutConstraint(item: subView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: mainView, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: 0)
+        let bottom:NSLayoutConstraint = NSLayoutConstraint(item: subView, attribute: .CenterY, relatedBy: .Equal, toItem: mainView, attribute: .CenterY, multiplier: 1, constant: 0)
         mainView.addConstraint(bottom)
     }
 
