@@ -16,12 +16,23 @@
 		C42C38921C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */; };
 		C42C38931C7E0F0B0080BFFC /* RunDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */; };
 		C42C38951C7E13E20080BFFC /* latLonFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42C38941C7E13E20080BFFC /* latLonFormats.swift */; };
+		C454E7111C94617B0095C077 /* realtimeruner.ai in Resources */ = {isa = PBXBuildFile; fileRef = C454E70B1C94617B0095C077 /* realtimeruner.ai */; };
+		C454E7121C94617B0095C077 /* realtimeruner58.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E70C1C94617B0095C077 /* realtimeruner58.png */; };
+		C454E7131C94617B0095C077 /* realtimeruner80.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E70D1C94617B0095C077 /* realtimeruner80.png */; };
+		C454E7141C94617B0095C077 /* realtimeruner87.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E70E1C94617B0095C077 /* realtimeruner87.png */; };
+		C454E7151C94617B0095C077 /* realtimeruner120.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E70F1C94617B0095C077 /* realtimeruner120.png */; };
+		C454E7161C94617B0095C077 /* realtimeruner180.png in Resources */ = {isa = PBXBuildFile; fileRef = C454E7101C94617B0095C077 /* realtimeruner180.png */; };
+		C46DA44D1C95C04D0095846D /* launchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = C46DA44C1C95C04D0095846D /* launchImage.png */; };
+		C46DA44F1C95C0D40095846D /* launchImage.ai in Resources */ = {isa = PBXBuildFile; fileRef = C46DA44E1C95C0D40095846D /* launchImage.ai */; };
 		C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E71C78983C005AB06F /* SharedLocationManager.swift */; };
 		C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */; };
 		C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647EB1C78A593005AB06F /* MapViewController.swift */; };
 		C496BC641C8E01F800DF2187 /* gear_24.png in Resources */ = {isa = PBXBuildFile; fileRef = C496BC611C8E01F800DF2187 /* gear_24.png */; };
 		C496BC651C8E01F800DF2187 /* history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C496BC621C8E01F800DF2187 /* history@2x.png */; };
 		C496BC661C8E01F800DF2187 /* runner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C496BC631C8E01F800DF2187 /* runner@2x.png */; };
+		C496BC6F1C93190B00DF2187 /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C496BC6D1C93190B00DF2187 /* Settings+CoreDataProperties.swift */; };
+		C496BC701C93190B00DF2187 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C496BC6E1C93190B00DF2187 /* Settings.swift */; };
+		C4DEF2A61C95B6BA00CE1413 /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DEF2A51C95B6BA00CE1413 /* LaunchScreenViewController.swift */; };
 		C4E24C411C86F92E006F5712 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */; };
 		C4E24C421C86F93B006F5712 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */; };
 		C4E24C4A1C88BDA4006F5712 /* ErrorLog+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E24C481C88BDA4006F5712 /* ErrorLog+CoreDataProperties.swift */; };
@@ -96,12 +107,24 @@
 		C42C388E1C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RunDetail+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C42C388F1C7E0F0B0080BFFC /* RunDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunDetail.swift; sourceTree = "<group>"; };
 		C42C38941C7E13E20080BFFC /* latLonFormats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = latLonFormats.swift; sourceTree = "<group>"; };
+		C454E70B1C94617B0095C077 /* realtimeruner.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = realtimeruner.ai; sourceTree = "<group>"; };
+		C454E70C1C94617B0095C077 /* realtimeruner58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner58.png; sourceTree = "<group>"; };
+		C454E70D1C94617B0095C077 /* realtimeruner80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner80.png; sourceTree = "<group>"; };
+		C454E70E1C94617B0095C077 /* realtimeruner87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner87.png; sourceTree = "<group>"; };
+		C454E70F1C94617B0095C077 /* realtimeruner120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner120.png; sourceTree = "<group>"; };
+		C454E7101C94617B0095C077 /* realtimeruner180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = realtimeruner180.png; sourceTree = "<group>"; };
+		C46DA44C1C95C04D0095846D /* launchImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchImage.png; sourceTree = "<group>"; };
+		C46DA44E1C95C0D40095846D /* launchImage.ai */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = launchImage.ai; sourceTree = "<group>"; };
 		C48647E71C78983C005AB06F /* SharedLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedLocationManager.swift; sourceTree = "<group>"; };
 		C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceRecordViewController.swift; sourceTree = "<group>"; };
 		C48647EB1C78A593005AB06F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		C496BC611C8E01F800DF2187 /* gear_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear_24.png; sourceTree = "<group>"; };
 		C496BC621C8E01F800DF2187 /* history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "history@2x.png"; sourceTree = "<group>"; };
 		C496BC631C8E01F800DF2187 /* runner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "runner@2x.png"; sourceTree = "<group>"; };
+		C496BC6C1C93184900DF2187 /* realTimeRunning 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "realTimeRunning 3.xcdatamodel"; sourceTree = "<group>"; };
+		C496BC6D1C93190B00DF2187 /* Settings+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C496BC6E1C93190B00DF2187 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		C4DEF2A51C95B6BA00CE1413 /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		C4E24C431C88BB15006F5712 /* realTimeRunning 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "realTimeRunning 2.xcdatamodel"; sourceTree = "<group>"; };
 		C4E24C481C88BDA4006F5712 /* ErrorLog+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ErrorLog+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C4E24C491C88BDA4006F5712 /* ErrorLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorLog.swift; sourceTree = "<group>"; };
@@ -180,6 +203,8 @@
 		D226B49D1C73B28400366800 = {
 			isa = PBXGroup;
 			children = (
+				C496BC6D1C93190B00DF2187 /* Settings+CoreDataProperties.swift */,
+				C496BC6E1C93190B00DF2187 /* Settings.swift */,
 				C4E24C481C88BDA4006F5712 /* ErrorLog+CoreDataProperties.swift */,
 				C4E24C491C88BDA4006F5712 /* ErrorLog.swift */,
 				C42C388C1C7E0F0B0080BFFC /* RunData+CoreDataProperties.swift */,
@@ -244,6 +269,14 @@
 				D27D67831C81ABF800338D01 /* Oswald-Light.ttf */,
 				D27D67841C81ABF800338D01 /* Oswald-Medium.ttf */,
 				D27D67851C81ABF800338D01 /* Oswald-Regular.ttf */,
+				C454E70B1C94617B0095C077 /* realtimeruner.ai */,
+				C454E70C1C94617B0095C077 /* realtimeruner58.png */,
+				C454E70D1C94617B0095C077 /* realtimeruner80.png */,
+				C454E70E1C94617B0095C077 /* realtimeruner87.png */,
+				C454E70F1C94617B0095C077 /* realtimeruner120.png */,
+				C454E7101C94617B0095C077 /* realtimeruner180.png */,
+				C46DA44E1C95C0D40095846D /* launchImage.ai */,
+				C46DA44C1C95C04D0095846D /* launchImage.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -261,6 +294,7 @@
 		D2B341711C89A1DF0024114C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C4DEF2A51C95B6BA00CE1413 /* LaunchScreenViewController.swift */,
 				D226B4AB1C73B28400366800 /* HomeViewController.swift */,
 				C48647EB1C78A593005AB06F /* MapViewController.swift */,
 				C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */,
@@ -381,7 +415,7 @@
 				TargetAttributes = {
 					D226B4A51C73B28400366800 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 2M48QV2N86;
+						DevelopmentTeam = TM5JB8724P;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -419,15 +453,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2B3416C1C8843150024114C /* Oswald-ExtraLight.ttf in Resources */,
+				C46DA44D1C95C04D0095846D /* launchImage.png in Resources */,
 				D2B3416D1C8843150024114C /* Oswald-Light.ttf in Resources */,
+				C454E7121C94617B0095C077 /* realtimeruner58.png in Resources */,
 				C496BC641C8E01F800DF2187 /* gear_24.png in Resources */,
+				C454E7141C94617B0095C077 /* realtimeruner87.png in Resources */,
 				D2B3416E1C8843150024114C /* Oswald-Medium.ttf in Resources */,
 				D2B3416F1C8843150024114C /* Oswald-Regular.ttf in Resources */,
+				C454E7111C94617B0095C077 /* realtimeruner.ai in Resources */,
 				D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */,
+				C46DA44F1C95C0D40095846D /* launchImage.ai in Resources */,
 				C496BC651C8E01F800DF2187 /* history@2x.png in Resources */,
+				C454E7151C94617B0095C077 /* realtimeruner120.png in Resources */,
 				D226B4B11C73B28400366800 /* Assets.xcassets in Resources */,
 				C496BC661C8E01F800DF2187 /* runner@2x.png in Resources */,
+				C454E7131C94617B0095C077 /* realtimeruner80.png in Resources */,
 				D226B4AF1C73B28400366800 /* Main.storyboard in Resources */,
+				C454E7161C94617B0095C077 /* realtimeruner180.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,6 +584,7 @@
 				C42C383E1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld in Sources */,
 				C4EC42FE1C7F402D00A458E3 /* raceHistorySummaryViewController.swift in Sources */,
 				D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */,
+				C496BC701C93190B00DF2187 /* Settings.swift in Sources */,
 				C4E24C511C899F64006F5712 /* settingsTableViewCell.swift in Sources */,
 				C42C38931C7E0F0B0080BFFC /* RunDetail.swift in Sources */,
 				C4E24C4F1C88E441006F5712 /* ErrorLogTableViewCell.swift in Sources */,
@@ -570,6 +613,8 @@
 				C4EC42FC1C7F2DF200A458E3 /* raceHistoryTableViewController.swift in Sources */,
 				C4EC43061C7F5FF600A458E3 /* UIGraphView.swift in Sources */,
 				D299ABF51C91756000FE219C /* Competitor.swift in Sources */,
+				C496BC6F1C93190B00DF2187 /* Settings+CoreDataProperties.swift in Sources */,
+				C4DEF2A61C95B6BA00CE1413 /* LaunchScreenViewController.swift in Sources */,
 				C42839EE1C8DB18300049B7C /* UIPanelView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -902,10 +947,11 @@
 		C42C383C1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C496BC6C1C93184900DF2187 /* realTimeRunning 3.xcdatamodel */,
 				C4E24C431C88BB15006F5712 /* realTimeRunning 2.xcdatamodel */,
 				C42C383D1C7DC3C70080BFFC /* realTimeRunning.xcdatamodel */,
 			);
-			currentVersion = C4E24C431C88BB15006F5712 /* realTimeRunning 2.xcdatamodel */;
+			currentVersion = C496BC6C1C93184900DF2187 /* realTimeRunning 3.xcdatamodel */;
 			path = realTimeRunning.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

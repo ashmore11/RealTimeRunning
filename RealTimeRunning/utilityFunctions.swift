@@ -174,4 +174,76 @@ extension NSData {
     }
 }
 
+func readSettingsFromDb() ->Settings?  {
+    var settings:Settings? = nil
+    if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+        let managedObjectContext:NSManagedObjectContext? = delegate.managedObjectContext
+        if let context = managedObjectContext {
+            
+            do {
+                let fetchRequest = NSFetchRequest(entityName: "Settings")
+                fetchRequest.fetchLimit = 1
+                let result = try context.executeFetchRequest(fetchRequest)
+                if result.count > 0 {
+                    let rundata = result[0]
+                    if let object = rundata as? Settings {
+                        settings = object
+                    }
+                }
+                else {
+                    if let newObject = NSEntityDescription.insertNewObjectForEntityForName("Settings", inManagedObjectContext: context) as? Settings {
+                        newObject.displayUnits = "metric"
+                        newObject.loggingFrequency = 1
+                        try context.save()
+                        settings = newObject
+                    }
+                }
+            } catch {
+                let fetchError = error as NSError
+                logError("Error while reading settings data: \(fetchError.description)")
+            }
+        }
+    }
+    return settings
+}
+
+func conversionFactorSpeed() -> (factor:Double, desc:String, displayUnits:String) {
+    var factor = 1.0
+    var desc = "M/S"
+    var displayUnits = "Native"
+    if let settings = readSettingsFromDb() {
+        if settings.displayUnits == "metric" {
+            factor = 3.6
+            desc = "Kph"
+            displayUnits = "metric"
+        }
+        else {
+            factor = 2.23694
+            desc = "MPH"
+            displayUnits = "imperial"
+        }
+    }
+    
+    return (factor:factor, desc:desc, displayUnits:displayUnits)
+}
+
+func conversionFactorPace() -> (factor:Double, desc:String, displayUnits:String) {
+    var factor = 1.0
+    var desc = "S/M"
+    var displayUnits = "Native"
+    if let settings = readSettingsFromDb() {
+        if settings.displayUnits == "metric" {
+            factor = 16.6667
+            desc = "Min./Km"
+            displayUnits = "metric"
+        }
+        else {
+            factor = 26.8224
+            desc = "Min/Mile"
+            displayUnits = "imperial"
+        }
+    }
+    
+    return (factor:factor, desc:desc, displayUnits:displayUnits)
+}
 

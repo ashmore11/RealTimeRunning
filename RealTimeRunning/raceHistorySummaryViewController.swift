@@ -177,8 +177,15 @@ class raceHistorySummaryViewController: UIViewController {
                                 raceName = name
                             }
                             self.raceNameLabel.text = String(format:"Race: %@ %@",formattedDate,raceName)
-                            self.averageSpeedLabel.text = String(format: "Average Speed: %6.2f Kph",averageSpeed  * 3.6)
-                            self.averagePaceLabel.text = String(format: "Pace: %6.2f Min. / Km",(averagePace * 1000.0) / 60.0)
+                            
+                            let speedData = conversionFactorSpeed()
+                            let formatString = "Average Speed: %6.2f " + speedData.desc
+                            self.averageSpeedLabel.text = String(format: formatString,averageSpeed  * speedData.factor)
+                            
+                            let paceData = conversionFactorPace()
+                            let paceFormat = "Pace: %6.2f  " + paceData.desc
+                           
+                            self.averagePaceLabel.text = String(format: paceFormat,(averagePace * paceData.factor))
                             self.distanceLabel.text = String(format: "Distance: %6.2f Meters",totalDistance)
                             self.totalStepsLabel.text = String(format: "Total Steps: %d",totalSteps)
                             self.timeLabel.text = String(format: "Race Time: %@",myRaceTime)
