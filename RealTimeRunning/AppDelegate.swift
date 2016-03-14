@@ -54,6 +54,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        
+        let colourView = IOSBackgroundSwitcherView(frame:self.window!.frame)
+        colourView.backgroundColor = UIColor.whiteColor()
+        colourView.tag = 1234;
+        colourView.alpha = 0;
+        self.window!.addSubview(colourView)
+        self.window!.bringSubviewToFront(colourView)
+        
+        // fade in the view
+        UIView.animateWithDuration(0.5, animations:{
+            colourView.alpha = 1;
+            })
+        
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
@@ -72,11 +85,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBSDKAppEvents.activateApp()
         SocketIOManager.sharedInstance.establishConnection()
         
+        // grab a reference to our coloured view
+        if let colourView = self.window!.viewWithTag(1234) {
+            // fade away colour view from main view
+                UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+                    colourView.alpha = 0;
+                    }, completion: { (finished: Bool) -> Void in
+                        colourView.removeFromSuperview()
+                })
+        }
+    
     }
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    
+    
     
     // MARK: - Core Data stack
     

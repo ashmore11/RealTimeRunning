@@ -27,6 +27,7 @@
 		C48647E81C78983C005AB06F /* SharedLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E71C78983C005AB06F /* SharedLocationManager.swift */; };
 		C48647EA1C7898DA005AB06F /* RaceRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */; };
 		C48647EC1C78A593005AB06F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48647EB1C78A593005AB06F /* MapViewController.swift */; };
+		C48866EE1C96C0E7006AE48C /* IOSBackgroundSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48866ED1C96C0E7006AE48C /* IOSBackgroundSwitcherView.swift */; };
 		C496BC641C8E01F800DF2187 /* gear_24.png in Resources */ = {isa = PBXBuildFile; fileRef = C496BC611C8E01F800DF2187 /* gear_24.png */; };
 		C496BC651C8E01F800DF2187 /* history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C496BC621C8E01F800DF2187 /* history@2x.png */; };
 		C496BC661C8E01F800DF2187 /* runner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C496BC631C8E01F800DF2187 /* runner@2x.png */; };
@@ -118,6 +119,7 @@
 		C48647E71C78983C005AB06F /* SharedLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedLocationManager.swift; sourceTree = "<group>"; };
 		C48647E91C7898DA005AB06F /* RaceRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceRecordViewController.swift; sourceTree = "<group>"; };
 		C48647EB1C78A593005AB06F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		C48866ED1C96C0E7006AE48C /* IOSBackgroundSwitcherView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOSBackgroundSwitcherView.swift; sourceTree = "<group>"; };
 		C496BC611C8E01F800DF2187 /* gear_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear_24.png; sourceTree = "<group>"; };
 		C496BC621C8E01F800DF2187 /* history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "history@2x.png"; sourceTree = "<group>"; };
 		C496BC631C8E01F800DF2187 /* runner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "runner@2x.png"; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 		D2B341721C89A21B0024114C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C48866ED1C96C0E7006AE48C /* IOSBackgroundSwitcherView.swift */,
 				C4E24C501C899F64006F5712 /* settingsTableViewCell.swift */,
 				C4EC42F91C7F2D5600A458E3 /* raceHistoryTableViewCell.swift */,
 				C42C388A1C7E0D150080BFFC /* RawTableViewCell.swift */,
@@ -601,6 +604,7 @@
 				D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */,
 				C4E24C4A1C88BDA4006F5712 /* ErrorLog+CoreDataProperties.swift in Sources */,
 				D226B4AC1C73B28400366800 /* HomeViewController.swift in Sources */,
+				C48866EE1C96C0E7006AE48C /* IOSBackgroundSwitcherView.swift in Sources */,
 				D226B4AA1C73B28400366800 /* AppDelegate.swift in Sources */,
 				D299ABF21C8DD76500FE219C /* CompetitorsTableViewCell.swift in Sources */,
 				C42C388B1C7E0D150080BFFC /* RawTableViewCell.swift in Sources */,
