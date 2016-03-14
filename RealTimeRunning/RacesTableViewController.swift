@@ -58,8 +58,8 @@ class RacesTableViewController: UITableViewController {
         let race = races[indexPath.row]
         
         cell.startTimeLabel.text = "\(race.getStartTime(indexPath.row))"
-        cell.competitorsLabel.text = "competitors: \(race.competitors!.count)".uppercaseString
-        cell.distanceLabel.text = "\(race.distance)km"
+        cell.competitorsLabel.text = "competitors: \(race.competitors?.count ?? 0)".uppercaseString
+        cell.distanceLabel.text = "\(race.distance) km"
 
         return cell
         
@@ -88,13 +88,9 @@ class RacesTableViewController: UITableViewController {
                         self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
                         
                     }
-
                 }
-
             })
-            
         }
-        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -113,11 +109,8 @@ class RacesTableViewController: UITableViewController {
                     controller.userId = userId
                     
                 }
-                
             }
-            
         }
-        
     }
     
 }
