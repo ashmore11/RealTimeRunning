@@ -116,7 +116,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "competitorsUpdated:", name: "reloadCompetitors", object: nil)
+        self.navigationItem.title = "RACE"
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "competitorsUpdated:", name: "competitorsUpdated", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePosition:", name: "positionUpdateReceived", object: nil)
         
         self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -143,6 +145,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
         self.getInitialCompetitors()
+        self.updateJoinRaceButton(0)
         
         self.activityManager = CMMotionActivityManager()
         self.pedoMeter = CMPedometer()
@@ -244,7 +247,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
             }
             
-            self.updateJoinRaceButton()
+            self.updateJoinRaceButton(0.5)
             
             self.competitorsTableView.endUpdates()
             
@@ -271,27 +274,23 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     func getInitialCompetitors() {
     
         if let competitors = self.race.competitors {
-        
-            for id in competitors {
             
-                self.addCompetitors(id)
-            
-            }
+            self.addCompetitors(competitors)
         
         }
         
     }
     
-    func addCompetitors(ids: String...) {
-                
+    func addCompetitors(ids: [String]) {
+        
         let url = "http://real-time-running.herokuapp.com/api/users/"
         
         Alamofire.request(.PUT, url, parameters: ["ids": ids]).responseSwiftyJSON({ (request, response, json, error) in
             
             if let users = json.array {
-            
-                for user in users {
                 
+                for user in users {
+                    
                     if let id = user["fbid"].string,
                         let name = user["name"].string,
                         let imageURL = user["profileImage"].string,
@@ -300,13 +299,22 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                         let image = UIImage(data:data) {
                             
                             let competitor = Competitor(id: id, image: image, name: name)
-                                
+                            
                             self.updateTableView(competitor, insert: true)
-
+                            
                     }
                 }
             }
+            
+            hideActivityIndicator(self.view)
         })
+        
+    }
+    
+    func addCompetitors(ids: String...) {
+        
+        self.addCompetitors(ids)
+                
     }
     
     func removeCompetitor(id: String) {
@@ -316,6 +324,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.updateTableView(competitor, insert: false)
             
         }
+        
+        hideActivityIndicator(self.view)
         
     }
     
@@ -350,8 +360,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             }
         }
         
-        hideActivityIndicator(self.view)
-        
     }
     
     func updatePosition(notification: NSNotification) {
@@ -371,9 +379,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
             }
         }
+        
     }
     
-    func updateJoinRaceButton() {
+    func updateJoinRaceButton(duration: Double) {
         
         dispatch_async(dispatch_get_main_queue()) {
         
@@ -383,7 +392,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     
                     self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
                     
-                    UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
+                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
                     
                     self.startStopButton.enabled = true
                     
@@ -391,14 +400,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     
                     self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
                     
-                    UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
+                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
                     
                     self.startStopButton.enabled = false
                     
                 }
-            
             }
-        
         }
 
     }
@@ -416,6 +423,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.willStopRace()
             
         }
+        
     }
     
     @IBAction func joinButtonPressed(sender: UIButton) {
@@ -424,21 +432,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let userId = self.userId {
             
-            let requestURL = "http://real-time-running.herokuapp.com/api/races/\(race.id)"
-            let parameters = ["id": userId]
+            SocketIOManager.sharedInstance.updateCompetitors(userId, raceId: self.race.id)
             
-            Alamofire.request(.PUT, requestURL, parameters: parameters, encoding: .JSON)
-                .responseSwiftyJSON({ (request, response, json, error) in
-                    
-                    if (error != nil) {
-                        print(".PUT error: (couldn't add user to race) ", error)
-                        return
-                    }
-                    
-                    SocketIOManager.sharedInstance.raceUsersUpdated(self.race.id, userId: userId)
-                    
-                })
         }
+        
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -458,6 +455,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
 
             }
         }
+        
     }
     
     // This function will be used for logging data
@@ -489,7 +487,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 return detailObject
                 
             }
-            
+
         }
         
         return nil
@@ -660,13 +658,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                                     
                                     let paceStr = String(self.currentPace * 16.6667)
                                     let paceArr = paceStr.componentsSeparatedByString(".")
-                                    let minutes = paceArr[0]
-                                    let seconds = paceArr[1]
+                                    let minutes = Int(paceArr[0])
+                                    let seconds = Int(paceArr[1])
                                     
-                                    self.paceLabel.text = String(format:"%6.2f' %6.2f\"", minutes, seconds)
+                                    self.paceLabel.text = String(format:"%02d' %02d\"", minutes!, seconds!)
                                     
                                 }
-                                
                             }
                         }
                             
@@ -682,12 +679,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     func didEncounterAuthorizationError() {
         
         let title = NSLocalizedString("Motion Activity Not Authorized", comment: "")
-        
         let message = NSLocalizedString("To enable Motion features, please allow access to Motion & Fitness in Settings under Privacy.", comment: "")
-        
         let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        
         alert.addAction(cancelAction)
         
         let openSettingsAction = UIAlertAction(title: "Open Settings", style: .Default) { _ in
@@ -700,7 +695,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         alert.addAction(openSettingsAction)
         
         dispatch_async(dispatch_get_main_queue()) {
+            
             self.presentViewController(alert, animated: true, completion:nil)
+            
         }
         
     }

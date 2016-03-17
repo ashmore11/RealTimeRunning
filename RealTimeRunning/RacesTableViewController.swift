@@ -27,7 +27,7 @@ class RacesTableViewController: UITableViewController {
         
         self.tableView.backgroundColor = UIColor.blackColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "reloadCompetitors", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "competitorsUpdated", object: nil)
         
     }
 

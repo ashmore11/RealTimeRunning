@@ -46,6 +46,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
+    func usersSubscriptionIsReady() {
+        
+        print("users ready")
+    
+        NSNotificationCenter.defaultCenter().postNotificationName("usersSubscriptionReady", object: nil)
+    
+    }
+    
+    func racesSubscriptionIsReady() {
+        
+        print("races ready")
+    
+        NSNotificationCenter.defaultCenter().postNotificationName("racesSubscriptionReady", object: nil)
+    
+    }
+    
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool
     {
         return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
