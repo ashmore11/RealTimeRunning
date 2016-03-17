@@ -12,13 +12,14 @@ import SwiftyJSON
 import Alamofire_SwiftyJSON
 import MBProgressHUD
 import SocketIOClientSwift
+import SwiftDDP
 
 class RacesTableViewController: UITableViewController {
     
     // MARK: Properties
-
+    
+    let races: MeteorCollection<Race> = (UIApplication.sharedApplication().delegate as! AppDelegate).races
     var userId: String?
-    var races = [Race]()
 
     
     override func viewDidLoad() {
@@ -27,7 +28,7 @@ class RacesTableViewController: UITableViewController {
         
         self.tableView.backgroundColor = UIColor.blackColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "competitorsUpdated", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: METEOR_COLLECTION_SET_DID_CHANGE, object: nil)
         
     }
 
@@ -41,7 +42,7 @@ class RacesTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
-        return races.count
+        return self.races.sorted.count
     
     }
 
@@ -55,7 +56,7 @@ class RacesTableViewController: UITableViewController {
         
         cell.backgroundColor = UIColor.clearColor()
         
-        let race = races[indexPath.row]
+        let race = self.races.sorted[indexPath.row]
         
         cell.startTimeLabel.text = "\(race.getStartTime(indexPath.row))"
         cell.competitorsLabel.text = "competitors: \(race.competitors?.count ?? 0)".uppercaseString
@@ -65,32 +66,10 @@ class RacesTableViewController: UITableViewController {
         
     }
     
-    func reloadTableViewCell(notification: NSNotification) {
+    func reloadTableViewCell() {
         
-        if let items = notification.object, let id = items["raceId"] as? String {
+        self.tableView.reloadData()
         
-            let requestURL = "http://real-time-running.herokuapp.com/api/races/\(id)"
-
-            Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
-                
-                if error != nil {
-                    print(error)
-                    return
-                }
-                        
-                if let index = self.races.indexOf({ $0.id == id }), let competitors = json[0]["competitors"].arrayObject as? [String] {
-                    
-                    self.races[index].competitors = competitors
-                    
-                    dispatch_async(dispatch_get_main_queue()) {
-                    
-                        let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-                        
-                    }
-                }
-            })
-        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -98,10 +77,10 @@ class RacesTableViewController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "raceRecord" {
-            
+                
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 
-                let race = races[indexPath.row]
+                let race = races.sorted[indexPath.row]
                 
                 if let controller = segue.destinationViewController as? RaceRecordViewController, let userId = self.userId {
                     

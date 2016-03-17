@@ -6,30 +6,16 @@
 //  Copyright © 2016 Scott Ashmore. All rights reserved.
 //
 
-import UIKit
+import SwiftDDP
 
-class Race {
+class Race: MeteorDocument {
     
-    // MARK: Properties
-    
-    var id: String
-    var createdAt: NSDate
+    var collection:String = "races"
+    var createdAt: NSDate?
     var competitors: [String]?
-    var distance: Int
-    var live: Bool
-    var index: Int
+    var distance: Int = 20
+    var live: Bool = false
     var startTime: String?
-    
-    init(id: String, createdAt: NSDate, competitors: [String]?, distance: Int, live: Bool, index: Int) {
-        
-        self.id = id
-        self.createdAt = createdAt
-        self.competitors = competitors
-        self.distance = distance
-        self.live = live
-        self.index = index
-        
-    }
     
     func getStartTime(index: Int) -> String {
         
@@ -49,5 +35,5 @@ class Race {
         return date
         
     }
-
+    
 }

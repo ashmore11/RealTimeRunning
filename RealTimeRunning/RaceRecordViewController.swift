@@ -15,12 +15,14 @@ import SwiftyJSON
 import Alamofire_SwiftyJSON
 import MBProgressHUD
 import AVFoundation
+import SwiftDDP
 
 class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: Properties
     
     var userId: String?
+    let races: MeteorCollection<Race> = (UIApplication.sharedApplication().delegate as! AppDelegate).races
     var race: Race!
     var competitors: [Competitor] = []
     var geoEvents:[CLLocationCoordinate2D] = []
@@ -118,9 +120,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         self.navigationItem.title = "RACE"
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "competitorsUpdated:", name: "competitorsUpdated", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePosition:", name: "positionUpdateReceived", object: nil)
-        
         self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         competitorsTableView.delegate = self
@@ -154,6 +153,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         if self.navigationController!.respondsToSelector("interactivePopGestureRecognizer") {
             
             self.navigationController!.interactivePopGestureRecognizer!.enabled = false
+            
+        }
+        
+        if let raceId = self.race.valueForKey("_id") as? String {
+        
+            self.races.documentWasChanged("races", id: raceId, fields: nil, cleared: nil)
             
         }
         
@@ -345,19 +350,16 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // MARK: WebSockets
     
-    func competitorsUpdated(notification: NSNotification) {
-        
-        if let items = notification.object, let id = items["userId"] as? String {
+    func competitorsUpdated(id: String) {
             
-            if let competitor = getCompetitor(id) {
-                
-                self.removeCompetitor(competitor.id)
+        if let competitor = getCompetitor(id) {
+            
+            self.removeCompetitor(competitor.id)
 
-            } else {
-                
-                self.addCompetitors(id)
-                
-            }
+        } else {
+            
+            self.addCompetitors(id)
+            
         }
         
     }
@@ -430,9 +432,22 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         showActivityIndicator(self.view, text: nil)
         
-        if let userId = self.userId {
+        let userId = "12345"
+        
+        if let raceId = self.race.valueForKey("_id") {
             
-            SocketIOManager.sharedInstance.updateCompetitors(userId, raceId: self.race.id)
+            Meteor.call("updateCompetitors", params: [userId, raceId]) { result, error in
+            
+                if error != nil {
+                    print("update error:", error)
+                    return
+                }
+                
+//                let competitor = Competitor(id: id, image: image, name: name)
+                
+//                self.updateTableView(competitor, insert: true)
+                
+            }
             
         }
         

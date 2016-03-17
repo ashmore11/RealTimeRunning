@@ -7,27 +7,12 @@
 //
 
 import UIKit
+import SwiftDDP
 
-class User {
+class User: MeteorDocument {
     
-    var id: String
-    var profileImage: UIImage?
-    var name: String
-    var email: String
-    
-    init?(id: String, profileImage: UIImage?, name: String, email: String) {
-        
-        self.id = id
-        self.profileImage = profileImage
-        self.name = name
-        self.email = email
-        
-        if id.isEmpty || name.isEmpty {
-            
-            return nil
-            
-        }
-        
-    }
+    var image: String?
+    var name: String?
+    var email: String?
     
 }

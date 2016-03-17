@@ -13,6 +13,7 @@ import Alamofire
 import SwiftyJSON
 import Alamofire_SwiftyJSON
 import MBProgressHUD
+import SwiftDDP
 
 class HomeViewController: UIViewController {
     
@@ -24,18 +25,26 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var fbLoginButton: UIButton!
     @IBOutlet weak var userNameField: UITextField!
     
-    var userId: String?
-    var races = [Race]()
+    let users: MeteorCollection<User> = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    var racesButtonPushed = false
+    var racesReady = false
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "racesSubscriptionReady:", name: "racesSubscriptionReady", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "usersSubscriptionReady:", name: "usersSubscriptionReady", object: nil)
         
         self.addToolbarOnKeyboard(userNameField, action: "addedUserName", buttonText: "Add User")
         
         self.setupLayout()
         
         self.navigationItem.title = "REAL TIME RUNNING"
+        
+    }
+    
+    func usersSubscriptionReady(notification: NSNotification) {
         
         if (FBSDKAccessToken.currentAccessToken() != nil) {
             
@@ -49,11 +58,20 @@ class HomeViewController: UIViewController {
         
     }
     
+    func racesSubscriptionReady(notification: NSNotification) {
+        
+        self.racesReady = true
+        
+    }
+    
     func addedUserName() {
+        
         self.userNameField.resignFirstResponder()
+        
         if let userName = self.userNameField.text {
             print("Added a username \(userName)")
         }
+        
     }
     
     func setupLayout() {
@@ -173,8 +191,6 @@ class HomeViewController: UIViewController {
                 email = fbEmail
             }
             
-            self.userId = id
-            
             self.createUser(id, name: name, email: email, profileImageURL: profileImageURL)
             
         }
@@ -184,69 +200,23 @@ class HomeViewController: UIViewController {
     func createUser(fbid: String, name: String, email: String, profileImageURL: String) {
         
         let parameters = [
-            "fbid": fbid,
             "name": name,
             "email": email,
-            "profileImage": profileImageURL
+            "image": profileImageURL
         ]
         
-        let getURL = "http://real-time-running.herokuapp.com/api/users/\(fbid)"
-        let postURL = "http://real-time-running.herokuapp.com/api/users/"
+        let user = User(id: fbid, fields: parameters)
         
-        Alamofire.request(.GET, getURL).responseSwiftyJSON({ (request, response, json, error) in
-            
-            if json.count == 0 {
-                
-                Alamofire.request(.POST, postURL, parameters: parameters, encoding: .JSON)
-                    .responseSwiftyJSON({ (request, response, json, error) in
-                    
-                        print("Reply from Alamofire in createUser: \(json["message"])")
-                    
-                })
-                
-            }
-            
-        })
+        users.insert(user)
+        
+        print(users.findOne("10206900955388309")?.name)
+        
         
     }
     
     @IBAction func racesButtonPushed(sender: UIButton) {
         
-        races = [Race]()
-        
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        
-        showActivityIndicator(self.view, text: "Loading Races")
-        
-        racesButton.enabled = false
-        
-        let requestURL = "http://real-time-running.herokuapp.com/api/races"
-        
-        Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
-                
-            for (key, value) in json {
-                
-                if  let raceId = value["_id"].string,
-                    let createdAt = value["createdAt"].string,
-                    let parsedDate = formatter.dateFromString(createdAt),
-                    let competitors = value["competitors"].arrayObject as? [String],
-                    let distance = value["distance"].int,
-                    let live = value["live"].bool {
-                    
-                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(key)!)
-                    
-                        self.races.append(race)
-                    
-                }
-                
-            }
-                    
-            hideActivityIndicator(self.view)
-                    
-            self.performSegueWithIdentifier("showRaces", sender: sender)
-            
-        })
+        self.performSegueWithIdentifier("showRaces", sender: sender)
         
     }
     
@@ -255,17 +225,12 @@ class HomeViewController: UIViewController {
         if segue.identifier == "showRaces" {
             
             racesButton.enabled = true
-            
-            let backItem = UIBarButtonItem()
-            backItem.title = "PROFILE"
-            navigationItem.backBarButtonItem = backItem
-            
-            if let controller = segue.destinationViewController as? RacesTableViewController {
-                
-                controller.userId = self.userId
-                controller.races = self.races
-                
-            }
+//            
+//            if let controller = segue.destinationViewController as? RacesTableViewController {
+//                
+//                  controller.userId = self.userId
+//                
+//            }
             
         }
         
