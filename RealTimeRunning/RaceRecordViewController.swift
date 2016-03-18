@@ -10,10 +10,6 @@ import UIKit
 import CoreLocation
 import CoreMotion
 import CoreData
-import Alamofire
-import SwiftyJSON
-import Alamofire_SwiftyJSON
-import MBProgressHUD
 import AVFoundation
 import SwiftDDP
 
@@ -21,7 +17,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // MARK: Properties
     
-    var userId: String?
+    var userId = UserData.sharedInstance.id
+    let users: MeteorCollection<User> = (UIApplication.sharedApplication().delegate as! AppDelegate).users
     let races: MeteorCollection<Race> = (UIApplication.sharedApplication().delegate as! AppDelegate).races
     var race: Race!
     var competitors: [Competitor] = []
@@ -156,11 +153,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
         }
         
-        if let raceId = self.race.valueForKey("_id") as? String {
-        
-            self.races.documentWasChanged("races", id: raceId, fields: nil, cleared: nil)
-            
-        }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "raceUpdated:", name: "raceUpdated", object: nil)
         
     }
 
@@ -280,46 +273,37 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
         if let competitors = self.race.competitors {
             
-            self.addCompetitors(competitors)
+            for competitor in competitors {
+                
+                self.addCompetitors(competitor)
+                
+            }
         
         }
         
     }
     
-    func addCompetitors(ids: [String]) {
-        
-        let url = "http://real-time-running.herokuapp.com/api/users/"
-        
-        Alamofire.request(.PUT, url, parameters: ["ids": ids]).responseSwiftyJSON({ (request, response, json, error) in
-            
-            if let users = json.array {
-                
-                for user in users {
-                    
-                    if let id = user["fbid"].string,
-                        let name = user["name"].string,
-                        let imageURL = user["profileImage"].string,
-                        let nsurl = NSURL(string: imageURL),
-                        let data = NSData(contentsOfURL:nsurl),
-                        let image = UIImage(data:data) {
-                            
-                            let competitor = Competitor(id: id, image: image, name: name)
-                            
-                            self.updateTableView(competitor, insert: true)
-                            
-                    }
-                }
-            }
-            
-            hideActivityIndicator(self.view)
-        })
-        
-    }
-    
     func addCompetitors(ids: String...) {
         
-        self.addCompetitors(ids)
+        for id in ids {
+            
+            let user = users.findOne(id)
+            
+            if let id = user?.valueForKey("_id") as? String,
+                let name = user?.valueForKey("name") as? String,
+                let imageURL = user?.valueForKey("image"),
+                let nsurl = NSURL(string: imageURL as! String),
+                let data = NSData(contentsOfURL:nsurl),
+                let image = UIImage(data:data) {
+            
+                    let competitor = Competitor(id: id, image: image, name: name)
+                    
+                    self.updateTableView(competitor, insert: true)
                 
+            }
+            
+        }
+        
     }
     
     func removeCompetitor(id: String) {
@@ -348,17 +332,23 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    // MARK: WebSockets
-    
-    func competitorsUpdated(id: String) {
+    func raceUpdated(notification: NSNotification) {
+        
+        if let object = notification.object, let userId = object.valueForKey("userId") as? String, let insert = object.valueForKey("insert") as? Bool {
             
-        if let competitor = getCompetitor(id) {
-            
-            self.removeCompetitor(competitor.id)
-
-        } else {
-            
-            self.addCompetitors(id)
+            if object.valueForKey("raceId") as? String == self.race.valueForKey("_id") as? String {
+                
+                if insert == true {
+                    
+                    self.addCompetitors(userId)
+                    
+                } else {
+                    
+                    self.removeCompetitor(userId)
+                    
+                }
+                
+            }
             
         }
         
@@ -430,11 +420,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
-        showActivityIndicator(self.view, text: nil)
-        
-        let userId = "12345"
-        
-        if let raceId = self.race.valueForKey("_id") {
+        if let userId = self.userId, let raceId = self.race.valueForKey("_id") {
             
             Meteor.call("updateCompetitors", params: [userId, raceId]) { result, error in
             
@@ -442,10 +428,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     print("update error:", error)
                     return
                 }
-                
-//                let competitor = Competitor(id: id, image: image, name: name)
-                
-//                self.updateTableView(competitor, insert: true)
                 
             }
             

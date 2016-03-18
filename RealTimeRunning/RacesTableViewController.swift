@@ -7,11 +7,6 @@
 //
 
 import UIKit
-import Alamofire
-import SwiftyJSON
-import Alamofire_SwiftyJSON
-import MBProgressHUD
-import SocketIOClientSwift
 import SwiftDDP
 
 class RacesTableViewController: UITableViewController {
@@ -19,8 +14,6 @@ class RacesTableViewController: UITableViewController {
     // MARK: Properties
     
     let races: MeteorCollection<Race> = (UIApplication.sharedApplication().delegate as! AppDelegate).races
-    var userId: String?
-
     
     override func viewDidLoad() {
         
@@ -28,7 +21,7 @@ class RacesTableViewController: UITableViewController {
         
         self.tableView.backgroundColor = UIColor.blackColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: METEOR_COLLECTION_SET_DID_CHANGE, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "raceUpdated", object: nil)
         
     }
 
@@ -66,10 +59,20 @@ class RacesTableViewController: UITableViewController {
         
     }
     
-    func reloadTableViewCell() {
+    func reloadTableViewCell(notification: NSNotification) {
         
-        self.tableView.reloadData()
-        
+        if let object = notification.object, let id = object["raceId"] as? String {
+                
+            if let index = self.races.sorted.indexOf({ $0.valueForKey("_id") as! String == id }) {
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    
+                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+                    
+                }
+            }
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -82,10 +85,9 @@ class RacesTableViewController: UITableViewController {
                 
                 let race = races.sorted[indexPath.row]
                 
-                if let controller = segue.destinationViewController as? RaceRecordViewController, let userId = self.userId {
+                if let controller = segue.destinationViewController as? RaceRecordViewController {
                     
                     controller.race = race
-                    controller.userId = userId
                     
                 }
             }

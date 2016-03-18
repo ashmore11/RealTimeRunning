@@ -119,6 +119,8 @@ class HomeViewController: UIViewController {
                 
                 if(fbloginresult.grantedPermissions.contains("email")) {
                     
+                    UserData.sharedInstance.sendRequest()
+                    
                     self.userLoggedIn()
                     
                 }
@@ -148,69 +150,38 @@ class HomeViewController: UIViewController {
     
     func getData() {
         
-        let accessToken = FBSDKAccessToken.currentAccessToken()
-        let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
-        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: parameters, tokenString: accessToken.tokenString, version: nil, HTTPMethod: "GET")
+        let data = UserData.sharedInstance
         
-        graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
-            
-            if error != nil {
-                logError(error.localizedDescription)
-                return
-            }
-            
-            // Get the facebook data and deal with optionals
-            var id: String = ""
-            var profileImage: UIImage?
-            var profileImageURL: String = ""
-            var name: String = ""
-            var email: String = ""
-            
-            if let fbid: String = (result.objectForKey("id") as? String) {
-                id = fbid
-            }
-            
-            if let firstName: String = (result.objectForKey("first_name") as? String), lastName: String = (result.objectForKey("last_name") as? String) {
-                name = firstName + " " + lastName
-            }
-            
-            self.navigationItem.title = name.uppercaseString
-            
-            // if all optionals unwrap OK then we can setup the image
-            if let imageURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
-                let directoryURL: NSURL = nsurl
-                let urlString: String = directoryURL.absoluteString
+        data.loaded.once {
+        
+            if let id = data.id, let name = data.name, let email = data.email, let imageURL = data.imageURL, let image = data.image {
                 
-                profileImageURL = urlString
-                profileImage = image
+                self.navigationItem.title = name.uppercaseString
+                self.fbProfileImage.image = image
+                
+                self.createUser(id, name: name, email: email, imageURL: imageURL)
+                
             }
-            
-            self.fbProfileImage.image = profileImage
-            
-            if let fbEmail: String = (result.objectForKey("email") as? String) {
-                email = fbEmail
-            }
-            
-            self.createUser(id, name: name, email: email, profileImageURL: profileImageURL)
             
         }
         
     }
     
-    func createUser(fbid: String, name: String, email: String, profileImageURL: String) {
+    func createUser(id: String, name: String, email: String, imageURL: String) {
         
-        let parameters = [
-            "name": name,
-            "email": email,
-            "image": profileImageURL
-        ]
+        if users.findOne(id) == nil {
         
-        let user = User(id: fbid, fields: parameters)
+            let parameters = [
+                "name": name,
+                "email": email,
+                "image": imageURL
+            ]
+            
+            let user = User(id: id, fields: parameters)
+            
+            users.insert(user)
         
-        users.insert(user)
-        
-        print(users.findOne("10206900955388309")?.name)
-        
+        }
         
     }
     
@@ -225,12 +196,6 @@ class HomeViewController: UIViewController {
         if segue.identifier == "showRaces" {
             
             racesButton.enabled = true
-//            
-//            if let controller = segue.destinationViewController as? RacesTableViewController {
-//                
-//                  controller.userId = self.userId
-//                
-//            }
             
         }
         

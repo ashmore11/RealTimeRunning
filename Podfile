@@ -8,6 +8,7 @@ pod 'Alamofire-SwiftyJSON', :podspec => 'https://raw.githubusercontent.com/pduto
 pod 'Socket.IO-Client-Swift', '~> 5.4.1'
 pod 'MBProgressHUD', '~> 0.9.2'
 pod "SwiftDDP", "~> 0.2.1"
+pod 'EmitterKit', '~> 4.0'
 end
 
 target 'RealTimeRunningTests' do
@@ -17,5 +18,6 @@ pod 'Alamofire-SwiftyJSON', :podspec => 'https://raw.githubusercontent.com/pduto
 pod 'Socket.IO-Client-Swift', '~> 5.4.1'
 pod 'MBProgressHUD', '~> 0.9.2'
 pod "SwiftDDP", "~> 0.2.1"
+pod 'EmitterKit', '~> 4.0'
 end
 

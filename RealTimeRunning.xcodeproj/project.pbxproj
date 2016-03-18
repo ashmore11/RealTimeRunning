@@ -60,6 +60,7 @@
 		D2830BDB1C73D53500B1B1A8 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */; };
 		D299ABF21C8DD76500FE219C /* CompetitorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299ABF01C8DD76500FE219C /* CompetitorsTableViewCell.swift */; };
 		D299ABF51C91756000FE219C /* Competitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299ABF41C91755F00FE219C /* Competitor.swift */; };
+		D299AC031C9BF30D00FE219C /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299AC021C9BF30D00FE219C /* UserData.swift */; };
 		D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FD1C75EA06009750A8 /* Race.swift */; };
 		D2AFE2001C75EBC3009750A8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE1FF1C75EBC3009750A8 /* User.swift */; };
 		D2AFE2031C75F42B009750A8 /* RacesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */; };
@@ -159,6 +160,7 @@
 		D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		D299ABF01C8DD76500FE219C /* CompetitorsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompetitorsTableViewCell.swift; sourceTree = "<group>"; };
 		D299ABF41C91755F00FE219C /* Competitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Competitor.swift; sourceTree = "<group>"; };
+		D299AC021C9BF30D00FE219C /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		D2AFE1FD1C75EA06009750A8 /* Race.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Race.swift; sourceTree = "<group>"; };
 		D2AFE1FF1C75EBC3009750A8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RacesTableViewController.swift; sourceTree = "<group>"; };
@@ -340,6 +342,7 @@
 				C48647E71C78983C005AB06F /* SharedLocationManager.swift */,
 				C42C38941C7E13E20080BFFC /* latLonFormats.swift */,
 				D235C33E1C8098EA00893BB6 /* SocketIOManager.swift */,
+				D299AC021C9BF30D00FE219C /* UserData.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				C42C388B1C7E0D150080BFFC /* RawTableViewCell.swift in Sources */,
 				C42C38951C7E13E20080BFFC /* latLonFormats.swift in Sources */,
 				C4EC42FA1C7F2D5600A458E3 /* raceHistoryTableViewCell.swift in Sources */,
+				D299AC031C9BF30D00FE219C /* UserData.swift in Sources */,
 				D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */,
 				C4EC43001C7F5ABC00A458E3 /* RaceGraphViewController.swift in Sources */,
 				D235C33F1C8098EA00893BB6 /* SocketIOManager.swift in Sources */,

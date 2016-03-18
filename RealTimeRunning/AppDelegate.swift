@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let notificationSettings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
         
-        Meteor.client.logLevel = .None
+        Meteor.client.logLevel = .Error
         Meteor.connect("ws://192.168.168.108:3000/websocket") {
             
             print("connected")
@@ -60,16 +60,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func usersSubscriptionIsReady() {
-        
-        print("users ready")
     
         NSNotificationCenter.defaultCenter().postNotificationName("usersSubscriptionReady", object: nil)
     
     }
     
     func racesSubscriptionIsReady() {
-        
-        print("races ready")
     
         NSNotificationCenter.defaultCenter().postNotificationName("racesSubscriptionReady", object: nil)
     
@@ -101,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        SocketIOManager.sharedInstance.closeConnection()
+//        SocketIOManager.sharedInstance.closeConnection()
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
@@ -112,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
         FBSDKAppEvents.activateApp()
-        SocketIOManager.sharedInstance.establishConnection()
+//        SocketIOManager.sharedInstance.establishConnection()
         
         // grab a reference to our coloured view
         if let colourView = self.window!.viewWithTag(1234) {

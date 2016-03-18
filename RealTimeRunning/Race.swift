@@ -1,5 +1,5 @@
 //
-//  Races.swift
+//  Race.swift
 //  RealTimeRunning
 //
 //  Created by Scott Ashmore on 18/02/2016.
@@ -7,15 +7,45 @@
 //
 
 import SwiftDDP
+import SwiftyJSON
+import EmitterKit
 
 class Race: MeteorDocument {
     
-    var collection:String = "races"
+    var collection: String = "races"
     var createdAt: NSDate?
     var competitors: [String]?
     var distance: Int = 20
     var live: Bool = false
     var startTime: String?
+    var updated = Event<String>()
+    
+    override func update(fields: NSDictionary?, cleared: [String]?) {
+        
+        if let data = fields?.valueForKey("competitors"), let newCompetitors = JSON(data).arrayObject as? [String], let oldCompetitors = self.competitors {
+            
+            let nc = Set(newCompetitors)
+            let oc = Set(oldCompetitors)
+            
+            let insert = nc.count > oc.count ? true : false
+            
+            if let raceId = self.valueForKey("_id"), let userId = nc.exclusiveOr(oc).first {
+            
+                let object = [
+                    "raceId": raceId,
+                    "userId": userId,
+                    "insert": insert
+                ]
+                
+                NSNotificationCenter.defaultCenter().postNotificationName("raceUpdated", object: object)
+            
+            }
+            
+            super.update(fields, cleared: cleared)
+            
+        }
+        
+    }
     
     func getStartTime(index: Int) -> String {
         
