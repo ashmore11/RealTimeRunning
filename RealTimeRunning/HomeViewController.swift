@@ -9,9 +9,6 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-import Alamofire
-import SwiftyJSON
-import Alamofire_SwiftyJSON
 import MBProgressHUD
 import SwiftDDP
 

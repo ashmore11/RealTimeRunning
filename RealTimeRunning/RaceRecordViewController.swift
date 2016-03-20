@@ -98,12 +98,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 self.durationLabel.text = self.durationString
                 self.speedLabel.text = String(format: "%6.2f Kph", self.speed * 3.6)
                 self.raceDistanceLabel.text = String(format: "%6.2f Km", self.distance / 1000)
-                
-                if let userId = self.userId {
-                
-                    SocketIOManager.sharedInstance.sendPositionUpdate(userId, distance: self.distance, pace: self.currentPace)
-                
-                }
             
             }
 
@@ -116,6 +110,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewDidLoad()
         
         self.navigationItem.title = "RACE"
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "raceUpdated:", name: "raceUpdated", object: nil)
         
         self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
@@ -152,8 +148,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.navigationController!.interactivePopGestureRecognizer!.enabled = false
             
         }
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "raceUpdated:", name: "raceUpdated", object: nil)
         
     }
 
@@ -253,17 +247,13 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func reloadCell(competitor: Competitor) {
+    func reloadCell(index: Int) {
         
         dispatch_async(dispatch_get_main_queue()) {
-        
-            if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
             
-                let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                
-                self.competitorsTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
-                
-            }
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            
+            self.competitorsTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
             
         }
         
@@ -287,11 +277,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         for id in ids {
             
-            let user = users.findOne(id)
-            
-            if let id = user?.valueForKey("_id") as? String,
-                let name = user?.valueForKey("name") as? String,
-                let imageURL = user?.valueForKey("image"),
+            if let user = users.findOne(id),
+                let id = user.valueForKey("_id") as? String,
+                let name = user.valueForKey("name") as? String,
+                let imageURL = user.valueForKey("image"),
                 let nsurl = NSURL(string: imageURL as! String),
                 let data = NSData(contentsOfURL:nsurl),
                 let image = UIImage(data:data) {
@@ -367,7 +356,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
                 competitor.setPosition(index)
                 
-                self.reloadCell(competitor)
+                self.reloadCell(index)
                 
             }
         }

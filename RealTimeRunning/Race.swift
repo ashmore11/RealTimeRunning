@@ -8,7 +8,6 @@
 
 import SwiftDDP
 import SwiftyJSON
-import EmitterKit
 
 class Race: MeteorDocument {
     
@@ -18,7 +17,6 @@ class Race: MeteorDocument {
     var distance: Int = 20
     var live: Bool = false
     var startTime: String?
-    var updated = Event<String>()
     
     override func update(fields: NSDictionary?, cleared: [String]?) {
         
@@ -37,11 +35,11 @@ class Race: MeteorDocument {
                     "insert": insert
                 ]
                 
+                super.update(fields, cleared: cleared)
+                
                 NSNotificationCenter.defaultCenter().postNotificationName("raceUpdated", object: object)
-            
+        
             }
-            
-            super.update(fields, cleared: cleared)
             
         }
         
