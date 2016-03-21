@@ -11,7 +11,6 @@ import SwiftyJSON
 
 class Race: MeteorDocument {
     
-    var collection: String = "races"
     var createdAt: NSDate?
     var competitors: [String]?
     var distance: Int = 20

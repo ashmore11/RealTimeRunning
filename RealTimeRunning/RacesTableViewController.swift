@@ -13,6 +13,7 @@ class RacesTableViewController: UITableViewController {
     
     // MARK: Properties
     
+    let users: MeteorCollection<User> = (UIApplication.sharedApplication().delegate as! AppDelegate).users
     let races: MeteorCollection<Race> = (UIApplication.sharedApplication().delegate as! AppDelegate).races
     
     override func viewDidLoad() {
@@ -68,7 +69,7 @@ class RacesTableViewController: UITableViewController {
                 dispatch_async(dispatch_get_main_queue()) {
                     
                     let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
                     
                 }
             }
@@ -85,9 +86,28 @@ class RacesTableViewController: UITableViewController {
                 
                 let race = races.sorted[indexPath.row]
                 
+                var competitors = [Competitor]()
+                
+                if let ids = race.competitors {
+
+                    for id in ids {
+                        
+                        if let user = users.findOne(id), let id = user.id, let name = user.name, let image = user.getImage() {
+                                
+                            let competitor = Competitor(id: id, image: image, name: name)
+                            
+                            competitors.append(competitor)
+                                
+                        }
+                        
+                    }
+                
+                }
+                
                 if let controller = segue.destinationViewController as? RaceRecordViewController {
                     
                     controller.race = race
+                    controller.competitors = competitors
                     
                 }
             }

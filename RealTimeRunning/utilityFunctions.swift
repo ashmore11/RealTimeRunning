@@ -105,19 +105,27 @@ func setButtonGradient(buttons: UIButton...) {
 
 func showActivityIndicator(view: UIView, text: String?) {
 
-    let loadingNotification = MBProgressHUD.showHUDAddedTo(view, animated: true)
-    loadingNotification.mode = MBProgressHUDMode.Indeterminate
-    
-    if text != nil {
-        loadingNotification.labelText = text
-        loadingNotification.labelFont = UIFont(name: "Oswald-Regular", size: 20)
+    dispatch_async(dispatch_get_main_queue()) {
+        
+        let loadingNotification = MBProgressHUD.showHUDAddedTo(view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.Indeterminate
+        
+        if text != nil {
+            loadingNotification.labelText = text
+            loadingNotification.labelFont = UIFont(name: "Oswald-Regular", size: 20)
+        }
+        
     }
     
 }
 
 func hideActivityIndicator(view: UIView) {
     
-    MBProgressHUD.hideAllHUDsForView(view, animated: true)
+    dispatch_async(dispatch_get_main_queue()) {
+    
+        MBProgressHUD.hideAllHUDsForView(view, animated: true)
+        
+    }
     
 }
 

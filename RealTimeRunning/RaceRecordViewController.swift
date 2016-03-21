@@ -60,51 +60,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var statsViewArea: UIView!
     @IBOutlet weak var competitorsTableView: UITableView!
 
-    func receiveAltimeterNotification(notification:NSNotification) {
-    
-        let userInfo:NSDictionary = notification.userInfo!
-        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
-        
-        if let data = altimeterData {
-            self.pressure = Double(data.pressure)
-            self.altitude = Double(data.relativeAltitude)
-        }
-    
-    }
-
-    func receiveLocationNotification(notification: NSNotification) {
-        
-        let userInfo: NSDictionary = notification.userInfo!
-        let location: CLLocation? = userInfo.objectForKey("Location") as? CLLocation
-
-        if let loc = location  {
-            
-            self.bLocationsReceived = true
-
-            self.lat = loc.coordinate.latitude
-            self.lon = loc.coordinate.longitude
-        
-            if let lMgr = myLocationManager {
-             
-                self.speed = lMgr.getStableSpeed()
-                self.distance = lMgr.getDistance()
-                self.durationString = lMgr.getDuration()
-                self.duration = lMgr.getDurationDouble()
-            
-            }
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                
-                self.durationLabel.text = self.durationString
-                self.speedLabel.text = String(format: "%6.2f Kph", self.speed * 3.6)
-                self.raceDistanceLabel.text = String(format: "%6.2f Km", self.distance / 1000)
-            
-            }
-
-        }
-        
-    }
-
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -135,8 +90,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.title = self.raceName
             
         }
-        
-        self.getInitialCompetitors()
+
         self.updateJoinRaceButton(0)
         
         self.activityManager = CMMotionActivityManager()
@@ -259,35 +213,15 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func getInitialCompetitors() {
-    
-        if let competitors = self.race.competitors {
-            
-            for competitor in competitors {
-                
-                self.addCompetitors(competitor)
-                
-            }
-        
-        }
-        
-    }
-    
     func addCompetitors(ids: String...) {
         
         for id in ids {
             
-            if let user = users.findOne(id),
-                let id = user.valueForKey("_id") as? String,
-                let name = user.valueForKey("name") as? String,
-                let imageURL = user.valueForKey("image"),
-                let nsurl = NSURL(string: imageURL as! String),
-                let data = NSData(contentsOfURL:nsurl),
-                let image = UIImage(data:data) {
+            if let user = users.findOne(id), let id = user.id, let name = user.name, let image = user.getImage() {
             
-                    let competitor = Competitor(id: id, image: image, name: name)
+                let competitor = Competitor(id: id, image: image, name: name)
                     
-                    self.updateTableView(competitor, insert: true)
+                self.updateTableView(competitor, insert: true)
                 
             }
             
@@ -322,6 +256,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func raceUpdated(notification: NSNotification) {
+        
+        hideActivityIndicator(self.view)
         
         if let object = notification.object, let userId = object.valueForKey("userId") as? String, let insert = object.valueForKey("insert") as? Bool {
             
@@ -409,6 +345,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
+        showActivityIndicator(self.view, text: nil)
+        
         if let userId = self.userId, let raceId = self.race.valueForKey("_id") {
             
             Meteor.call("updateCompetitors", params: [userId, raceId]) { result, error in
@@ -440,6 +378,51 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 controller.runDetail = self.runDetailObject
 
             }
+        }
+        
+    }
+    
+    func receiveAltimeterNotification(notification:NSNotification) {
+        
+        let userInfo:NSDictionary = notification.userInfo!
+        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
+        
+        if let data = altimeterData {
+            self.pressure = Double(data.pressure)
+            self.altitude = Double(data.relativeAltitude)
+        }
+        
+    }
+    
+    func receiveLocationNotification(notification: NSNotification) {
+        
+        let userInfo: NSDictionary = notification.userInfo!
+        let location: CLLocation? = userInfo.objectForKey("Location") as? CLLocation
+        
+        if let loc = location  {
+            
+            self.bLocationsReceived = true
+            
+            self.lat = loc.coordinate.latitude
+            self.lon = loc.coordinate.longitude
+            
+            if let lMgr = myLocationManager {
+                
+                self.speed = lMgr.getStableSpeed()
+                self.distance = lMgr.getDistance()
+                self.durationString = lMgr.getDuration()
+                self.duration = lMgr.getDurationDouble()
+                
+            }
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                self.durationLabel.text = self.durationString
+                self.speedLabel.text = String(format: "%6.2f Kph", self.speed * 3.6)
+                self.raceDistanceLabel.text = String(format: "%6.2f Km", self.distance / 1000)
+                
+            }
+            
         }
         
     }

@@ -11,8 +11,30 @@ import SwiftDDP
 
 class User: MeteorDocument {
     
-    var image: String?
+    var id: String?
     var name: String?
-    var email: String?
+    var image: String?
+    
+    required init(id: String, fields: NSDictionary?) {
+        
+        super.init(id: id, fields: fields)
+        
+        self.id = id
+        
+    }
+    
+    func getImage() -> UIImage? {
+        
+        if let string = self.image, let nsurl = NSURL(string: string), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
+         
+            return image
+            
+        } else {
+            
+            return nil
+            
+        }
+        
+    }
     
 }

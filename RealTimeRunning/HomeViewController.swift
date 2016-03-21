@@ -9,7 +9,6 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-import MBProgressHUD
 import SwiftDDP
 
 class HomeViewController: UIViewController {
@@ -45,11 +44,7 @@ class HomeViewController: UIViewController {
         
         if (FBSDKAccessToken.currentAccessToken() != nil) {
             
-            self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
-            
-            self.fadeRacesButton(1, delay: 0.25)
-            
-            self.getData()
+            self.userLoggedIn()
             
         }
         
@@ -66,7 +61,9 @@ class HomeViewController: UIViewController {
         self.userNameField.resignFirstResponder()
         
         if let userName = self.userNameField.text {
+            
             print("Added a username \(userName)")
+            
         }
         
     }
@@ -137,21 +134,16 @@ class HomeViewController: UIViewController {
     }
     
     func userLoggedIn() {
-            
-        self.getData()
+    
         self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
         self.racesButton.enabled = true
         self.fadeRacesButton(1, delay: 1)
         
-    }
-    
-    func getData() {
+        let user = UserData.sharedInstance
         
-        let data = UserData.sharedInstance
+        user.loaded.once {
         
-        data.loaded.once {
-        
-            if let id = data.id, let name = data.name, let email = data.email, let imageURL = data.imageURL, let image = data.image {
+            if let id = user.id, let name = user.name, let email = user.email, let imageURL = user.imageURL, let image = user.image {
                 
                 self.navigationItem.title = name.uppercaseString
                 self.fbProfileImage.image = image
