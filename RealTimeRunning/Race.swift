@@ -6,39 +6,68 @@
 //  Copyright © 2016 Scott Ashmore. All rights reserved.
 //
 
-import SwiftDDP
-import SwiftyJSON
+import Foundation
+import EmitterKit
 
-class Race: MeteorDocument {
+struct Race {
     
+    var id: String?
     var createdAt: NSDate?
     var competitors: [String]?
-    var distance: Int = 20
-    var live: Bool = false
-    var startTime: String?
+    var distance: Int?
+    var live: Bool?
+    let events = EventManager()
     
-    override func update(fields: NSDictionary?, cleared: [String]?) {
+    init(id: String, fields: NSDictionary?) {
         
-        if let data = fields?.valueForKey("competitors"), let newCompetitors = JSON(data).arrayObject as? [String], let oldCompetitors = self.competitors {
+        self.id = id
+        self.update(fields)
+        
+    }
+    
+    mutating func update(fields: NSDictionary?) {
+        
+        if let createdAt = fields?.valueForKey("createdAt") as? String {
             
-            let nc = Set(newCompetitors)
-            let oc = Set(oldCompetitors)
+            let formatter = NSDateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            let date = formatter.dateFromString(createdAt)
             
+            self.createdAt = date
+            
+        }
+        
+        if let competitors = fields?.valueForKey("competitors") as? [String] {
+            
+            let nc = Set(competitors)
+            let oc = Set(self.competitors ?? [])
+
             let insert = nc.count > oc.count ? true : false
-            
-            if let raceId = self.valueForKey("_id"), let userId = nc.exclusiveOr(oc).first {
-            
+
+            if let userId = nc.exclusiveOr(oc).first {
+
                 let object = [
-                    "raceId": raceId,
                     "userId": userId,
                     "insert": insert
                 ]
                 
-                super.update(fields, cleared: cleared)
-                
-                NSNotificationCenter.defaultCenter().postNotificationName("raceUpdated", object: object)
+                self.events.trigger("competitorsUpdated", information: object)
         
             }
+            
+            self.competitors = competitors
+            
+        }
+        
+        if let distance = fields?.valueForKey("distance") as? Int {
+            
+            self.distance = distance
+            
+        }
+        
+        if let live = fields?.valueForKey("live") as? Bool {
+            
+            self.live = live
             
         }
         
@@ -62,5 +91,5 @@ class Race: MeteorDocument {
         return date
         
     }
-    
+
 }

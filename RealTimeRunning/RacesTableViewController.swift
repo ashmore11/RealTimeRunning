@@ -14,7 +14,7 @@ class RacesTableViewController: UITableViewController {
     // MARK: Properties
     
     let users: MeteorCollection<User> = (UIApplication.sharedApplication().delegate as! AppDelegate).users
-    let races: MeteorCollection<Race> = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    let races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
     
     override func viewDidLoad() {
         
@@ -22,6 +22,7 @@ class RacesTableViewController: UITableViewController {
         
         self.tableView.backgroundColor = UIColor.blackColor()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableView:", name: "reloadRaces", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "raceUpdated", object: nil)
         
     }
@@ -36,7 +37,7 @@ class RacesTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
-        return self.races.sorted.count
+        return self.races.count
     
     }
 
@@ -54,17 +55,23 @@ class RacesTableViewController: UITableViewController {
         
         cell.startTimeLabel.text = "\(race.getStartTime(indexPath.row))"
         cell.competitorsLabel.text = "competitors: \(race.competitors?.count ?? 0)".uppercaseString
-        cell.distanceLabel.text = "\(race.distance) km"
+        cell.distanceLabel.text = "\(race.distance ?? 0) km"
 
         return cell
         
     }
     
+    func reloadTableView(notification: NSNotification) {
+        
+        self.tableView.reloadData()
+        
+    }
+    
     func reloadTableViewCell(notification: NSNotification) {
         
-        if let object = notification.object, let id = object["raceId"] as? String {
+        if let id = notification.object as? String {
                 
-            if let index = self.races.sorted.indexOf({ $0.valueForKey("_id") as! String == id }) {
+            if let index = self.races.index(id) {
                 
                 dispatch_async(dispatch_get_main_queue()) {
                     
@@ -85,8 +92,8 @@ class RacesTableViewController: UITableViewController {
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 
                 let race = races.sorted[indexPath.row]
-                
                 var competitors = [Competitor]()
+                let startTime = race.getStartTime(indexPath.row)
                 
                 if let ids = race.competitors {
 
@@ -107,6 +114,7 @@ class RacesTableViewController: UITableViewController {
                 if let controller = segue.destinationViewController as? RaceRecordViewController {
                     
                     controller.race = race
+                    controller.startTime = startTime
                     controller.competitors = competitors
                     
                 }

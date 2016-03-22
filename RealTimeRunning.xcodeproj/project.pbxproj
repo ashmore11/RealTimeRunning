@@ -55,6 +55,8 @@
 		D226B4B11C73B28400366800 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D226B4B01C73B28400366800 /* Assets.xcassets */; };
 		D226B4B41C73B28400366800 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D226B4B21C73B28400366800 /* LaunchScreen.storyboard */; };
 		D226B4BF1C73B28400366800 /* RealTimeRunningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D226B4BE1C73B28400366800 /* RealTimeRunningTests.swift */; };
+		D240E5291CA066A000B2A4CE /* Races.swift in Sources */ = {isa = PBXBuildFile; fileRef = D240E5281CA066A000B2A4CE /* Races.swift */; };
+		D240E52C1CA16F3200B2A4CE /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = D240E52B1CA16F3200B2A4CE /* Events.swift */; };
 		D2830BD91C73D52B00B1B1A8 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */; };
 		D2830BDB1C73D53500B1B1A8 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */; };
 		D299ABF21C8DD76500FE219C /* CompetitorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299ABF01C8DD76500FE219C /* CompetitorsTableViewCell.swift */; };
@@ -150,6 +152,8 @@
 		D226B4BA1C73B28400366800 /* RealTimeRunningTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealTimeRunningTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D226B4BE1C73B28400366800 /* RealTimeRunningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealTimeRunningTests.swift; sourceTree = "<group>"; };
 		D226B4C01C73B28400366800 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D240E5281CA066A000B2A4CE /* Races.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Races.swift; sourceTree = "<group>"; };
+		D240E52B1CA16F3200B2A4CE /* Events.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		D27D67821C81ABF800338D01 /* Oswald-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oswald-ExtraLight.ttf"; sourceTree = "<group>"; };
 		D27D67831C81ABF800338D01 /* Oswald-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oswald-Light.ttf"; sourceTree = "<group>"; };
 		D27D67841C81ABF800338D01 /* Oswald-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Oswald-Medium.ttf"; sourceTree = "<group>"; };
@@ -235,12 +239,13 @@
 		D226B4A81C73B28400366800 /* RealTimeRunning */ = {
 			isa = PBXGroup;
 			children = (
-				D235C3401C809B8B00893BB6 /* Resources */,
 				D226B4A91C73B28400366800 /* AppDelegate.swift */,
+				D235C3401C809B8B00893BB6 /* Resources */,
 				D2B341751C89A2620024114C /* Utilities */,
 				D2B341711C89A1DF0024114C /* Controllers */,
 				D2B341741C89A2420024114C /* Components */,
 				D2B341721C89A21B0024114C /* Views */,
+				D240E5271CA0668200B2A4CE /* Collections */,
 				D2B341701C89A1B30024114C /* Models */,
 				D2B341731C89A2300024114C /* Logging */,
 				D226B4B01C73B28400366800 /* Assets.xcassets */,
@@ -281,6 +286,14 @@
 				C46DA44C1C95C04D0095846D /* launchImage.png */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		D240E5271CA0668200B2A4CE /* Collections */ = {
+			isa = PBXGroup;
+			children = (
+				D240E5281CA066A000B2A4CE /* Races.swift */,
+			);
+			name = Collections;
 			sourceTree = "<group>";
 		};
 		D2B341701C89A1B30024114C /* Models */ = {
@@ -340,6 +353,7 @@
 				C48647E71C78983C005AB06F /* SharedLocationManager.swift */,
 				C42C38941C7E13E20080BFFC /* latLonFormats.swift */,
 				D299AC021C9BF30D00FE219C /* UserData.swift */,
+				D240E52B1CA16F3200B2A4CE /* Events.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -583,8 +597,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D240E52C1CA16F3200B2A4CE /* Events.swift in Sources */,
 				C42C38921C7E0F0B0080BFFC /* RunDetail+CoreDataProperties.swift in Sources */,
 				C42C383E1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld in Sources */,
+				D240E5291CA066A000B2A4CE /* Races.swift in Sources */,
 				C4EC42FE1C7F402D00A458E3 /* raceHistorySummaryViewController.swift in Sources */,
 				D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */,
 				C496BC701C93190B00DF2187 /* Settings.swift in Sources */,

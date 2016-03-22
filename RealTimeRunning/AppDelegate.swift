@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var displayUnits:String = "metric"
     var loggingFrequency:Int = 1
-    let races = MeteorCollection<Race>(name: "races")
+    let races = Races(name: "races")
     let users = MeteorCollection<User>(name: "users")
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool

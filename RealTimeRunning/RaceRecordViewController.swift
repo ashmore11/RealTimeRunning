@@ -19,8 +19,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     var userId = UserData.sharedInstance.id
     let users: MeteorCollection<User> = (UIApplication.sharedApplication().delegate as! AppDelegate).users
-    let races: MeteorCollection<Race> = (UIApplication.sharedApplication().delegate as! AppDelegate).races
-    var race: Race!
+    let races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    var race: Race?
+    var startTime: String?
     var competitors: [Competitor] = []
     var geoEvents:[CLLocationCoordinate2D] = []
     var lat:Double = 0.0
@@ -64,10 +65,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         super.viewDidLoad()
         
-        self.navigationItem.title = "RACE"
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "raceUpdated:", name: "raceUpdated", object: nil)
-        
         self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         competitorsTableView.delegate = self
@@ -84,10 +81,19 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         }
         
-        if let race = self.race, let startTime = race.startTime {
+        self.race?.events.listenTo("competitorsUpdated", action: self.competitorsUpdated)
+        
+        if let race = self.race, let startTime = self.startTime, let live = race.live {
             
-            self.raceName = startTime
-            self.title = self.raceName
+            if live == true {
+                
+                self.navigationItem.title = "RACE LIVE"
+                
+            } else {
+             
+                self.navigationItem.title = "RACE BEGINS AT \(startTime)"
+                
+            }
             
         }
 
@@ -255,23 +261,19 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func raceUpdated(notification: NSNotification) {
+    func competitorsUpdated(data: Any?) {
         
         hideActivityIndicator(self.view)
         
-        if let object = notification.object, let userId = object.valueForKey("userId") as? String, let insert = object.valueForKey("insert") as? Bool {
-            
-            if object.valueForKey("raceId") as? String == self.race.valueForKey("_id") as? String {
+        if let data = data as? [String: AnyObject], let userId = data["userId"] as? String, let insert = data["insert"] as? Bool {
                 
-                if insert == true {
-                    
-                    self.addCompetitors(userId)
-                    
-                } else {
-                    
-                    self.removeCompetitor(userId)
-                    
-                }
+            if insert == true {
+                
+                self.addCompetitors(userId)
+                
+            } else {
+                
+                self.removeCompetitor(userId)
                 
             }
             
@@ -347,7 +349,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         showActivityIndicator(self.view, text: nil)
         
-        if let userId = self.userId, let raceId = self.race.valueForKey("_id") {
+        if let userId = self.userId, let raceId = self.race?.id {
             
             Meteor.call("updateCompetitors", params: [userId, raceId]) { result, error in
             
