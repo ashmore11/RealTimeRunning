@@ -8,43 +8,36 @@
 
 import UIKit
 import FBSDKCoreKit
-import EmitterKit
 
-class UserData {
+class CurrentUser {
     
-    static let sharedInstance = UserData()
+    static let sharedInstance = CurrentUser()
     
     var id: String?
     var name: String?
     var email: String?
     var imageURL: String?
     var image: UIImage?
-    var loaded = Signal()
-    
-    init() {
-        
-        if (FBSDKAccessToken.currentAccessToken() != nil) {
-            
-            self.sendRequest()
-        
-        }
-        
-    }
+    var loggedIn: Bool = false
+    let events = EventManager()
         
     func sendRequest() {
         
-        let accessToken = FBSDKAccessToken.currentAccessToken()
-        let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
-        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: parameters, tokenString: accessToken.tokenString, version: nil, HTTPMethod: "GET")
-        
-        graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
+        if let accessToken = FBSDKAccessToken.currentAccessToken() {
             
-            if error != nil {
-                logError(error.localizedDescription)
-                return
+            let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
+            let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: parameters, tokenString: accessToken.tokenString, version: nil, HTTPMethod: "GET")
+            
+            graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
+                
+                if error != nil {
+                    logError(error.localizedDescription)
+                    return
+                }
+                
+                self.getData(result)
+                
             }
-            
-            self.getData(result)
             
         }
         
@@ -78,7 +71,8 @@ class UserData {
             
         }
         
-        self.loaded.emit()
+        self.loggedIn = true
+        self.events.trigger("userLoaded")
         
     }
     

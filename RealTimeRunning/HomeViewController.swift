@@ -21,7 +21,8 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var fbLoginButton: UIButton!
     @IBOutlet weak var userNameField: UITextField!
     
-    let users: MeteorCollection<User> = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    let currentUser = CurrentUser.sharedInstance
+    let users = Users.sharedInstance
     var racesButtonPushed = false
     var racesReady = false
     
@@ -32,21 +33,30 @@ class HomeViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "racesSubscriptionReady:", name: "racesSubscriptionReady", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "usersSubscriptionReady:", name: "usersSubscriptionReady", object: nil)
         
+        self.navigationItem.title = "REAL TIME RUNNING"
+        
         self.addToolbarOnKeyboard(userNameField, action: "addedUserName", buttonText: "Add User")
         
         self.setupLayout()
-        
-        self.navigationItem.title = "REAL TIME RUNNING"
         
     }
     
     func usersSubscriptionReady(notification: NSNotification) {
         
-        if (FBSDKAccessToken.currentAccessToken() != nil) {
+        self.currentUser.sendRequest()
+        self.currentUser.events.listenTo("userLoaded", action: {
             
-            self.userLoggedIn()
-            
-        }
+            if let id = self.currentUser.id {
+                
+                if self.users.findOne(id) != nil {
+                    
+                    self.userLoggedIn()
+                
+                }
+                
+            }
+        
+        })
         
     }
     
@@ -94,7 +104,9 @@ class HomeViewController: UIViewController {
     
         let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
         
-        if (FBSDKAccessToken.currentAccessToken() != nil) {
+        if self.currentUser.loggedIn == true {
+            
+            self.currentUser.loggedIn = false
             
             fbLoginManager.logOut()
             
@@ -102,7 +114,7 @@ class HomeViewController: UIViewController {
             
         } else {
             
-            fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) -> Void in
+            fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) in
                 
                 if error != nil {
                     print("Error in fbLoginManager.logInWithReadPermissionserror:\(error)")
@@ -113,12 +125,49 @@ class HomeViewController: UIViewController {
                 
                 if(fbloginresult.grantedPermissions.contains("email")) {
                     
-                    UserData.sharedInstance.sendRequest()
+                    self.getData()
+                    
+                }
+            })
+        }
+        
+    }
+    
+    func getData() {
+        
+        self.currentUser.sendRequest()
+        self.currentUser.events.listenTo("userLoaded", action: {
+            
+            if let id = self.currentUser.id, let name = self.currentUser.name, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
+                
+                if self.users.findOne(id) == nil {
+                
+                    self.createUser(id, name: name, email: email, imageURL: imageURL)
+                    
+                } else {
                     
                     self.userLoggedIn()
                     
                 }
-            })
+                
+            }
+            
+        })
+        
+    }
+    
+    func createUser(id: String, name: String, email: String, imageURL: String) {
+            
+        let parameters = [
+            "name": name,
+            "email": email,
+            "image": imageURL
+        ]
+        
+        users.insert(id, fields: parameters) { user in
+            
+            self.userLoggedIn()
+            
         }
         
     }
@@ -134,49 +183,22 @@ class HomeViewController: UIViewController {
     }
     
     func userLoggedIn() {
-    
+        
         self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
         self.racesButton.enabled = true
         self.fadeRacesButton(1, delay: 1)
-        
-        let user = UserData.sharedInstance
-        
-        user.loaded.once {
-        
-            if let id = user.id, let name = user.name, let email = user.email, let imageURL = user.imageURL, let image = user.image {
-                
-                self.navigationItem.title = name.uppercaseString
-                self.fbProfileImage.image = image
-                
-                self.createUser(id, name: name, email: email, imageURL: imageURL)
-                
-            }
-            
-        }
-        
-    }
-    
-    func createUser(id: String, name: String, email: String, imageURL: String) {
-        
-        if users.findOne(id) == nil {
-        
-            let parameters = [
-                "name": name,
-                "email": email,
-                "image": imageURL
-            ]
-            
-            let user = User(id: id, fields: parameters)
-            
-            users.insert(user)
-        
-        }
+        self.navigationItem.title = self.currentUser.name!.uppercaseString
+        self.fbProfileImage.image = self.currentUser.image
         
     }
     
     @IBAction func racesButtonPushed(sender: UIButton) {
         
-        self.performSegueWithIdentifier("showRaces", sender: sender)
+        if self.racesReady == true {
+         
+            self.performSegueWithIdentifier("showRaces", sender: sender)
+            
+        }
         
     }
     

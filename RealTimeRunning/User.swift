@@ -9,17 +9,32 @@
 import UIKit
 import SwiftDDP
 
-class User: MeteorDocument {
+struct User {
     
     var id: String?
     var name: String?
     var image: String?
     
-    required init(id: String, fields: NSDictionary?) {
-        
-        super.init(id: id, fields: fields)
+    init(id: String, fields: NSDictionary?) {
         
         self.id = id
+        self.update(fields)
+        
+    }
+    
+    mutating func update(fields: NSDictionary?) {
+        
+        if let name = fields?.valueForKey("name") as? String {
+        
+            self.name = name
+        
+        }
+        
+        if let image = fields?.valueForKey("image") as? String {
+            
+            self.image = image
+            
+        }
         
     }
     

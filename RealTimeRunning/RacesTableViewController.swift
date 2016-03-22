@@ -13,12 +13,14 @@ class RacesTableViewController: UITableViewController {
     
     // MARK: Properties
     
-    let users: MeteorCollection<User> = (UIApplication.sharedApplication().delegate as! AppDelegate).users
-    let races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    let users = Users.sharedInstance
+    let races = Races.sharedInstance
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        print(self.races.sorted)
         
         self.tableView.backgroundColor = UIColor.blackColor()
         

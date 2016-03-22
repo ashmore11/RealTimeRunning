@@ -11,16 +11,14 @@ import SwiftDDP
 
 class Races: AbstractCollection {
     
+    static let sharedInstance = Races(name: "races")
+    
     var races = [Race]()
     
     var sorted: [Race] {
-        return Array(self.races).sort({
-            if let first = $0.createdAt, let second = $1.createdAt {
-                return first.compare(second) == .OrderedAscending
-            } else {
-                return false
-            }
-        })
+
+        return self.races.sort({ $0.createdAt?.compare($1.createdAt!) == .OrderedAscending })
+        
     }
     
     var count: Int {

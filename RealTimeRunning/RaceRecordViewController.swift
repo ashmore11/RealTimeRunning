@@ -17,9 +17,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // MARK: Properties
     
-    var userId = UserData.sharedInstance.id
-    let users: MeteorCollection<User> = (UIApplication.sharedApplication().delegate as! AppDelegate).users
-    let races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    var userId = CurrentUser.sharedInstance.id
+    let users = Users.sharedInstance
+    let races = Races.sharedInstance
     var race: Race?
     var startTime: String?
     var competitors: [Competitor] = []
