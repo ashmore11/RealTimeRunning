@@ -10,8 +10,6 @@ import UIKit
 
 class Competitor {
     
-    // MARK: Properties
-    
     var id: String
     var image: UIImage
     var name: String

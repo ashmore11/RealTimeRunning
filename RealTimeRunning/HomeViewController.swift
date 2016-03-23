@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var userNameField: UITextField!
     
     let currentUser = CurrentUser.sharedInstance
-    let users = Users.sharedInstance
+    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
     var racesButtonPushed = false
     var racesReady = false
     
@@ -81,14 +81,12 @@ class HomeViewController: UIViewController {
     func setupLayout() {
     
         setViewGradient(self.view)
+        setButtonGradient(self.racesButton, self.fbLoginButton)
         
         self.topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
-        
-        setButtonGradient(self.racesButton, self.fbLoginButton)
-        self.racesButton.alpha = 0.5
-        
         self.fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
         self.fbProfileImage.clipsToBounds = true
+        self.racesButton.alpha = 0.5
         
     }
     
@@ -105,8 +103,6 @@ class HomeViewController: UIViewController {
         let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
         
         if self.currentUser.loggedIn == true {
-            
-            self.currentUser.loggedIn = false
             
             fbLoginManager.logOut()
             
@@ -128,7 +124,9 @@ class HomeViewController: UIViewController {
                     self.getData()
                     
                 }
+                
             })
+            
         }
         
     }
@@ -174,21 +172,22 @@ class HomeViewController: UIViewController {
     
     func userLoggedOut() {
         
-        self.fbLoginButton.setTitle("SIGN IN" , forState: .Normal)
         self.navigationItem.title = "REAL TIME RUNNING"
         self.fbProfileImage.image = nil
+        self.fbLoginButton.setTitle("SIGN IN" , forState: .Normal)
         self.racesButton.enabled = false
         self.fadeRacesButton(0.5, delay: 0)
+        self.currentUser.loggedIn = false
         
     }
     
     func userLoggedIn() {
         
+        self.navigationItem.title = self.currentUser.name!.uppercaseString
+        self.fbProfileImage.image = self.currentUser.image
         self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
         self.racesButton.enabled = true
         self.fadeRacesButton(1, delay: 1)
-        self.navigationItem.title = self.currentUser.name!.uppercaseString
-        self.fbProfileImage.image = self.currentUser.image
         
     }
     

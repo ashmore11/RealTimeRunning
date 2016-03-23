@@ -11,8 +11,6 @@ import SwiftDDP
 
 class Races: AbstractCollection {
     
-    static let sharedInstance = Races(name: "races")
-    
     var races = [Race]()
     
     var sorted: [Race] {
@@ -59,7 +57,7 @@ class Races: AbstractCollection {
     
     override internal func documentWasChanged(collection: String, id: String, fields: NSDictionary?, cleared: [String]?) {
         
-        if let index = races.indexOf({ $0.id == id }) {
+        if let index = self.index(id) {
             
             var race = self.races[index]
             
@@ -70,11 +68,12 @@ class Races: AbstractCollection {
             NSNotificationCenter.defaultCenter().postNotificationName("raceUpdated", object: race.id)
             
         }
+        
     }
     
     override internal func documentWasRemoved(collection: String, id: String) {
         
-        if let index = races.indexOf({ $0.id == id }) {
+        if let index = self.index(id) {
             
             self.races.removeAtIndex(index)
             

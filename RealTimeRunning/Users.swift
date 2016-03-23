@@ -11,8 +11,6 @@ import SwiftDDP
 
 class Users: AbstractCollection {
     
-    static let sharedInstance = Users(name: "users")
-    
     var users = [User]()
     
     func index(id: String) -> Int? {

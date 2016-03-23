@@ -17,9 +17,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // MARK: Properties
     
-    var userId = CurrentUser.sharedInstance.id
-    let users = Users.sharedInstance
-    let races = Races.sharedInstance
+    var currentUserId = CurrentUser.sharedInstance.id
+    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
     var race: Race?
     var startTime: String?
     var competitors: [Competitor] = []
@@ -305,11 +305,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         dispatch_async(dispatch_get_main_queue()) {
         
-            if let userId = self.userId {
+            if let userId = self.currentUserId {
                 
                 if self.getCompetitor(userId) != nil {
                     
-                    self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
+                    self.joinRaceButton.setTitle("LEAVE RACE", forState: .Normal)
                     
                     UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
                     
@@ -324,7 +324,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     self.startStopButton.enabled = false
                     
                 }
+
             }
+
         }
 
     }
@@ -347,9 +349,19 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
+        self.joinRaceButton.transform = CGAffineTransformMakeScale(0.95, 0.95)
+        UIView.animateWithDuration(0.5,
+            delay: 0,
+            usingSpringWithDamping: 0.1,
+            initialSpringVelocity: 1.0,
+            options: UIViewAnimationOptions.AllowUserInteraction,
+            animations: {
+                self.joinRaceButton.transform = CGAffineTransformIdentity
+            }, completion: nil)
+        
         showActivityIndicator(self.view, text: nil)
         
-        if let userId = self.userId, let raceId = self.race?.id {
+        if let userId = self.currentUserId, let raceId = self.race?.id {
             
             Meteor.call("updateCompetitors", params: [userId, raceId]) { result, error in
             

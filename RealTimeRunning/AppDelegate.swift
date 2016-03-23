@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var displayUnits:String = "metric"
     var loggingFrequency:Int = 1
+    let races: Races = Races(name: "races")
+    let users: Users = Users(name: "users")
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
@@ -106,6 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
         FBSDKAppEvents.activateApp()
+//        SocketIOManager.sharedInstance.establishConnection()
         
         // grab a reference to our coloured view
         if let colourView = self.window!.viewWithTag(1234) {

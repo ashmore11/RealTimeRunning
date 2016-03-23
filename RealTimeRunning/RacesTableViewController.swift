@@ -13,14 +13,12 @@ class RacesTableViewController: UITableViewController {
     
     // MARK: Properties
     
-    let users = Users.sharedInstance
-    let races = Races.sharedInstance
+    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        print(self.races.sorted)
         
         self.tableView.backgroundColor = UIColor.blackColor()
         
