@@ -7,15 +7,43 @@
 //
 
 import Foundation
-import SwiftDDP
+import Firebase
+import SwiftyJSON
 
-class Users: AbstractCollection {
+class Users {
     
+    var ref = Firebase(url:"https://real-time-running.firebaseio.com/users")
     var users = [User]()
+    
+    init() {
+        
+        ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
+            NSNotificationCenter.defaultCenter().postNotificationName("usersSubscriptionReady", object: nil)
+        })
+        
+        ref.observeEventType(.ChildAdded, withBlock: { snapshot in
+            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
+                self.documentWasAdded(id, fields: fields)
+            }
+        })
+        
+        ref.observeEventType(.ChildChanged, withBlock: { snapshot in
+            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
+                self.documentWasChanged(id, fields: fields)
+            }
+        })
+        
+        ref.observeEventType(.ChildRemoved, withBlock: { snapshot in
+            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
+                self.documentWasRemoved(id, fields: fields)
+            }
+        })
+        
+    }
     
     func index(id: String) -> Int? {
         
-        return self.users.indexOf({ $0.id == id })
+        return self.users.indexOf({ $0.fbid == id })
         
     }
     
@@ -33,7 +61,7 @@ class Users: AbstractCollection {
         
     }
     
-    override internal func documentWasAdded(collection: String, id: String, fields: NSDictionary?) {
+    private func documentWasAdded(id: String, fields: NSDictionary?) {
         
         let user = User(id: id, fields: fields)
         
@@ -41,7 +69,7 @@ class Users: AbstractCollection {
         
     }
     
-    override internal func documentWasChanged(collection: String, id: String, fields: NSDictionary?, cleared: [String]?) {
+    private func documentWasChanged(id: String, fields: NSDictionary?) {
         
         if let index = self.index(id) {
             
@@ -52,9 +80,10 @@ class Users: AbstractCollection {
             self.users[index] = user
             
         }
+
     }
     
-    override internal func documentWasRemoved(collection: String, id: String) {
+    private func documentWasRemoved(id: String, fields: NSDictionary?) {
         
         if let index = self.index(id) {
             
@@ -69,31 +98,30 @@ class Users: AbstractCollection {
         if let name = fields?["name"], let email = fields?["email"], let imageURL = fields?["image"] {
             
             let parameters = [
-                "id": id,
+                "fbid": id,
                 "name": name,
                 "email": email,
                 "image": imageURL
             ]
             
             let user = User(id: id, fields: parameters)
+
+            let userRef = ref.childByAutoId()
+            userRef.setValue(parameters, withCompletionBlock: { (error: NSError?, ref: Firebase!) in
             
-            Meteor.call("createUser", params: [id, name, email, imageURL]) { result, error in
-                
                 if error != nil {
                     print("INSERT ERROR:", error)
                     return
                 }
-                
+
                 self.users.append(user)
                 
                 callback(user)
-                
-            }
+            
+            })
             
         }
         
-        
-        
     }
-    
+
 }

@@ -23,6 +23,7 @@ class HomeViewController: UIViewController {
     
     let currentUser = CurrentUser.sharedInstance
     let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
     var racesButtonPushed = false
     var racesReady = false
     

@@ -10,7 +10,7 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 import CoreData
-import SwiftDDP
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,8 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var displayUnits:String = "metric"
     var loggingFrequency:Int = 1
-    let races: Races = Races(name: "races")
-    let users: Users = Users(name: "users")
+    var users = Users()
+    var races = Races()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
@@ -46,29 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let notificationSettings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
         
-        Meteor.client.logLevel = .Error
-        Meteor.connect("ws://192.168.168.108:3000/websocket") {
-            
-            print("connected")
-            
-            Meteor.subscribe("users") { self.usersSubscriptionIsReady() }
-            Meteor.subscribe("races") { self.racesSubscriptionIsReady() }
-            
-        }
-        
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-    }
-    
-    func usersSubscriptionIsReady() {
-    
-        NSNotificationCenter.defaultCenter().postNotificationName("usersSubscriptionReady", object: nil)
-    
-    }
-    
-    func racesSubscriptionIsReady() {
-    
-        NSNotificationCenter.defaultCenter().postNotificationName("racesSubscriptionReady", object: nil)
-    
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool

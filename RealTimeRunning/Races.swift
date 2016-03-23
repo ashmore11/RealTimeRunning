@@ -7,11 +7,39 @@
 //
 
 import Foundation
-import SwiftDDP
+import Firebase
+import SwiftyJSON
 
-class Races: AbstractCollection {
+class Races {
     
+    var ref = Firebase(url:"https://real-time-running.firebaseio.com/races")
     var races = [Race]()
+    
+    init() {
+        
+        ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
+            NSNotificationCenter.defaultCenter().postNotificationName("racesSubscriptionReady", object: nil)
+        })
+        
+        ref.observeEventType(.ChildAdded, withBlock: { snapshot in
+            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
+                self.documentWasAdded(id, fields: fields)
+            }
+        })
+        
+        ref.observeEventType(.ChildChanged, withBlock: { snapshot in
+            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
+                self.documentWasChanged(id, fields: fields)
+            }
+        })
+        
+        ref.observeEventType(.ChildRemoved, withBlock: { snapshot in
+            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
+                self.documentWasRemoved(id, fields: fields)
+            }
+        })
+        
+    }
     
     var sorted: [Race] {
 
@@ -45,7 +73,7 @@ class Races: AbstractCollection {
     
     }
 
-    override internal func documentWasAdded(collection: String, id: String, fields: NSDictionary?) {
+    private func documentWasAdded(id: String, fields: NSDictionary?) {
         
         let race = Race(id: id, fields: fields)
         
@@ -55,7 +83,7 @@ class Races: AbstractCollection {
         
     }
     
-    override internal func documentWasChanged(collection: String, id: String, fields: NSDictionary?, cleared: [String]?) {
+    private func documentWasChanged(id: String, fields: NSDictionary?) {
         
         if let index = self.index(id) {
             
@@ -71,13 +99,19 @@ class Races: AbstractCollection {
         
     }
     
-    override internal func documentWasRemoved(collection: String, id: String) {
+    private func documentWasRemoved(id: String, fields: NSDictionary?) {
         
         if let index = self.index(id) {
             
             self.races.removeAtIndex(index)
             
         }
+        
+    }
+    
+    func update(raceId: String, competitors: [String]) {
+        
+        self.ref.childByAppendingPath(raceId).updateChildValues(["competitors": competitors])
         
     }
     

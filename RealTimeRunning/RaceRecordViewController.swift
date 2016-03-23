@@ -349,26 +349,27 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
-        self.joinRaceButton.transform = CGAffineTransformMakeScale(0.95, 0.95)
-        UIView.animateWithDuration(0.5,
-            delay: 0,
-            usingSpringWithDamping: 0.1,
-            initialSpringVelocity: 1.0,
-            options: UIViewAnimationOptions.AllowUserInteraction,
-            animations: {
-                self.joinRaceButton.transform = CGAffineTransformIdentity
-            }, completion: nil)
+//        showActivityIndicator(self.view, text: nil)
         
-        showActivityIndicator(self.view, text: nil)
-        
-        if let userId = self.currentUserId, let raceId = self.race?.id {
+        if let userId = self.currentUserId, let raceId = self.race?.id, var competitors = self.race?.competitors {
             
-            Meteor.call("updateCompetitors", params: [userId, raceId]) { result, error in
+            print(competitors)
             
-                if error != nil {
-                    print("update error:", error)
-                    return
+            if competitors.contains(userId) {
+                
+                if let index = competitors.indexOf(userId) {
+                    
+                    competitors.removeAtIndex(index)
+                    
+                    self.races.update(raceId, competitors: competitors)
+                    
                 }
+                
+            } else {
+                
+                competitors.append(userId)
+                
+                self.races.update(raceId, competitors: competitors)
                 
             }
             
