@@ -24,7 +24,7 @@ class Races {
     
     }
     
-    func authUser(token: String) {
+    func authenticateUser(token: String) {
         
         ref.authWithOAuthProvider("facebook", token: token, withCompletionBlock: { error, authData in
             
@@ -44,10 +44,6 @@ class Races {
     
     func observeEvents() {
         
-        ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            NSNotificationCenter.defaultCenter().postNotificationName("racesSubscriptionReady", object: nil)
-        })
-        
         ref.observeEventType(.ChildAdded, withBlock: { snapshot in
             if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
                 self.documentWasAdded(id, fields: fields)
@@ -64,6 +60,10 @@ class Races {
             if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
                 self.documentWasRemoved(id, fields: fields)
             }
+        })
+        
+        ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
+            NSNotificationCenter.defaultCenter().postNotificationName("racesSubscriptionReady", object: nil)
         })
         
     }

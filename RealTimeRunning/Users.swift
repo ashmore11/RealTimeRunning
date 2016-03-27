@@ -17,10 +17,6 @@ class Users {
     
     init() {
         
-        ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            NSNotificationCenter.defaultCenter().postNotificationName("usersSubscriptionReady", object: nil)
-        })
-        
         ref.observeEventType(.ChildAdded, withBlock: { snapshot in
             if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
                 self.documentWasAdded(id, fields: fields)
@@ -37,6 +33,10 @@ class Users {
             if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
                 self.documentWasRemoved(id, fields: fields)
             }
+        })
+        
+        ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
+            NSNotificationCenter.defaultCenter().postNotificationName("usersSubscriptionReady", object: nil)
         })
         
     }
