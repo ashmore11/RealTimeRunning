@@ -51,6 +51,10 @@ class HomeViewController: UIViewController {
                 
                 if self.users.findOne(id) != nil {
                     
+                    let token = FBSDKAccessToken.currentAccessToken().tokenString
+                    
+                    self.users.authenticateUser(token)
+                    
                     self.userLoggedIn()
                 
                 }
@@ -137,6 +141,8 @@ class HomeViewController: UIViewController {
         self.currentUser.sendRequest()
         self.currentUser.events.listenTo("userLoaded", action: {
             
+            self.users.authenticateUser(FBSDKAccessToken.currentAccessToken().tokenString)
+            
             if let id = self.currentUser.id, let name = self.currentUser.name, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
                 
                 if self.users.findOne(id) == nil {
@@ -189,8 +195,6 @@ class HomeViewController: UIViewController {
         self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
         self.racesButton.enabled = true
         self.fadeRacesButton(1, delay: 1)
-        
-        self.races.authenticateUser(FBSDKAccessToken.currentAccessToken().tokenString)
         
     }
     

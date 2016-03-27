@@ -24,24 +24,6 @@ class Races {
     
     }
     
-    func authenticateUser(token: String) {
-        
-        ref.authWithOAuthProvider("facebook", token: token, withCompletionBlock: { error, authData in
-            
-            if error != nil {
-                
-                print("Login failed. \(error)")
-                
-            } else {
-                
-                print("Logged in! \(authData)")
-                
-            }
-            
-        })
-        
-    }
-    
     func observeEvents() {
         
         ref.observeEventType(.ChildAdded, withBlock: { snapshot in

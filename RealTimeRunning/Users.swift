@@ -17,6 +17,30 @@ class Users {
     
     init() {
         
+        self.observeEvents()
+        
+    }
+    
+    func authenticateUser(token: String) {
+        
+        ref.authWithOAuthProvider("facebook", token: token, withCompletionBlock: { error, authData in
+            
+            if error != nil {
+                
+                print("Authentication Failed! \(error)")
+                
+            } else {
+                
+                print("User Authenticated!")
+                
+            }
+            
+        })
+        
+    }
+    
+    func observeEvents() {
+        
         ref.observeEventType(.ChildAdded, withBlock: { snapshot in
             if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
                 self.documentWasAdded(id, fields: fields)
