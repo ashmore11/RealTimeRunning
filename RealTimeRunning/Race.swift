@@ -45,11 +45,11 @@ struct Race {
             
         } else {
             
+            self.getUpdatedCompetitorsDifference()
+            
             self.competitors = []
             
         }
-        
-        print("race", self.competitors)
         
         if let distance = fields?.valueForKey("distance") as? Int {
             
@@ -65,7 +65,7 @@ struct Race {
         
     }
     
-    func getUpdatedCompetitorsDifference(competitors: [String]) {
+    func getUpdatedCompetitorsDifference(competitors: [String] = []) {
         
         let nc = Set(competitors)
         let oc = Set(self.competitors ?? [])

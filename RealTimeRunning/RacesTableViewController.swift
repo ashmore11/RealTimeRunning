@@ -99,7 +99,7 @@ class RacesTableViewController: UITableViewController {
 
                     for id in ids {
                         
-                        if let user = users.findOne(id), let id = user.id, let name = user.name, let image = user.getImage() {
+                        if let user = users.findOne(id), let id = user.fbid, let name = user.name, let image = user.getImage() {
                                 
                             let competitor = Competitor(id: id, image: image, name: name)
                             

@@ -223,7 +223,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         for id in ids {
             
-            if let user = users.findOne(id), let id = user.id, let name = user.name, let image = user.getImage() {
+            if let user = users.findOne(id), let id = user.fbid, let name = user.name, let image = user.getImage() {
             
                 let competitor = Competitor(id: id, image: image, name: name)
                     
@@ -262,8 +262,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func competitorsUpdated(data: Any?) {
-        
-        hideActivityIndicator(self.view)
         
         if let data = data as? [String: AnyObject], let userId = data["userId"] as? String, let insert = data["insert"] as? Bool {
                 
@@ -349,29 +347,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
-//        showActivityIndicator(self.view, text: nil)
-        
-        if let userId = self.currentUserId, let raceId = self.race?.id, var competitors = self.race?.competitors {
-            
-            print(competitors)
-            
-            if competitors.contains(userId) {
+        if let userId = self.currentUserId, let raceId = self.race?.id {
                 
-                if let index = competitors.indexOf(userId) {
-                    
-                    competitors.removeAtIndex(index)
-                    
-                    self.races.update(raceId, competitors: competitors)
-                    
-                }
-                
-            } else {
-                
-                competitors.append(userId)
-                
-                self.races.update(raceId, competitors: competitors)
-                
-            }
+            self.races.update(raceId, userId: userId)
             
         }
         

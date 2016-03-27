@@ -79,8 +79,6 @@ class Races {
         
         self.races.append(race)
         
-        NSNotificationCenter.defaultCenter().postNotificationName("reloadRaces", object: nil)
-        
     }
     
     private func documentWasChanged(id: String, fields: NSDictionary?) {
@@ -107,11 +105,31 @@ class Races {
             
         }
         
+        NSNotificationCenter.defaultCenter().postNotificationName("reloadRaces", object: nil)
+        
     }
     
-    func update(raceId: String, competitors: [String]) {
+    func update(raceId: String, userId: String) {
         
-        self.ref.childByAppendingPath(raceId).updateChildValues(["competitors": competitors])
+        if let race = self.findOne(raceId), var competitors = race.competitors {
+            
+            if competitors.contains(userId) {
+                
+                if let index = competitors.indexOf(userId) {
+                    
+                    competitors.removeAtIndex(index)
+                    
+                }
+                
+            } else {
+                
+                competitors.append(userId)
+                
+            }
+            
+            self.ref.childByAppendingPath(raceId).updateChildValues(["competitors": competitors])
+            
+        }
         
     }
     
