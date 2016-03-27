@@ -8,30 +8,52 @@
 
 import UIKit
 
-class Competitor {
+struct Competitor {
     
     var id: String
-    var image: UIImage
-    var name: String
+    var image: UIImage?
+    var name: String?
     var position: String = ""
     var distance: Double = 0.0
     var pace: String = ""
     
-    init(id: String, image: UIImage, name: String) {
+    init(id: String, fields: NSDictionary?) {
         
         self.id = id
-        self.image = image
+        self.update(fields)
+        
+    }
+    
+    mutating func setNameAndImage(name: String, image: UIImage) {
+        
         self.name = name
+        self.image = image
         
     }
     
-    func setDistance(distance: Double) {
+    mutating func update(fields: NSDictionary?) {
         
-        self.distance = distance
+        if let position = fields?.valueForKey("position") as? Int {
+            
+            self.setPosition(position)
+            
+        }
+        
+        if let distance = fields?.valueForKey("distance") as? Double {
+            
+            self.distance = distance
+            
+        }
+        
+        if let pace = fields?.valueForKey("pace") as? Double {
+            
+            self.setPace(pace)
+            
+        }
         
     }
     
-    func setPace(pace: Double) {
+    mutating func setPace(pace: Double) {
         
         let paceStr = String(pace * 16.6667)
         let paceArr = paceStr.componentsSeparatedByString(".")
@@ -42,7 +64,7 @@ class Competitor {
         
     }
     
-    func setPosition(index: Int) {
+    mutating func setPosition(index: Int) {
         
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .OrdinalStyle

@@ -13,10 +13,9 @@ struct Race {
     
     var id: String?
     var createdAt: NSDate?
-    var competitors: [String]?
+    var competitors: [String: AnyObject]?
     var distance: Int?
     var live: Bool?
-    let events = EventManager()
     
     init(id: String, fields: NSDictionary?) {
         
@@ -37,17 +36,9 @@ struct Race {
             
         }
         
-        if let competitors = fields?.valueForKey("competitors") as? [String] {
-            
-            self.getUpdatedCompetitorsDifference(competitors)
+        if let competitors = fields?.valueForKey("competitors") as? [String: AnyObject] {
             
             self.competitors = competitors
-            
-        } else {
-            
-            self.getUpdatedCompetitorsDifference()
-            
-            self.competitors = []
             
         }
         
@@ -60,26 +51,6 @@ struct Race {
         if let live = fields?.valueForKey("live") as? Bool {
             
             self.live = live
-            
-        }
-        
-    }
-    
-    func getUpdatedCompetitorsDifference(competitors: [String] = []) {
-        
-        let nc = Set(competitors)
-        let oc = Set(self.competitors ?? [])
-        
-        let insert = nc.count > oc.count ? true : false
-        
-        if let userId = nc.exclusiveOr(oc).first {
-            
-            let object = [
-                "userId": userId,
-                "insert": insert
-            ]
-            
-            self.events.trigger("competitorsUpdated", information: object)
             
         }
         

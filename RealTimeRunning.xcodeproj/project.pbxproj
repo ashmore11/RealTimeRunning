@@ -71,6 +71,7 @@
 		D2B3416D1C8843150024114C /* Oswald-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67831C81ABF800338D01 /* Oswald-Light.ttf */; };
 		D2B3416E1C8843150024114C /* Oswald-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67841C81ABF800338D01 /* Oswald-Medium.ttf */; };
 		D2B3416F1C8843150024114C /* Oswald-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27D67851C81ABF800338D01 /* Oswald-Regular.ttf */; };
+		D2F2A0861CA81483009E1889 /* Competitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F2A0851CA81483009E1889 /* Competitors.swift */; };
 		F26242D9C92B38A80BBFC014 /* Pods_RealTimeRunningTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B04F00C144E9C6F830EF8A /* Pods_RealTimeRunningTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -169,6 +170,7 @@
 		D2AFE1FF1C75EBC3009750A8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RacesTableViewController.swift; sourceTree = "<group>"; };
 		D2AFE2051C7602CB009750A8 /* RaceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RaceTableViewCell.swift; sourceTree = "<group>"; };
+		D2F2A0851CA81483009E1889 /* Competitors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Competitors.swift; sourceTree = "<group>"; };
 		E03FA64D4A6A3E2D3BD9503F /* Pods-RealTimeRunningTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealTimeRunningTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RealTimeRunningTests/Pods-RealTimeRunningTests.release.xcconfig"; sourceTree = "<group>"; };
 		FA77EDEB677191A8B3B61085 /* Pods-RealTimeRunning.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealTimeRunning.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -295,6 +297,7 @@
 			children = (
 				D240E5281CA066A000B2A4CE /* Races.swift */,
 				D240E52D1CA17D8000B2A4CE /* Users.swift */,
+				D2F2A0851CA81483009E1889 /* Competitors.swift */,
 			);
 			name = Collections;
 			sourceTree = "<group>";
@@ -605,6 +608,7 @@
 				C42C383E1C7DC3C70080BFFC /* realTimeRunning.xcdatamodeld in Sources */,
 				D240E5291CA066A000B2A4CE /* Races.swift in Sources */,
 				C4EC42FE1C7F402D00A458E3 /* raceHistorySummaryViewController.swift in Sources */,
+				D2F2A0861CA81483009E1889 /* Competitors.swift in Sources */,
 				D2AFE2061C7602CB009750A8 /* RaceTableViewCell.swift in Sources */,
 				C496BC701C93190B00DF2187 /* Settings.swift in Sources */,
 				C4E24C511C899F64006F5712 /* settingsTableViewCell.swift in Sources */,

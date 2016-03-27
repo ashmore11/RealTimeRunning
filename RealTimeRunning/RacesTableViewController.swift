@@ -92,30 +92,16 @@ class RacesTableViewController: UITableViewController {
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 
                 let race = races.sorted[indexPath.row]
-                var competitors = [Competitor]()
                 let startTime = race.getStartTime(indexPath.row)
-                
-                if let ids = race.competitors {
-
-                    for id in ids {
-                        
-                        if let user = users.findOne(id), let id = user.fbid, let name = user.name, let image = user.getImage() {
-                                
-                            let competitor = Competitor(id: id, image: image, name: name)
-                            
-                            competitors.append(competitor)
-                                
-                        }
-                        
-                    }
-                
-                }
                 
                 if let controller = segue.destinationViewController as? RaceRecordViewController {
                     
                     controller.race = race
                     controller.startTime = startTime
-                    controller.competitors = competitors
+                    
+                    if let id = race.id {
+                        controller.competitors = Competitors(raceId: id)
+                    }
                     
                 }
             }

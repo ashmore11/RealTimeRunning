@@ -6,7 +6,6 @@
 //  Copyright © 2016 Scott Ashmore. All rights reserved.
 //
 
-import Foundation
 import Firebase
 import SwiftyJSON
 import FBSDKCoreKit
@@ -103,30 +102,6 @@ class Races {
         }
         
         NSNotificationCenter.defaultCenter().postNotificationName("reloadRaces", object: nil)
-        
-    }
-    
-    func update(raceId: String, userId: String) {
-        
-        if let race = self.findOne(raceId), var competitors = race.competitors {
-            
-            if competitors.contains(userId) {
-                
-                if let index = competitors.indexOf(userId) {
-                    
-                    competitors.removeAtIndex(index)
-                    
-                }
-                
-            } else {
-                
-                competitors.append(userId)
-                
-            }
-            
-            self.ref.childByAppendingPath(raceId).updateChildValues(["competitors": competitors])
-            
-        }
         
     }
     
