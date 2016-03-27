@@ -9,13 +9,40 @@
 import Foundation
 import Firebase
 import SwiftyJSON
+import FBSDKCoreKit
 
 class Races {
     
     var ref = Firebase(url:"https://real-time-running.firebaseio.com/races")
     var races = [Race]()
+    var sorted: [Race] { return self.races.sort({ $0.createdAt?.compare($1.createdAt!) == .OrderedAscending }) }
+    var count: Int { return self.races.count }
     
     init() {
+        
+        self.observeEvents()
+    
+    }
+    
+    func authUser(token: String) {
+        
+        ref.authWithOAuthProvider("facebook", token: token, withCompletionBlock: { error, authData in
+            
+            if error != nil {
+                
+                print("Login failed. \(error)")
+                
+            } else {
+                
+                print("Logged in! \(authData)")
+                
+            }
+            
+        })
+        
+    }
+    
+    func observeEvents() {
         
         ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
             NSNotificationCenter.defaultCenter().postNotificationName("racesSubscriptionReady", object: nil)
@@ -38,18 +65,6 @@ class Races {
                 self.documentWasRemoved(id, fields: fields)
             }
         })
-        
-    }
-    
-    var sorted: [Race] {
-
-        return self.races.sort({ $0.createdAt?.compare($1.createdAt!) == .OrderedAscending })
-        
-    }
-    
-    var count: Int {
-        
-        return self.races.count
         
     }
     

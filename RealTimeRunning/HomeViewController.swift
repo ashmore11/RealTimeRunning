@@ -190,6 +190,8 @@ class HomeViewController: UIViewController {
         self.racesButton.enabled = true
         self.fadeRacesButton(1, delay: 1)
         
+        self.races.authUser(FBSDKAccessToken.currentAccessToken().tokenString)
+        
     }
     
     @IBAction func racesButtonPushed(sender: UIButton) {
