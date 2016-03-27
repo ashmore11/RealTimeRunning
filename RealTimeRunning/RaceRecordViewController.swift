@@ -10,18 +10,18 @@ import UIKit
 import CoreLocation
 import CoreMotion
 import CoreData
-import Alamofire
-import SwiftyJSON
-import Alamofire_SwiftyJSON
-import MBProgressHUD
 import AVFoundation
+import SwiftDDP
 
 class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: Properties
     
-    var userId: String?
-    var race: Race!
+    var currentUserId = CurrentUser.sharedInstance.id
+    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    var race: Race?
+    var startTime: String?
     var competitors: [Competitor] = []
     var geoEvents:[CLLocationCoordinate2D] = []
     var lat:Double = 0.0
@@ -61,65 +61,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var statsViewArea: UIView!
     @IBOutlet weak var competitorsTableView: UITableView!
 
-    func receiveAltimeterNotification(notification:NSNotification) {
-    
-        let userInfo:NSDictionary = notification.userInfo!
-        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
-        
-        if let data = altimeterData {
-            self.pressure = Double(data.pressure)
-            self.altitude = Double(data.relativeAltitude)
-        }
-    
-    }
-
-    func receiveLocationNotification(notification: NSNotification) {
-        
-        let userInfo: NSDictionary = notification.userInfo!
-        let location: CLLocation? = userInfo.objectForKey("Location") as? CLLocation
-
-        if let loc = location  {
-            
-            self.bLocationsReceived = true
-
-            self.lat = loc.coordinate.latitude
-            self.lon = loc.coordinate.longitude
-        
-            if let lMgr = myLocationManager {
-             
-                self.speed = lMgr.getStableSpeed()
-                self.distance = lMgr.getDistance()
-                self.durationString = lMgr.getDuration()
-                self.duration = lMgr.getDurationDouble()
-            
-            }
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                
-                self.durationLabel.text = self.durationString
-                self.speedLabel.text = String(format: "%6.2f Kph", self.speed * 3.6)
-                self.raceDistanceLabel.text = String(format: "%6.2f Km", self.distance / 1000)
-                
-                if let userId = self.userId {
-                
-                    SocketIOManager.sharedInstance.sendPositionUpdate(userId, distance: self.distance, pace: self.currentPace)
-                
-                }
-            
-            }
-
-        }
-        
-    }
-
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        self.navigationItem.title = "RACE"
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "competitorsUpdated:", name: "competitorsUpdated", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePosition:", name: "positionUpdateReceived", object: nil)
         
         self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
@@ -137,14 +81,22 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         }
         
-        if let race = self.race, let startTime = race.startTime {
+        self.race?.events.listenTo("competitorsUpdated", action: self.competitorsUpdated)
+        
+        if let race = self.race, let startTime = self.startTime, let live = race.live {
             
-            self.raceName = startTime
-            self.title = self.raceName
+            if live == true {
+                
+                self.navigationItem.title = "RACE LIVE"
+                
+            } else {
+             
+                self.navigationItem.title = "RACE BEGINS AT \(startTime)"
+                
+            }
             
         }
-        
-        self.getInitialCompetitors()
+
         self.updateJoinRaceButton(0)
         
         self.activityManager = CMMotionActivityManager()
@@ -255,66 +207,32 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func reloadCell(competitor: Competitor) {
+    func reloadCell(index: Int) {
         
         dispatch_async(dispatch_get_main_queue()) {
-        
-            if let index = self.competitors.indexOf({ $0.id == competitor.id }) {
             
-                let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                
-                self.competitorsTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
-                
-            }
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            
+            self.competitorsTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
             
         }
-        
-    }
-    
-    func getInitialCompetitors() {
-    
-        if let competitors = self.race.competitors {
-            
-            self.addCompetitors(competitors)
-        
-        }
-        
-    }
-    
-    func addCompetitors(ids: [String]) {
-        
-        let url = "http://real-time-running.herokuapp.com/api/users/"
-        
-        Alamofire.request(.PUT, url, parameters: ["ids": ids]).responseSwiftyJSON({ (request, response, json, error) in
-            
-            if let users = json.array {
-                
-                for user in users {
-                    
-                    if let id = user["fbid"].string,
-                        let name = user["name"].string,
-                        let imageURL = user["profileImage"].string,
-                        let nsurl = NSURL(string: imageURL),
-                        let data = NSData(contentsOfURL:nsurl),
-                        let image = UIImage(data:data) {
-                            
-                            let competitor = Competitor(id: id, image: image, name: name)
-                            
-                            self.updateTableView(competitor, insert: true)
-                            
-                    }
-                }
-            }
-            
-            hideActivityIndicator(self.view)
-        })
         
     }
     
     func addCompetitors(ids: String...) {
         
-        self.addCompetitors(ids)
+        for id in ids {
+            
+            if let user = users.findOne(id), let id = user.fbid, let name = user.name, let image = user.getImage() {
+            
+                let competitor = Competitor(id: id, image: image, name: name)
+                    
+                self.updateTableView(competitor, insert: true)
                 
+            }
+            
+        }
+        
     }
     
     func removeCompetitor(id: String) {
@@ -343,21 +261,20 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    // MARK: WebSockets
-    
-    func competitorsUpdated(notification: NSNotification) {
+    func competitorsUpdated(data: Any?) {
         
-        if let items = notification.object, let id = items["userId"] as? String {
-            
-            if let competitor = getCompetitor(id) {
+        if let data = data as? [String: AnyObject], let userId = data["userId"] as? String, let insert = data["insert"] as? Bool {
                 
-                self.removeCompetitor(competitor.id)
-
+            if insert == true {
+                
+                self.addCompetitors(userId)
+                
             } else {
                 
-                self.addCompetitors(id)
+                self.removeCompetitor(userId)
                 
             }
+            
         }
         
     }
@@ -375,7 +292,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
                 competitor.setPosition(index)
                 
-                self.reloadCell(competitor)
+                self.reloadCell(index)
                 
             }
         }
@@ -386,11 +303,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         dispatch_async(dispatch_get_main_queue()) {
         
-            if let userId = self.userId {
+            if let userId = self.currentUserId {
                 
                 if self.getCompetitor(userId) != nil {
                     
-                    self.joinRaceButton.setTitle("LEAVE RACE" , forState: .Normal)
+                    self.joinRaceButton.setTitle("LEAVE RACE", forState: .Normal)
                     
                     UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
                     
@@ -405,7 +322,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     self.startStopButton.enabled = false
                     
                 }
+
             }
+
         }
 
     }
@@ -428,11 +347,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
-        showActivityIndicator(self.view, text: nil)
-        
-        if let userId = self.userId {
-            
-            SocketIOManager.sharedInstance.updateCompetitors(userId, raceId: self.race.id)
+        if let userId = self.currentUserId, let raceId = self.race?.id {
+                
+            self.races.update(raceId, userId: userId)
             
         }
         
@@ -454,6 +371,51 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 controller.runDetail = self.runDetailObject
 
             }
+        }
+        
+    }
+    
+    func receiveAltimeterNotification(notification:NSNotification) {
+        
+        let userInfo:NSDictionary = notification.userInfo!
+        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
+        
+        if let data = altimeterData {
+            self.pressure = Double(data.pressure)
+            self.altitude = Double(data.relativeAltitude)
+        }
+        
+    }
+    
+    func receiveLocationNotification(notification: NSNotification) {
+        
+        let userInfo: NSDictionary = notification.userInfo!
+        let location: CLLocation? = userInfo.objectForKey("Location") as? CLLocation
+        
+        if let loc = location  {
+            
+            self.bLocationsReceived = true
+            
+            self.lat = loc.coordinate.latitude
+            self.lon = loc.coordinate.longitude
+            
+            if let lMgr = myLocationManager {
+                
+                self.speed = lMgr.getStableSpeed()
+                self.distance = lMgr.getDistance()
+                self.durationString = lMgr.getDuration()
+                self.duration = lMgr.getDurationDouble()
+                
+            }
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                self.durationLabel.text = self.durationString
+                self.speedLabel.text = String(format: "%6.2f Kph", self.speed * 3.6)
+                self.raceDistanceLabel.text = String(format: "%6.2f Km", self.distance / 1000)
+                
+            }
+            
         }
         
     }

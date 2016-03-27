@@ -7,22 +7,51 @@
 //
 
 import UIKit
+import SwiftDDP
 
-class User {
+struct User {
     
-    var id: String
-    var profileImage: UIImage?
-    var name: String
-    var email: String
+    var id: String?
+    var fbid: String?
+    var name: String?
+    var image: String?
     
-    init?(id: String, profileImage: UIImage?, name: String, email: String) {
+    init(id: String, fields: NSDictionary?) {
         
         self.id = id
-        self.profileImage = profileImage
-        self.name = name
-        self.email = email
+        self.update(fields)
         
-        if id.isEmpty || name.isEmpty {
+    }
+    
+    mutating func update(fields: NSDictionary?) {
+        
+        if let fbid = fields?.valueForKey("fbid") as? String {
+            
+            self.fbid = fbid
+            
+        }
+        
+        if let name = fields?.valueForKey("name") as? String {
+        
+            self.name = name
+        
+        }
+        
+        if let image = fields?.valueForKey("image") as? String {
+            
+            self.image = image
+            
+        }
+        
+    }
+    
+    func getImage() -> UIImage? {
+        
+        if let string = self.image, let nsurl = NSURL(string: string), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
+         
+            return image
+            
+        } else {
             
             return nil
             

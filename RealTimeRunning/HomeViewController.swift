@@ -9,10 +9,7 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-import Alamofire
-import SwiftyJSON
-import Alamofire_SwiftyJSON
-import MBProgressHUD
+import SwiftDDP
 
 class HomeViewController: UIViewController {
     
@@ -24,49 +21,77 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var fbLoginButton: UIButton!
     @IBOutlet weak var userNameField: UITextField!
     
-    var userId: String?
-    var races = [Race]()
+    let currentUser = CurrentUser.sharedInstance
+    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    var racesButtonPushed = false
+    var racesReady = false
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "racesSubscriptionReady:", name: "racesSubscriptionReady", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "usersSubscriptionReady:", name: "usersSubscriptionReady", object: nil)
+        
+        self.navigationItem.title = "REAL TIME RUNNING"
+        
         self.addToolbarOnKeyboard(userNameField, action: "addedUserName", buttonText: "Add User")
         
         self.setupLayout()
         
-        self.navigationItem.title = "REAL TIME RUNNING"
+    }
+    
+    func usersSubscriptionReady(notification: NSNotification) {
         
-        if (FBSDKAccessToken.currentAccessToken() != nil) {
+        self.currentUser.sendRequest()
+        self.currentUser.events.listenTo("userLoaded", action: {
             
-            self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
-            
-            self.fadeRacesButton(1, delay: 0.25)
-            
-            self.getData()
-            
-        }
+            if let id = self.currentUser.id {
+                
+                if self.users.findOne(id) != nil {
+                    
+                    let token = FBSDKAccessToken.currentAccessToken().tokenString
+                    
+                    self.users.authenticateUser(token)
+                    
+                    self.userLoggedIn()
+                
+                }
+                
+            }
+        
+        })
+        
+    }
+    
+    func racesSubscriptionReady(notification: NSNotification) {
+        
+        self.racesReady = true
         
     }
     
     func addedUserName() {
+        
         self.userNameField.resignFirstResponder()
+        
         if let userName = self.userNameField.text {
+            
             print("Added a username \(userName)")
+            
         }
+        
     }
     
     func setupLayout() {
     
         setViewGradient(self.view)
+        setButtonGradient(self.racesButton, self.fbLoginButton)
         
         self.topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
-        
-        setButtonGradient(self.racesButton, self.fbLoginButton)
-        self.racesButton.alpha = 0.5
-        
         self.fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
         self.fbProfileImage.clipsToBounds = true
+        self.racesButton.alpha = 0.5
         
     }
     
@@ -82,7 +107,7 @@ class HomeViewController: UIViewController {
     
         let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
         
-        if (FBSDKAccessToken.currentAccessToken() != nil) {
+        if self.currentUser.loggedIn == true {
             
             fbLoginManager.logOut()
             
@@ -90,7 +115,7 @@ class HomeViewController: UIViewController {
             
         } else {
             
-            fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) -> Void in
+            fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) in
                 
                 if error != nil {
                     print("Error in fbLoginManager.logInWithReadPermissionserror:\(error)")
@@ -101,152 +126,85 @@ class HomeViewController: UIViewController {
                 
                 if(fbloginresult.grantedPermissions.contains("email")) {
                     
+                    self.getData()
+                    
+                }
+                
+            })
+            
+        }
+        
+    }
+    
+    func getData() {
+        
+        self.currentUser.sendRequest()
+        self.currentUser.events.listenTo("userLoaded", action: {
+            
+            self.users.authenticateUser(FBSDKAccessToken.currentAccessToken().tokenString)
+            
+            if let id = self.currentUser.id, let name = self.currentUser.name, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
+                
+                if self.users.findOne(id) == nil {
+                
+                    self.createUser(id, name: name, email: email, imageURL: imageURL)
+                    
+                } else {
+                    
                     self.userLoggedIn()
                     
                 }
-            })
+                
+            }
+            
+        })
+        
+    }
+    
+    func createUser(id: String, name: String, email: String, imageURL: String) {
+            
+        let parameters = [
+            "name": name,
+            "email": email,
+            "image": imageURL
+        ]
+        
+        users.insert(id, fields: parameters) { user in
+            
+            self.userLoggedIn()
+            
         }
         
     }
     
     func userLoggedOut() {
         
-        self.fbLoginButton.setTitle("SIGN IN" , forState: .Normal)
         self.navigationItem.title = "REAL TIME RUNNING"
         self.fbProfileImage.image = nil
+        self.fbLoginButton.setTitle("SIGN IN" , forState: .Normal)
         self.racesButton.enabled = false
         self.fadeRacesButton(0.5, delay: 0)
+        self.currentUser.loggedIn = false
         
     }
     
     func userLoggedIn() {
-            
-        self.getData()
+        
+        self.navigationItem.title = self.currentUser.name!.uppercaseString
+        self.fbProfileImage.image = self.currentUser.image
         self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
         self.racesButton.enabled = true
         self.fadeRacesButton(1, delay: 1)
         
     }
     
-    func getData() {
-        
-        let accessToken = FBSDKAccessToken.currentAccessToken()
-        let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
-        let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: parameters, tokenString: accessToken.tokenString, version: nil, HTTPMethod: "GET")
-        
-        graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
-            
-            if error != nil {
-                logError(error.localizedDescription)
-                return
-            }
-            
-            // Get the facebook data and deal with optionals
-            var id: String = ""
-            var profileImage: UIImage?
-            var profileImageURL: String = ""
-            var name: String = ""
-            var email: String = ""
-            
-            if let fbid: String = (result.objectForKey("id") as? String) {
-                id = fbid
-            }
-            
-            if let firstName: String = (result.objectForKey("first_name") as? String), lastName: String = (result.objectForKey("last_name") as? String) {
-                name = firstName + " " + lastName
-            }
-            
-            self.navigationItem.title = name.uppercaseString
-            
-            // if all optionals unwrap OK then we can setup the image
-            if let imageURL: String = (result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
-                let directoryURL: NSURL = nsurl
-                let urlString: String = directoryURL.absoluteString
-                
-                profileImageURL = urlString
-                profileImage = image
-            }
-            
-            self.fbProfileImage.image = profileImage
-            
-            if let fbEmail: String = (result.objectForKey("email") as? String) {
-                email = fbEmail
-            }
-            
-            self.userId = id
-            
-            self.createUser(id, name: name, email: email, profileImageURL: profileImageURL)
-            
-        }
-        
-    }
-    
-    func createUser(fbid: String, name: String, email: String, profileImageURL: String) {
-        
-        let parameters = [
-            "fbid": fbid,
-            "name": name,
-            "email": email,
-            "profileImage": profileImageURL
-        ]
-        
-        let getURL = "http://real-time-running.herokuapp.com/api/users/\(fbid)"
-        let postURL = "http://real-time-running.herokuapp.com/api/users/"
-        
-        Alamofire.request(.GET, getURL).responseSwiftyJSON({ (request, response, json, error) in
-            
-            if json.count == 0 {
-                
-                Alamofire.request(.POST, postURL, parameters: parameters, encoding: .JSON)
-                    .responseSwiftyJSON({ (request, response, json, error) in
-                    
-                        print("Reply from Alamofire in createUser: \(json["message"])")
-                    
-                })
-                
-            }
-            
-        })
-        
-    }
-    
     @IBAction func racesButtonPushed(sender: UIButton) {
         
-        races = [Race]()
-        
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        
-        showActivityIndicator(self.view, text: "Loading Races")
-        
-        racesButton.enabled = false
-        
-        let requestURL = "http://real-time-running.herokuapp.com/api/races"
-        
-        Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
-                
-            for (key, value) in json {
-                
-                if  let raceId = value["_id"].string,
-                    let createdAt = value["createdAt"].string,
-                    let parsedDate = formatter.dateFromString(createdAt),
-                    let competitors = value["competitors"].arrayObject as? [String],
-                    let distance = value["distance"].int,
-                    let live = value["live"].bool {
-                    
-                        let race = Race(id: raceId, createdAt: parsedDate, competitors: competitors, distance: distance, live: live, index: Int(key)!)
-                    
-                        self.races.append(race)
-                    
-                }
-                
-            }
-                    
-            hideActivityIndicator(self.view)
-                    
+        if self.racesReady == true {
+         
             self.performSegueWithIdentifier("showRaces", sender: sender)
             
-        })
+        }
         
     }
     
@@ -255,17 +213,6 @@ class HomeViewController: UIViewController {
         if segue.identifier == "showRaces" {
             
             racesButton.enabled = true
-            
-            let backItem = UIBarButtonItem()
-            backItem.title = "PROFILE"
-            navigationItem.backBarButtonItem = backItem
-            
-            if let controller = segue.destinationViewController as? RacesTableViewController {
-                
-                controller.userId = self.userId
-                controller.races = self.races
-                
-            }
             
         }
         

@@ -10,6 +10,7 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 import CoreData
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var displayUnits:String = "metric"
     var loggingFrequency:Int = 1
+    var users = Users()
+    var races = Races()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
     {
@@ -46,22 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    func usersSubscriptionIsReady() {
-        
-        print("users ready")
-    
-        NSNotificationCenter.defaultCenter().postNotificationName("usersSubscriptionReady", object: nil)
-    
-    }
-    
-    func racesSubscriptionIsReady() {
-        
-        print("races ready")
-    
-        NSNotificationCenter.defaultCenter().postNotificationName("racesSubscriptionReady", object: nil)
-    
-    }
-    
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool
     {
         return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
@@ -88,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        SocketIOManager.sharedInstance.closeConnection()
+//        SocketIOManager.sharedInstance.closeConnection()
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
@@ -99,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
         FBSDKAppEvents.activateApp()
-        SocketIOManager.sharedInstance.establishConnection()
+//        SocketIOManager.sharedInstance.establishConnection()
         
         // grab a reference to our coloured view
         if let colourView = self.window!.viewWithTag(1234) {

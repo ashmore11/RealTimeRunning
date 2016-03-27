@@ -7,19 +7,14 @@
 //
 
 import UIKit
-import Alamofire
-import SwiftyJSON
-import Alamofire_SwiftyJSON
-import MBProgressHUD
-import SocketIOClientSwift
+import SwiftDDP
 
 class RacesTableViewController: UITableViewController {
     
     // MARK: Properties
-
-    var userId: String?
-    var races = [Race]()
-
+    
+    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
     
     override func viewDidLoad() {
         
@@ -27,7 +22,8 @@ class RacesTableViewController: UITableViewController {
         
         self.tableView.backgroundColor = UIColor.blackColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "competitorsUpdated", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableView:", name: "reloadRaces", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "raceUpdated", object: nil)
         
     }
 
@@ -41,7 +37,7 @@ class RacesTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
-        return races.count
+        return self.races.count
     
     }
 
@@ -55,41 +51,35 @@ class RacesTableViewController: UITableViewController {
         
         cell.backgroundColor = UIColor.clearColor()
         
-        let race = races[indexPath.row]
+        let race = self.races.sorted[indexPath.row]
         
         cell.startTimeLabel.text = "\(race.getStartTime(indexPath.row))"
         cell.competitorsLabel.text = "competitors: \(race.competitors?.count ?? 0)".uppercaseString
-        cell.distanceLabel.text = "\(race.distance) km"
+        cell.distanceLabel.text = "\(race.distance ?? 0) km"
 
         return cell
         
     }
     
+    func reloadTableView(notification: NSNotification) {
+        
+        self.tableView.reloadData()
+        
+    }
+    
     func reloadTableViewCell(notification: NSNotification) {
         
-        if let items = notification.object, let id = items["raceId"] as? String {
-        
-            let requestURL = "http://real-time-running.herokuapp.com/api/races/\(id)"
-
-            Alamofire.request(.GET, requestURL).responseSwiftyJSON({ (request, response, json, error) in
+        if let id = notification.object as? String {
                 
-                if error != nil {
-                    print(error)
-                    return
+            if let index = self.races.index(id) {
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    
+                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                    
                 }
-                        
-                if let index = self.races.indexOf({ $0.id == id }), let competitors = json[0]["competitors"].arrayObject as? [String] {
-                    
-                    self.races[index].competitors = competitors
-                    
-                    dispatch_async(dispatch_get_main_queue()) {
-                    
-                        let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-                        
-                    }
-                }
-            })
+            }
         }
     }
     
@@ -98,15 +88,34 @@ class RacesTableViewController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "raceRecord" {
-            
+                
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 
-                let race = races[indexPath.row]
+                let race = races.sorted[indexPath.row]
+                var competitors = [Competitor]()
+                let startTime = race.getStartTime(indexPath.row)
                 
-                if let controller = segue.destinationViewController as? RaceRecordViewController, let userId = self.userId {
+                if let ids = race.competitors {
+
+                    for id in ids {
+                        
+                        if let user = users.findOne(id), let id = user.fbid, let name = user.name, let image = user.getImage() {
+                                
+                            let competitor = Competitor(id: id, image: image, name: name)
+                            
+                            competitors.append(competitor)
+                                
+                        }
+                        
+                    }
+                
+                }
+                
+                if let controller = segue.destinationViewController as? RaceRecordViewController {
                     
                     controller.race = race
-                    controller.userId = userId
+                    controller.startTime = startTime
+                    controller.competitors = competitors
                     
                 }
             }
