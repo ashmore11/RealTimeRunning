@@ -33,12 +33,6 @@ struct Competitor {
     
     mutating func update(fields: NSDictionary?) {
         
-        if let position = fields?.valueForKey("position") as? Int {
-            
-            self.setPosition(position)
-            
-        }
-        
         if let distance = fields?.valueForKey("distance") as? Double {
             
             self.distance = distance

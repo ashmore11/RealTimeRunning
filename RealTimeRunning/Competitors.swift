@@ -136,7 +136,6 @@ class Competitors {
     func insert(id: String) {
             
         let fields = [
-            "position": 0,
             "distance": 0,
             "pace": 0
         ]
