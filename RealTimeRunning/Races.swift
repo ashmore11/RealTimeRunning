@@ -14,8 +14,12 @@ class Races {
     
     var ref = Firebase(url:"https://real-time-running.firebaseio.com/races")
     var races = [Race]()
-    var sorted: [Race] { return self.races.sort({ $0.createdAt?.compare($1.createdAt!) == .OrderedAscending }) }
-    var count: Int { return self.races.count }
+    var sorted: [Race] {
+        return self.races.sort({ $0.createdAt?.compare($1.createdAt!) == .OrderedAscending })
+    }
+    var count: Int {
+        return self.races.count
+    }
     
     init() {
         

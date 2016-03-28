@@ -15,9 +15,13 @@ class Competitors {
     let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
     var ref: Firebase
     var competitors = [Competitor]()
-    var sorted: [Competitor] { return self.competitors.sort({ $0.position > $1.position }) }
-    var count: Int { return self.competitors.count }
     let events = EventManager()
+    var sorted: [Competitor] {
+        return self.competitors.sort({ $0.position > $1.position })
+    }
+    var count: Int {
+        return self.competitors.count
+    }
     
     init(raceId: String) {
         
@@ -45,6 +49,10 @@ class Competitors {
             if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
                 self.documentWasRemoved(id, fields: fields)
             }
+        })
+        
+        ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
+            NSNotificationCenter.defaultCenter().postNotificationName("competitorsReady", object: nil)
         })
         
     }
@@ -125,7 +133,7 @@ class Competitors {
         
     }
     
-    func insert(userId: String) {
+    func insert(id: String) {
             
         let fields = [
             "position": 0,
@@ -133,13 +141,23 @@ class Competitors {
             "pace": 0
         ]
         
-        self.ref.childByAppendingPath(userId).setValue(fields)
+        self.ref.childByAppendingPath(id).setValue(fields)
         
     }
     
-    func remove(userId: String) {
+    func remove(id: String) {
         
-        self.ref.childByAppendingPath(userId).removeValue()
+        self.ref.childByAppendingPath(id).removeValue()
+        
+    }
+    
+    func update(id: String, fields: NSDictionary?) {
+        
+        if let position = fields?.valueForKey("position") {
+            
+            print(position)
+            
+        }
         
     }
     
