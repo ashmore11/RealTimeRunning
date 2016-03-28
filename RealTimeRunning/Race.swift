@@ -40,6 +40,10 @@ struct Race {
             
             self.competitors = competitors
             
+        } else {
+            
+            self.competitors = [String: AnyObject]()
+            
         }
         
         if let distance = fields?.valueForKey("distance") as? Int {

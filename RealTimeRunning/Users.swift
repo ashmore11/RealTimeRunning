@@ -67,7 +67,7 @@ class Users {
     
     func index(id: String) -> Int? {
         
-        return self.users.indexOf({ $0.fbid == id })
+        return self.users.indexOf({ $0.id == id })
         
     }
     
@@ -117,31 +117,25 @@ class Users {
         
     }
     
-    func insert(id: String, fields: NSDictionary?, callback: (User) -> Void) {
+    func insert(id: String, fields: NSDictionary?, callback: () -> Void) {
         
-        if let name = fields?["name"], let email = fields?["email"], let imageURL = fields?["image"] {
+        if let name = fields?["name"], let email = fields?["email"], let image = fields?["image"] {
             
             let parameters = [
-                "fbid": id,
                 "name": name,
                 "email": email,
-                "image": imageURL
+                "image": image
             ]
-            
-            let user = User(id: id, fields: parameters)
 
-            let userRef = ref.childByAutoId()
-            userRef.setValue(parameters, withCompletionBlock: { (error: NSError?, ref: Firebase!) in
-            
+            ref.childByAppendingPath(id).setValue(parameters, withCompletionBlock: { (error: NSError?, ref: Firebase!) in
+                
                 if error != nil {
                     print("INSERT ERROR:", error)
                     return
                 }
-
-                self.users.append(user)
                 
-                callback(user)
-            
+                callback()
+                
             })
             
         }

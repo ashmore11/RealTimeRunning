@@ -12,7 +12,6 @@ import SwiftDDP
 struct User {
     
     var id: String?
-    var fbid: String?
     var name: String?
     var image: String?
     
@@ -24,12 +23,6 @@ struct User {
     }
     
     mutating func update(fields: NSDictionary?) {
-        
-        if let fbid = fields?.valueForKey("fbid") as? String {
-            
-            self.fbid = fbid
-            
-        }
         
         if let name = fields?.valueForKey("name") as? String {
         

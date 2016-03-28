@@ -27,6 +27,12 @@ class HomeViewController: UIViewController {
     var racesButtonPushed = false
     var racesReady = false
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        showActivityIndicator(self.view, text: nil)
+    }
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -126,6 +132,10 @@ class HomeViewController: UIViewController {
                 
                 if(fbloginresult.grantedPermissions.contains("email")) {
                     
+                    let token = FBSDKAccessToken.currentAccessToken().tokenString
+                    
+                    self.users.authenticateUser(token)
+                    
                     self.getData()
                     
                 }
@@ -141,13 +151,21 @@ class HomeViewController: UIViewController {
         self.currentUser.sendRequest()
         self.currentUser.events.listenTo("userLoaded", action: {
             
-            self.users.authenticateUser(FBSDKAccessToken.currentAccessToken().tokenString)
-            
             if let id = self.currentUser.id, let name = self.currentUser.name, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
                 
                 if self.users.findOne(id) == nil {
                 
-                    self.createUser(id, name: name, email: email, imageURL: imageURL)
+                    let parameters = [
+                        "name": name,
+                        "email": email,
+                        "image": imageURL
+                    ]
+                    
+                    self.users.insert(id, fields: parameters) {
+                        
+                        self.userLoggedIn()
+                    
+                    }
                     
                 } else {
                     
@@ -158,22 +176,6 @@ class HomeViewController: UIViewController {
             }
             
         })
-        
-    }
-    
-    func createUser(id: String, name: String, email: String, imageURL: String) {
-            
-        let parameters = [
-            "name": name,
-            "email": email,
-            "image": imageURL
-        ]
-        
-        users.insert(id, fields: parameters) { user in
-            
-            self.userLoggedIn()
-            
-        }
         
     }
     
@@ -189,6 +191,8 @@ class HomeViewController: UIViewController {
     }
     
     func userLoggedIn() {
+        
+        hideActivityIndicator(self.view)
         
         self.navigationItem.title = self.currentUser.name!.uppercaseString
         self.fbProfileImage.image = self.currentUser.image
