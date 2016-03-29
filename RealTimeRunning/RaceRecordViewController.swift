@@ -169,6 +169,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
             cell.nameLabel.text = competitor.name?.uppercaseString
             cell.positionLabel.text = competitor.position
+            cell.distancePaceLabel.text = String(format: "%6.2f km", self.distance / 1000)
             cell.profileImage.image = competitor.image
             
         }
@@ -369,10 +370,23 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             dispatch_async(dispatch_get_main_queue()) {
                 
                 self.durationLabel.text = self.durationString
-                self.speedLabel.text = String(format: "%6.2f Kph", self.speed * 3.6)
-                self.raceDistanceLabel.text = String(format: "%6.2f Km", self.distance / 1000)
+                self.speedLabel.text = String(format: "%6.2f kph", self.speed * 3.6)
+                self.raceDistanceLabel.text = String(format: "%6.2f km", self.distance / 1000)
                 
             }
+            
+            if let id = self.currentUserId {
+                
+                let fields = [
+                    "distance": self.distance,
+                    "pace": self.currentPace
+                ]
+                
+                self.competitors?.update(id, fields: fields)
+                
+            }
+            
+            self.competitorsTableView.reloadData()
             
         }
         

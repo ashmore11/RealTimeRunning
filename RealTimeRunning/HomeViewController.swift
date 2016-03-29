@@ -27,12 +27,6 @@ class HomeViewController: UIViewController {
     var racesButtonPushed = false
     var racesReady = false
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        showActivityIndicator(self.view, text: nil)
-    }
-    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -59,9 +53,11 @@ class HomeViewController: UIViewController {
                     
                     let token = FBSDKAccessToken.currentAccessToken().tokenString
                     
-                    self.users.authenticateUser(token)
+                    self.users.authenticateUser(token) {
                     
-                    self.userLoggedIn()
+                        self.userLoggedIn()
+                    
+                    }
                 
                 }
                 
@@ -134,9 +130,11 @@ class HomeViewController: UIViewController {
                     
                     let token = FBSDKAccessToken.currentAccessToken().tokenString
                     
-                    self.users.authenticateUser(token)
-                    
-                    self.getData()
+                    self.users.authenticateUser(token) {
+                     
+                        self.getData()
+                        
+                    }
                     
                 }
                 

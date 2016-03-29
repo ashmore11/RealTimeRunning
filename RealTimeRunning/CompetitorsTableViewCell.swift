@@ -15,6 +15,7 @@ class CompetitorsTableViewCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var distancePaceLabel: UILabel!
     
     override func awakeFromNib() {
         

@@ -21,7 +21,7 @@ class Users {
         
     }
     
-    func authenticateUser(token: String) {
+    func authenticateUser(token: String, callback: () -> Void) {
         
         ref.authWithOAuthProvider("facebook", token: token, withCompletionBlock: { error, authData in
             
@@ -32,6 +32,8 @@ class Users {
             } else {
                 
                 print("User Authenticated!")
+                
+                callback()
                 
             }
             

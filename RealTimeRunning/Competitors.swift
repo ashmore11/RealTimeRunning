@@ -152,9 +152,16 @@ class Competitors {
     
     func update(id: String, fields: NSDictionary?) {
         
-        if let position = fields?.valueForKey("position") {
+        if let index = self.index(id), let distance = fields?.valueForKey("distance"), let pace = fields?.valueForKey("pace") {
             
-            print(position)
+            let fields = [
+                "distance": distance,
+                "pace": pace
+            ]
+            
+            self.ref.childByAppendingPath(id).setValue(fields)
+            
+            self.competitors[index].setPosition(index)
             
         }
         
