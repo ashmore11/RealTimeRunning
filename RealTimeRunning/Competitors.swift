@@ -17,7 +17,7 @@ class Competitors {
     var competitors = [Competitor]()
     let events = EventManager()
     var sorted: [Competitor] {
-        return self.competitors.sort({ $0.position > $1.position })
+        return self.competitors.sort({ $0.distance > $1.distance })
     }
     var count: Int {
         return self.competitors.count
@@ -78,26 +78,20 @@ class Competitors {
     }
     
     private func documentWasAdded(id: String, fields: NSDictionary?) {
+            
+        let competitor = Competitor(id: id, fields: fields)
         
-        if let user = users.findOne(id), let name = user.name, let image = user.getImage() {
+        self.competitors.append(competitor)
+        
+        if let index = self.index(id) {
             
-            var competitor = Competitor(id: id, fields: fields)
+            let object = [
+                "index": index,
+                "insert": true
+            ]
             
-            competitor.setNameAndImage(name, image: image)
-            
-            self.competitors.append(competitor)
-            
-            if let index = self.index(id) {
-                
-                let object = [
-                    "index": index,
-                    "insert": true
-                ]
-                
-                self.events.trigger("competitorsUpdated", information: object)
-            
-            }
-            
+            self.events.trigger("competitorsUpdated", information: object)
+        
         }
         
     }
@@ -113,6 +107,8 @@ class Competitors {
             self.competitors[index] = competitor
             
         }
+        
+        self.events.trigger("reloadCompetitorsTableview")
         
     }
     
@@ -134,13 +130,19 @@ class Competitors {
     }
     
     func insert(id: String) {
-            
-        let fields = [
-            "distance": 0,
-            "pace": 0
-        ]
         
-        self.ref.childByAppendingPath(id).setValue(fields)
+        if let user = self.users.findOne(id), let name = user.name, let image = user.image {
+            
+            let fields = [
+                "name": name,
+                "image": image,
+                "distance": 0,
+                "pace": 0
+            ]
+            
+            self.ref.childByAppendingPath(id).setValue(fields)
+            
+        }
         
     }
     
@@ -152,16 +154,10 @@ class Competitors {
     
     func update(id: String, fields: NSDictionary?) {
         
-        if let index = self.index(id), let distance = fields?.valueForKey("distance"), let pace = fields?.valueForKey("pace") {
+        if let distance = fields?.valueForKey("distance"), let pace = fields?.valueForKey("pace") {
             
-            let fields = [
-                "distance": distance,
-                "pace": pace
-            ]
-            
-            self.ref.childByAppendingPath(id).setValue(fields)
-            
-            self.competitors[index].setPosition(index)
+            self.ref.childByAppendingPath("\(id)/distance").setValue(distance)
+            self.ref.childByAppendingPath("\(id)/pace").setValue(pace)
             
         }
         

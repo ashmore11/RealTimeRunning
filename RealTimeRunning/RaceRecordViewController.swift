@@ -65,48 +65,41 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         super.viewDidLoad()
         
-        self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        if let race = self.race, let startTime = self.startTime, let live = race.live {
+            if live == true {
+                self.navigationItem.title = "RACE LIVE"
+            } else {
+                self.navigationItem.title = "RACE BEGINS AT \(startTime)"
+            }
+        }
         
-        competitorsTableView.delegate = self
-        competitorsTableView.dataSource = self
-        competitorsTableView.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.3)
+        self.competitorsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.competitorsTableView.delegate = self
+        self.competitorsTableView.dataSource = self
+        self.competitorsTableView.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.3)
         
         setViewGradient(self.view)
         setButtonGradient(startStopButton, joinRaceButton, raceDataButton, viewMapButton)
-        statsViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
+        
+        self.statsViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
+        self.updateJoinRaceButton(0)
         
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-            
             self.managedObjectContext = delegate.managedObjectContext
-        
         }
         
+        /** 
+         * Listen for updates from the database
+         */
         self.competitors?.events.listenTo("competitorsUpdated", action: self.competitorsUpdated)
-        
-        if let race = self.race, let startTime = self.startTime, let live = race.live {
-            
-            if live == true {
-                
-                self.navigationItem.title = "RACE LIVE"
-                
-            } else {
-             
-                self.navigationItem.title = "RACE BEGINS AT \(startTime)"
-                
-            }
-            
-        }
-
-        self.updateJoinRaceButton(0)
+        self.competitors?.events.listenTo("reloadCompetitorsTableview", action: self.reloadCompetitorsTableview)
         
         self.activityManager = CMMotionActivityManager()
         self.pedoMeter = CMPedometer()
 
         // disable the interactivePopGestureRecognizer so you cant slide from left to pop the current view
         if self.navigationController!.respondsToSelector("interactivePopGestureRecognizer") {
-            
             self.navigationController!.interactivePopGestureRecognizer!.enabled = false
-            
         }
         
     }
@@ -145,15 +138,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if let count = self.competitors?.count {
-        
-            return count
-
-        } else {
-            
-            return 0
-            
-        }
+        return self.competitors?.sorted.count ?? 0
         
     }
     
@@ -162,14 +147,14 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         let cellIdentifier = "CompetitorsTableViewCell"
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! CompetitorsTableViewCell
-        
-        setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
-        
+            
         if let competitor = self.competitors?.sorted[indexPath.row] {
-        
+            
+            print(indexPath.row, competitor.name!)
+            
+            cell.positionLabel.text = competitor.getPosition(indexPath.row)
             cell.nameLabel.text = competitor.name?.uppercaseString
-            cell.positionLabel.text = competitor.position
-            cell.distancePaceLabel.text = String(format: "%6.2f km", self.distance / 1000)
+            cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
             cell.profileImage.image = competitor.image
             
         }
@@ -179,40 +164,34 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func updateTableView(index: Int, insert: Bool) {
+            
+        self.competitorsTableView.beginUpdates()
         
-        dispatch_async(dispatch_get_main_queue()) {
-            
-            self.competitorsTableView.beginUpdates()
-            
-            if insert == true {
-                    
-                let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            
-                self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-            
-            } else {
-                    
-                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+        if insert == true {
                 
-                self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+        
+            self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+        
+        } else {
                 
-            }
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
             
-            self.updateJoinRaceButton(0.5)
-            
-            self.competitorsTableView.endUpdates()
+            self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             
         }
         
+        self.competitorsTableView.endUpdates()
+        
+        self.updateJoinRaceButton(0.5)
+        
     }
     
-    func reloadCell(index: Int) {
+    func reloadCompetitorsTableview(data: Any?) {
         
         dispatch_async(dispatch_get_main_queue()) {
             
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            
-            self.competitorsTableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            self.competitorsTableView.reloadData()
             
         }
         
@@ -360,8 +339,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
             if let lMgr = myLocationManager {
                 
-                self.speed = lMgr.getStableSpeed()
-                self.distance = lMgr.getDistance()
+                self.speed = lMgr.getStableSpeed() * 3.6
+                self.distance = lMgr.getDistance() / 1000
                 self.durationString = lMgr.getDuration()
                 self.duration = lMgr.getDurationDouble()
                 
@@ -370,8 +349,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             dispatch_async(dispatch_get_main_queue()) {
                 
                 self.durationLabel.text = self.durationString
-                self.speedLabel.text = String(format: "%6.2f kph", self.speed * 3.6)
-                self.raceDistanceLabel.text = String(format: "%6.2f km", self.distance / 1000)
+                self.speedLabel.text = String(format: "%6.2f kph", self.speed)
+                self.raceDistanceLabel.text = String(format: "%6.2f km", self.distance)
                 
             }
             
@@ -385,8 +364,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 self.competitors?.update(id, fields: fields)
                 
             }
-            
-            self.competitorsTableView.reloadData()
             
         }
         

@@ -23,6 +23,8 @@ class CompetitorsTableViewCell: UITableViewCell {
         
         // Initialization code
         
+        setTableViewBackgroundGradient(self, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
+        
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
         profileImage.clipsToBounds = true
         

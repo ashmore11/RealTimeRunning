@@ -11,11 +11,17 @@ import UIKit
 struct Competitor {
     
     var id: String
-    var image: UIImage?
     var name: String?
-    var position: String = ""
-    var distance: Double = 0.0
-    var pace: String = ""
+    var imageURL: String?
+    var distance: Double?
+    var pace: String?
+    var image: UIImage? {
+        if let string = self.imageURL, let nsurl = NSURL(string: string), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
+            return image
+        } else {
+            return nil
+        }
+    }
     
     init(id: String, fields: NSDictionary?) {
         
@@ -24,14 +30,19 @@ struct Competitor {
         
     }
     
-    mutating func setNameAndImage(name: String, image: UIImage) {
-        
-        self.name = name
-        self.image = image
-        
-    }
-    
     mutating func update(fields: NSDictionary?) {
+        
+        if let name = fields?.valueForKey("name") as? String {
+            
+            self.name = name
+            
+        }
+        
+        if let image = fields?.valueForKey("image") as? String {
+            
+            self.imageURL = image
+            
+        }
         
         if let distance = fields?.valueForKey("distance") as? Double {
             
@@ -58,14 +69,18 @@ struct Competitor {
         
     }
     
-    mutating func setPosition(index: Int) {
+    func getPosition(index: Int) -> String {
         
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .OrdinalStyle
         
         if let position = formatter.stringFromNumber(index + 1) {
         
-            self.position = self.distance > 0.0 ? position : ""
+            return self.distance > 0 ? position : ""
+            
+        } else {
+            
+            return ""
             
         }
         
