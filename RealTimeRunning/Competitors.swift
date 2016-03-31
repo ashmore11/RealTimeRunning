@@ -14,14 +14,8 @@ class Competitors {
     
     let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
     var ref: Firebase
-    var competitors = [Competitor]()
+    var list = [Competitor]()
     let events = EventManager()
-    var sorted: [Competitor] {
-        return self.competitors
-    }
-    var count: Int {
-        return self.competitors.count
-    }
     
     init(raceId: String) {
         
@@ -31,36 +25,9 @@ class Competitors {
         
     }
     
-    func observeEvents() {
-        
-        ref.observeEventType(.ChildAdded, withBlock: { snapshot in
-            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
-                self.documentWasAdded(id, fields: fields)
-            }
-        })
-        
-        ref.observeEventType(.ChildChanged, withBlock: { snapshot in
-            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
-                self.documentWasChanged(id, fields: fields)
-            }
-        })
-        
-        ref.observeEventType(.ChildRemoved, withBlock: { snapshot in
-            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
-                self.documentWasRemoved(id, fields: fields)
-            }
-        })
-        
-        ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            self.sort()
-            self.events.trigger("competitorsReady")
-        })
-        
-    }
-    
     func index(id: String) -> Int? {
         
-        return self.sorted.indexOf({ $0.id == id })
+        return self.list.indexOf({ $0.id == id })
         
     }
     
@@ -68,7 +35,7 @@ class Competitors {
         
         if let index = self.index(id) {
             
-            return self.competitors[index]
+            return self.list[index]
             
         } else {
             
@@ -80,7 +47,34 @@ class Competitors {
     
     private func sort() {
         
-        self.competitors.sortInPlace({ $0.0.distance > $0.1.distance })
+        self.list.sortInPlace({ $0.0.distance > $0.1.distance })
+        
+    }
+    
+    private func observeEvents() {
+        
+        self.ref.observeEventType(.ChildAdded, withBlock: { snapshot in
+            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
+                self.documentWasAdded(id, fields: fields)
+            }
+        })
+        
+        self.ref.observeEventType(.ChildChanged, withBlock: { snapshot in
+            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
+                self.documentWasChanged(id, fields: fields)
+            }
+        })
+        
+        self.ref.observeEventType(.ChildRemoved, withBlock: { snapshot in
+            if let id = snapshot?.key, let value = snapshot?.value, let fields = JSON(value).dictionaryObject {
+                self.documentWasRemoved(id, fields: fields)
+            }
+        })
+        
+        self.ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
+            self.sort()
+            self.events.trigger("competitorsReady")
+        })
         
     }
     
@@ -88,7 +82,7 @@ class Competitors {
             
         let competitor = Competitor(id: id, fields: fields)
         
-        self.competitors.append(competitor)
+        self.list.append(competitor)
         
         if let index = self.index(id) {
             
@@ -102,18 +96,19 @@ class Competitors {
         
         if let index = self.index(id) {
             
-            var competitor = self.competitors[index]
+            var competitor = self.list[index]
             
             competitor.update(fields)
             
-            self.competitors[index] = competitor
+            self.list[index] = competitor
+            
+            self.sort()
             
             let fields = [
                 "index": index,
                 "id": id
             ]
             
-            self.sort()
             self.events.trigger("competitorUpdated", information: fields)
             
         }
@@ -124,7 +119,7 @@ class Competitors {
         
         if let index = self.index(id) {
             
-            self.competitors.removeAtIndex(index)
+            self.list.removeAtIndex(index)
             
             self.events.trigger("competitorRemoved", information: index)
             

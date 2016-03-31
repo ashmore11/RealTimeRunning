@@ -129,7 +129,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return self.competitors?.sorted.count ?? 0
+        return self.competitors?.list.count ?? 0
         
     }
     
@@ -145,7 +145,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! CompetitorsTableViewCell
             
-        if let competitor = self.competitors?.sorted[indexPath.row] {
+        if let competitor = self.competitors?.list[indexPath.row] {
             
             cell.positionLabel.text = competitor.getPosition(indexPath.row)
             cell.nameLabel.text = competitor.name?.uppercaseString
