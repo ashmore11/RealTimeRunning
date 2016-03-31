@@ -17,7 +17,7 @@ class Competitors {
     var competitors = [Competitor]()
     let events = EventManager()
     var sorted: [Competitor] {
-        return self.competitors.sort({ $0.distance > $1.distance })
+        return self.competitors
     }
     var count: Int {
         return self.competitors.count
@@ -52,6 +52,7 @@ class Competitors {
         })
         
         ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
+            self.sort()
             self.events.trigger("competitorsReady")
         })
         
@@ -74,6 +75,12 @@ class Competitors {
             return nil
             
         }
+        
+    }
+    
+    private func sort() {
+        
+        self.competitors.sortInPlace({ $0.0.distance > $0.1.distance })
         
     }
     
@@ -101,7 +108,13 @@ class Competitors {
             
             self.competitors[index] = competitor
             
-            self.events.trigger("positionUpdate")
+            let fields = [
+                "index": index,
+                "id": id
+            ]
+            
+            self.sort()
+            self.events.trigger("competitorUpdated", information: fields)
             
         }
         

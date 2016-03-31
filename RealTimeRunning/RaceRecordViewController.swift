@@ -91,8 +91,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
          * Listen for updates from the database
          */
         self.competitors?.events.listenTo("competitorAdded", action: self.competitorAdded)
+        self.competitors?.events.listenTo("competitorUpdated", action: self.competitorUpdated)
         self.competitors?.events.listenTo("competitorRemoved", action: self.competitorRemoved)
-        self.competitors?.events.listenTo("positionUpdate", action: self.reloadTableView)
         
         self.activityManager = CMMotionActivityManager()
         self.pedoMeter = CMPedometer()
@@ -133,6 +133,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        
+        return true
+        
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cellIdentifier = "CompetitorsTableViewCell"
@@ -149,16 +155,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
         return cell
-        
-    }
-    
-    func reloadTableView() {
-        
-        dispatch_async(dispatch_get_main_queue()) {
-            
-            self.competitorsTableView.reloadData()
-            
-        }
         
     }
     
@@ -181,6 +177,31 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
         self.updateJoinRaceButton(0.5)
+        
+    }
+    
+    func competitorUpdated(data: Any?) {
+        
+        if let data = data as? NSDictionary, let currentIndex = data["index"] as? Int, let id = data["id"] as? String, let newIndex = self.competitors?.index(id) {
+            
+            let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
+            let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
+            
+            self.competitorsTableView.beginUpdates()
+            
+            if newIndex != currentIndex {
+                self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
+            }
+            
+            self.competitorsTableView.endUpdates()
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                self.competitorsTableView.reloadRowsAtIndexPaths([newIndexPath], withRowAnimation: .None)
+                
+            }
+            
+        }
         
     }
     
