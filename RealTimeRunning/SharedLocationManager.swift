@@ -108,7 +108,7 @@ class SharedLocationManager:NSObject,CLLocationManagerDelegate {
                 }
             }
             // Listen for background notifications
-            NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveBackgroundNotification:", name:"backgroundNotification", object:nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SharedLocationManager.receiveBackgroundNotification), name:"backgroundNotification", object:nil)
         }
         self.bKeepAlive = false
         self.bAltitudeAvailable = false

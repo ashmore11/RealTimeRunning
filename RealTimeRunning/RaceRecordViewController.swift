@@ -11,7 +11,6 @@ import CoreLocation
 import CoreMotion
 import CoreData
 import AVFoundation
-import SwiftDDP
 
 class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -91,41 +90,33 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         /** 
          * Listen for updates from the database
          */
-        self.competitors?.events.listenTo("competitorsUpdated", action: self.competitorsUpdated)
-        self.competitors?.events.listenTo("reloadCompetitorsTableview", action: self.reloadCompetitorsTableview)
+        self.competitors?.events.listenTo("competitorAdded", action: self.competitorAdded)
+        self.competitors?.events.listenTo("competitorRemoved", action: self.competitorRemoved)
+        self.competitors?.events.listenTo("positionUpdate", action: self.reloadTableView)
         
         self.activityManager = CMMotionActivityManager()
         self.pedoMeter = CMPedometer()
 
         // disable the interactivePopGestureRecognizer so you cant slide from left to pop the current view
-        if self.navigationController!.respondsToSelector("interactivePopGestureRecognizer") {
+        if self.navigationController!.respondsToSelector(Selector("interactivePopGestureRecognizer")) {
             self.navigationController!.interactivePopGestureRecognizer!.enabled = false
         }
         
     }
 
     override func viewDidAppear(animated:Bool) {
-        
         super.viewDidAppear(animated)
-        
         UIApplication.sharedApplication().idleTimerDisabled = true
-        
     }
 
     override func viewDidDisappear(animated:Bool) {
-        
         super.viewDidDisappear(animated)
-        
         UIApplication.sharedApplication().idleTimerDisabled = false
-        
     }
 
     override func didReceiveMemoryWarning() {
-        
         super.didReceiveMemoryWarning()
-        
         // Dispose of any resources that can be recreated.
-        
     }
     
     // MARK: - Table view data source
@@ -150,8 +141,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
         if let competitor = self.competitors?.sorted[indexPath.row] {
             
-            print(indexPath.row, competitor.name!)
-            
             cell.positionLabel.text = competitor.getPosition(indexPath.row)
             cell.nameLabel.text = competitor.name?.uppercaseString
             cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
@@ -163,31 +152,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func updateTableView(index: Int, insert: Bool) {
-            
-        self.competitorsTableView.beginUpdates()
-        
-        if insert == true {
-                
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-        
-            self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-        
-        } else {
-                
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            
-            self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-            
-        }
-        
-        self.competitorsTableView.endUpdates()
-        
-        self.updateJoinRaceButton(0.5)
-        
-    }
-    
-    func reloadCompetitorsTableview(data: Any?) {
+    func reloadTableView() {
         
         dispatch_async(dispatch_get_main_queue()) {
             
@@ -197,33 +162,79 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func getCompetitor(id: String) -> Competitor? {
+    func competitorAdded(data: Any?) {
         
-        if let index = self.competitors?.sorted.indexOf({ $0.id == id }) {
+        if let index = data as? Int {
+                
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
             
-            return self.competitors?.sorted[index]
+            dispatch_async(dispatch_get_main_queue()) {
             
-        } else {
+                self.competitorsTableView.beginUpdates()
+                
+                self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+                
+                self.competitorsTableView.endUpdates()
             
-            return nil
+            }
+            
+        }
+        
+        self.updateJoinRaceButton(0.5)
+        
+    }
+    
+    func competitorRemoved(data: Any?) {
+        
+        if let index = data as? Int {
+            
+            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            
+            dispatch_async(dispatch_get_main_queue()) {
+            
+                self.competitorsTableView.beginUpdates()
+                
+                self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+                
+                self.competitorsTableView.endUpdates()
+                
+            }
+            
+        }
+        
+        self.updateJoinRaceButton(0.5)
+        
+    }
+    
+    // MARK: Actions
+    
+    @IBAction func joinButtonPressed(sender: UIButton) {
+        
+        if let userId = self.currentUserId {
+            
+            if self.competitors?.findOne(userId) != nil {
+                
+                self.competitors?.remove(userId)
+                
+            } else {
+                
+                self.competitors?.insert(userId)
+                
+            }
             
         }
         
     }
     
-    func competitorsUpdated(data: Any?) {
+    @IBAction func startStopPressed(sender: AnyObject) {
         
-        if let data = data as? [String: AnyObject], let index = data["index"] as? Int, let insert = data["insert"] as? Bool {
-                
-            if insert == true {
-                
-                self.updateTableView(index, insert: true)
-                
-            } else {
-                
-                self.updateTableView(index, insert: false)
-                
-            }
+        if myLocationManager == nil {
+            
+            self.willStartRace()
+            
+        } else {
+            
+            self.willStopRace()
             
         }
         
@@ -232,10 +243,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     func updateJoinRaceButton(duration: Double) {
         
         dispatch_async(dispatch_get_main_queue()) {
-        
+            
             if let userId = self.currentUserId {
                 
-                if self.getCompetitor(userId) != nil {
+                if self.competitors?.index(userId) != nil {
                     
                     self.joinRaceButton.setTitle("LEAVE RACE", forState: .Normal)
                     
@@ -252,40 +263,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     self.startStopButton.enabled = false
                     
                 }
-
-            }
-
-        }
-
-    }
-    
-    // MARK: Actions
-    
-    @IBAction func startStopPressed(sender: AnyObject) {
-        
-        if myLocationManager == nil {
-            
-            self.willStartRace()
-            
-        } else {
-            
-            self.willStopRace()
-            
-        }
-        
-    }
-    
-    @IBAction func joinButtonPressed(sender: UIButton) {
-        
-        if let userId = self.currentUserId, let competitors = self.competitors {
-            
-            if competitors.findOne(userId) != nil {
-                
-                competitors.remove(userId)
-                
-            } else {
-                
-                competitors.insert(userId)
                 
             }
             
@@ -471,8 +448,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         self.navigationItem.setHidesBackButton(true, animated: true)
         self.bLocationsReceived = false
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveLocationNotification:", name:"locationNotification", object:nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"receiveAltimeterNotification:", name:"altimeterNotification", object:nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RaceRecordViewController.receiveLocationNotification), name: "locationNotification", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RaceRecordViewController.receiveAltimeterNotification), name: "altimeterNotification", object: nil)
 
         geoEvents = []
         myLocationManager = SharedLocationManager.sharedInstance
@@ -482,7 +459,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         self.runDetailObject = writeRaceDetail()
         
         // Start a timer that will run the updateLog function once every second
-        self.logTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLog", userInfo: nil, repeats: true)
+        self.logTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(RaceRecordViewController.updateLog), userInfo: nil, repeats: true)
         self.startStopButton.setTitle("STOP", forState: .Normal)
     
     }

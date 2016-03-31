@@ -31,7 +31,7 @@ class ErrorLogTableViewController: UITableViewController, NSFetchedResultsContro
         
         self.title = "Error Log"
         
-        let newButton  = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: "processAction:")
+        let newButton  = UIBarButtonItem(barButtonSystemItem: .Trash, target: self, action: #selector(ErrorLogTableViewController.processAction))
         navigationItem.rightBarButtonItem = newButton
 
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftDDP
 
 class RacesTableViewController: UITableViewController {
     
@@ -15,6 +14,7 @@ class RacesTableViewController: UITableViewController {
     
     let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
     let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    var competitors: Competitors?
     
     override func viewDidLoad() {
         
@@ -22,8 +22,8 @@ class RacesTableViewController: UITableViewController {
         
         self.tableView.backgroundColor = UIColor.blackColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableView:", name: "reloadRaces", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadTableViewCell:", name: "raceUpdated", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RacesTableViewController.reloadTableView), name: "reloadRaces", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RacesTableViewController.reloadTableViewCell), name: "raceUpdated", object: nil)
         
     }
 
@@ -83,6 +83,23 @@ class RacesTableViewController: UITableViewController {
         }
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let race = self.races.sorted[indexPath.row]
+        
+        if let id = race.id {
+            
+            self.competitors = Competitors(raceId: id)
+        
+            self.competitors?.events.listenTo("competitorsReady", action: {
+                
+                self.performSegueWithIdentifier("raceRecord", sender: nil)
+                
+            })
+            
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         // Get the new view controller using segue.destinationViewController.
@@ -98,10 +115,7 @@ class RacesTableViewController: UITableViewController {
                     
                     controller.race = race
                     controller.startTime = startTime
-                    
-                    if let id = race.id {
-                        controller.competitors = Competitors(raceId: id)
-                    }
+                    controller.competitors = self.competitors
                     
                 }
             }

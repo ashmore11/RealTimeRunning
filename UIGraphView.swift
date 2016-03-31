@@ -50,12 +50,12 @@ class UIGraphView: UIView {
         }
     }
     
-    func processGradient(context: CGContextRef, startColor: UIColor, endColor: UIColor, var gradient:CGGradientRef?) {
+    func processGradient(context: CGContextRef, startColor: UIColor, endColor: UIColor, gradient:CGGradientRef?) {
         if(gradient == nil) {
             let gradientColors: [AnyObject] = [startColor.CGColor, endColor.CGColor]
             let flocations: [CGFloat] = [ 0.0, 1.0 ]
             let rgbColorspace = CGColorSpaceCreateDeviceRGB()
-            gradient = CGGradientCreateWithColors(rgbColorspace, gradientColors, flocations)
+            let gradient = CGGradientCreateWithColors(rgbColorspace, gradientColors, flocations)
         }
         if let grad = gradient {
             CGContextDrawLinearGradient(context, grad, CGPointMake(self.bounds.size.width/2.0, 0), CGPointMake(self.bounds.size.width/2.0, self.bounds.size.height),[])
@@ -88,7 +88,7 @@ class UIGraphView: UIView {
         var scaledPoint:CGFloat = 0.0
         let path = CGPathCreateMutable()
         var delta:CGFloat = 0.0
-        for var y = 1 ; y<=21 ; y++ {
+        for y in 1..<21 {
             delta = divSize * CGFloat(y)
             scaledPoint = (CGFloat(self.bounds.size.height) / self.topSize) * delta
             CGPathMoveToPoint(path, nil, 0.0, floor(self.bounds.size.height - scaledPoint)+0.5)

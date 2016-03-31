@@ -36,7 +36,7 @@ class RawRaceDataTableViewController: UITableViewController, NSFetchedResultsCon
         self.tableView.backgroundColor = UIColor.blackColor()
         tableView.allowsSelection = false
         
-        let newButton  = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "processAction:")
+        let newButton  = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(RawRaceDataTableViewController.processAction))
         navigationItem.rightBarButtonItem = newButton
 
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {

@@ -52,7 +52,7 @@ class Competitors {
         })
         
         ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            NSNotificationCenter.defaultCenter().postNotificationName("competitorsReady", object: nil)
+            self.events.trigger("competitorsReady")
         })
         
     }
@@ -85,12 +85,7 @@ class Competitors {
         
         if let index = self.index(id) {
             
-            let object = [
-                "index": index,
-                "insert": true
-            ]
-            
-            self.events.trigger("competitorsUpdated", information: object)
+            self.events.trigger("competitorAdded", information: index)
         
         }
         
@@ -106,9 +101,9 @@ class Competitors {
             
             self.competitors[index] = competitor
             
+            self.events.trigger("positionUpdate")
+            
         }
-        
-        self.events.trigger("reloadCompetitorsTableview")
         
     }
     
@@ -118,12 +113,7 @@ class Competitors {
             
             self.competitors.removeAtIndex(index)
             
-            let object = [
-                "index": index,
-                "insert": false
-            ]
-            
-            self.events.trigger("competitorsUpdated", information: object)
+            self.events.trigger("competitorRemoved", information: index)
             
         }
         
@@ -146,12 +136,6 @@ class Competitors {
         
     }
     
-    func remove(id: String) {
-        
-        self.ref.childByAppendingPath(id).removeValue()
-        
-    }
-    
     func update(id: String, fields: NSDictionary?) {
         
         if let distance = fields?.valueForKey("distance"), let pace = fields?.valueForKey("pace") {
@@ -160,6 +144,12 @@ class Competitors {
             self.ref.childByAppendingPath("\(id)/pace").setValue(pace)
             
         }
+        
+    }
+    
+    func remove(id: String) {
+        
+        self.ref.childByAppendingPath(id).removeValue()
         
     }
     

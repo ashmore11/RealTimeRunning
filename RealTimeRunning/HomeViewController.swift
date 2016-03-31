@@ -9,7 +9,6 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
-import SwiftDDP
 
 class HomeViewController: UIViewController {
     
@@ -31,12 +30,12 @@ class HomeViewController: UIViewController {
         
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "racesSubscriptionReady:", name: "racesSubscriptionReady", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "usersSubscriptionReady:", name: "usersSubscriptionReady", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HomeViewController.racesSubscriptionReady), name: "racesSubscriptionReady", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HomeViewController.usersSubscriptionReady), name: "usersSubscriptionReady", object: nil)
         
         self.navigationItem.title = "REAL TIME RUNNING"
         
-        self.addToolbarOnKeyboard(userNameField, action: "addedUserName", buttonText: "Add User")
+        self.addToolbarOnKeyboard(userNameField, action: #selector(HomeViewController.addedUserName), buttonText: "Add User")
         
         self.setupLayout()
         
@@ -226,7 +225,7 @@ class HomeViewController: UIViewController {
         toolbar.barStyle = UIBarStyle.BlackTranslucent
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         let done: UIBarButtonItem = UIBarButtonItem(title: buttonText, style: UIBarButtonItemStyle.Plain, target: self, action: action)
-        let cancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: view, action:  "resignFirstResponder")
+        let cancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: view, action:  #selector(UIResponder.resignFirstResponder))
         
         toolbar.items = [flexSpace,cancel,done]
         toolbar.sizeToFit()

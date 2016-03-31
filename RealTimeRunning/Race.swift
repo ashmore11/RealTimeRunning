@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import EmitterKit
 
 struct Race {
     

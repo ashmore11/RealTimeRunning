@@ -20,7 +20,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let newButton  = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "processAction:")
+        let newButton  = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(MapViewController.processAction(_:)))
         navigationItem.rightBarButtonItem = newButton
 
         if let delegate = UIApplication.sharedApplication().delegate as? AppDelegate {
