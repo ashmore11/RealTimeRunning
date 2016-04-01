@@ -163,20 +163,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         if let index = data as? Int {
                 
             let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             
-            dispatch_async(dispatch_get_main_queue()) {
-            
-                self.competitorsTableView.beginUpdates()
-                
-                self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-                
-                self.competitorsTableView.endUpdates()
-            
-            }
+            self.updateJoinRaceButton(0.35)
             
         }
-        
-        self.updateJoinRaceButton(0.5)
         
     }
     
@@ -187,19 +178,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
             let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
             
-            self.competitorsTableView.beginUpdates()
-            
             if newIndex != currentIndex {
                 self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
             }
-            
-            self.competitorsTableView.endUpdates()
-            
-            dispatch_async(dispatch_get_main_queue()) {
                 
-                self.competitorsTableView.reloadRowsAtIndexPaths([newIndexPath], withRowAnimation: .None)
-                
-            }
+            self.competitorsTableView.reloadRowsAtIndexPaths([newIndexPath], withRowAnimation: .None)
             
         }
         
@@ -210,20 +193,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         if let index = data as? Int {
             
             let indexPath = NSIndexPath(forRow: index, inSection: 0)
+            self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             
-            dispatch_async(dispatch_get_main_queue()) {
-            
-                self.competitorsTableView.beginUpdates()
-                
-                self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-                
-                self.competitorsTableView.endUpdates()
-                
-            }
+            self.updateJoinRaceButton(0.35)
             
         }
-        
-        self.updateJoinRaceButton(0.5)
         
     }
     
@@ -231,15 +205,15 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBAction func joinButtonPressed(sender: UIButton) {
         
-        if let userId = self.currentUserId {
+        if let id = self.currentUserId {
             
-            if self.competitors?.findOne(userId) != nil {
+            if self.competitors?.findOne(id) != nil {
                 
-                self.competitors?.remove(userId)
+                self.competitors?.remove(id)
                 
             } else {
                 
-                self.competitors?.insert(userId)
+                self.competitors?.insert(id)
                 
             }
             
@@ -349,6 +323,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 self.durationLabel.text = self.durationString
                 self.speedLabel.text = String(format: "%6.2f kph", self.speed)
                 self.raceDistanceLabel.text = String(format: "%6.2f km", self.distance)
+                
+                if let id = self.currentUserId, let position = self.competitors?.getPosition(id) {
+                    self.positionLabel.text = position
+                }
                 
             }
             
@@ -461,10 +439,13 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         setupMotionManage()
         logError("Race Started")
         
-//        let voice = AVSpeechSynthesizer()
-//        let myUtterance = AVSpeechUtterance(string: "Your race has begun")
-//        voice.speakUtterance(myUtterance)
-
+        let voice = AVSpeechSynthesizer()
+        let myUtterance = AVSpeechUtterance(string: "The race has begun!")
+        voice.speakUtterance(myUtterance)
+        
+        UIView.animateKeyframesWithDuration(0.35, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 0.5 }, completion: nil)
+        self.joinRaceButton.enabled = false
+        
         // Hide the back button incase the user accidently hits it
         self.navigationItem.setHidesBackButton(true, animated: true)
         self.bLocationsReceived = false
@@ -494,15 +475,20 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
         let title = NSLocalizedString("Finished Race", comment: "")
-
         let message = NSLocalizedString("By pressing OK you will finish the current race and logging will stop.", comment: "")
-
         let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         alert.addAction(cancelAction)
 
         let finishRaceAction = UIAlertAction(title: "Finish Race", style: .Default) { _ in
+            
+            let voice = AVSpeechSynthesizer()
+            let myUtterance = AVSpeechUtterance(string: "Race complete")
+            voice.speakUtterance(myUtterance)
+            
+            UIView.animateKeyframesWithDuration(0.35, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 1 }, completion: nil)
+            self.joinRaceButton.enabled = true
             
             self.bLocationsReceived = false
             
@@ -527,9 +513,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         alert.addAction(finishRaceAction)
 
         dispatch_async(dispatch_get_main_queue()) {
-            
             self.presentViewController(alert, animated: true, completion:nil)
-            
         }
         
     }
