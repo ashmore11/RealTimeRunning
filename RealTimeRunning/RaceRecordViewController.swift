@@ -168,9 +168,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             self.competitorsTableView.endUpdates()
             
+            self.updateJoinRaceButton(0.5)
+            
         }
-        
-        self.updateJoinRaceButton(0.5)
         
     }
     
@@ -203,9 +203,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             self.competitorsTableView.endUpdates()
             
+            self.updateJoinRaceButton(0.5)
+            
         }
-        
-        self.updateJoinRaceButton(0.5)
         
     }
     
