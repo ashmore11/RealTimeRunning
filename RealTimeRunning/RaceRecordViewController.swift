@@ -164,15 +164,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
             let indexPath = NSIndexPath(forRow: index, inSection: 0)
             
-            dispatch_async(dispatch_get_main_queue()) {
-            
-                self.competitorsTableView.beginUpdates()
-                
-                self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-                
-                self.competitorsTableView.endUpdates()
-            
-            }
+            self.competitorsTableView.beginUpdates()
+            self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+            self.competitorsTableView.endUpdates()
             
         }
         
@@ -186,19 +180,13 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
             let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
             let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
-            
-            self.competitorsTableView.beginUpdates()
+                
+            self.competitorsTableView.reloadData()
             
             if newIndex != currentIndex {
+                self.competitorsTableView.beginUpdates()
                 self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
-            }
-            
-            self.competitorsTableView.endUpdates()
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                
-                self.competitorsTableView.reloadRowsAtIndexPaths([newIndexPath], withRowAnimation: .None)
-                
+                self.competitorsTableView.endUpdates()
             }
             
         }
@@ -211,15 +199,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
             let indexPath = NSIndexPath(forRow: index, inSection: 0)
             
-            dispatch_async(dispatch_get_main_queue()) {
-            
-                self.competitorsTableView.beginUpdates()
-                
-                self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
-                
-                self.competitorsTableView.endUpdates()
-                
-            }
+            self.competitorsTableView.beginUpdates()
+            self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
+            self.competitorsTableView.endUpdates()
             
         }
         
@@ -250,13 +232,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBAction func startStopPressed(sender: AnyObject) {
         
         if myLocationManager == nil {
-            
             self.willStartRace()
-            
         } else {
-            
             self.willStopRace()
-            
         }
         
     }
