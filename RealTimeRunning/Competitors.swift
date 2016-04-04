@@ -45,6 +45,23 @@ class Competitors {
         
     }
     
+    func getPosition(id: String) -> String {
+        
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .OrdinalStyle
+        
+        if let competitor = self.findOne(id), let index = self.index(id), let position = formatter.stringFromNumber(index + 1) {
+            
+            return competitor.distance > 0 ? position : ""
+            
+        } else {
+            
+            return ""
+            
+        }
+        
+    }
+    
     private func sort() {
         
         self.list.sortInPlace({ $0.0.distance > $0.1.distance })
