@@ -442,6 +442,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
 //        let voice = AVSpeechSynthesizer()
 //        let myUtterance = AVSpeechUtterance(string: "Your race has begun")
 //        voice.speakUtterance(myUtterance)
+        
+        UIView.animateKeyframesWithDuration(0.25, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 0.5 }, completion: nil)
+        self.joinRaceButton.enabled = false
 
         // Hide the back button incase the user accidently hits it
         self.navigationItem.setHidesBackButton(true, animated: true)
@@ -481,6 +484,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         alert.addAction(cancelAction)
 
         let finishRaceAction = UIAlertAction(title: "Finish Race", style: .Default) { _ in
+            
+            UIView.animateKeyframesWithDuration(0.25, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 1 }, completion: nil)
+            self.joinRaceButton.enabled = true
             
             self.bLocationsReceived = false
             
