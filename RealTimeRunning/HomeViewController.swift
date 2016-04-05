@@ -164,7 +164,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         let title = "CREATE YOUR USERNAME"
         let subTitle = "Create a username that is greater than 4 characters and less than 16. Username's must only contain letters and numbers."
         
-        alert.showEdit(title, subTitle: subTitle, colorStyle: 0x000000)
+        alert.show(title, subTitle: subTitle)
         
     }
     
