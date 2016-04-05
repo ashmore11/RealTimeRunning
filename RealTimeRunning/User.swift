@@ -11,6 +11,7 @@ import UIKit
 struct User {
     
     var id: String?
+    var username: String?
     var name: String?
     var image: String?
     
@@ -22,6 +23,12 @@ struct User {
     }
     
     mutating func update(fields: NSDictionary?) {
+        
+        if let username = fields?.valueForKey("username") as? String {
+            
+            self.username = username
+            
+        }
         
         if let name = fields?.valueForKey("name") as? String {
         

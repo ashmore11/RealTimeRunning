@@ -11,7 +11,7 @@ import UIKit
 struct Competitor {
     
     var id: String
-    var name: String?
+    var username: String?
     var imageURL: String?
     var distance: Double?
     var pace: String?
@@ -32,9 +32,9 @@ struct Competitor {
     
     mutating func update(fields: NSDictionary?) {
         
-        if let name = fields?.valueForKey("name") as? String {
+        if let username = fields?.valueForKey("username") as? String {
             
-            self.name = name
+            self.username = username
             
         }
         

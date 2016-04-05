@@ -146,10 +146,10 @@ class Competitors {
     
     func insert(id: String) {
         
-        if let user = self.users.findOne(id), let name = user.name, let image = user.image {
+        if let user = self.users.findOne(id), let username = user.username, let image = user.image {
             
             let fields = [
-                "name": name,
+                "username": username,
                 "image": image,
                 "distance": 0,
                 "pace": 0

@@ -14,6 +14,7 @@ class CurrentUser {
     static let sharedInstance = CurrentUser()
     
     var id: String?
+    var username: String?
     var name: String?
     var email: String?
     var imageURL: String?
@@ -46,29 +47,20 @@ class CurrentUser {
     func getData(data: AnyObject) {
         
         if let id = (data.objectForKey("id") as? String) {
-        
             self.id = id
-        
         }
         
         if let firstName = (data.objectForKey("first_name") as? String), lastName = (data.objectForKey("last_name") as? String) {
-        
             self.name = firstName + " " + lastName
-        
         }
         
         if let imageURL = (data.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
-            
             self.imageURL = imageURL
-            
             self.image = image
-            
         }
         
         if let email = (data.objectForKey("email") as? String) {
-            
             self.email = email
-            
         }
         
         self.loggedIn = true

@@ -148,7 +148,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         if let competitor = self.competitors?.list[indexPath.row] {
             
             cell.positionLabel.text = competitor.getPosition(indexPath.row)
-            cell.nameLabel.text = competitor.name?.uppercaseString
+            cell.nameLabel.text = competitor.username?.uppercaseString
             cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
             cell.profileImage.image = competitor.image
             
