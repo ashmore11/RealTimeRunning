@@ -267,3 +267,14 @@ func UIColorFromRGB(rgbValue: UInt) -> UIColor {
     
 }
 
+func getOrdinalPosition(index: Int) -> String {
+    
+    let formatter = NSNumberFormatter()
+    formatter.numberStyle = .OrdinalStyle
+    
+    guard let position = formatter.stringFromNumber(index + 1) else { return "" }
+        
+    return position
+    
+}
+

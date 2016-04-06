@@ -22,31 +22,38 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     var race: Race?
     var competitors: Competitors?
     var startTime: String?
-    var geoEvents:[CLLocationCoordinate2D] = []
-    var lat:Double = 0.0
-    var lon:Double = 0.0
-    var speed:Double = 0.0
-    var distance:Double = 0.0
-    var durationString:String = ""
-    var duration:Double = 0.0
-    var myLocationManager:SharedLocationManager? = nil
+    var geoEvents: [CLLocationCoordinate2D] = []
+    var lat: Double = 0.0
+    var lon: Double = 0.0
+    var speed: Double = 0.0
+    var distance: Double = 0.0
+    var currentPosition: Int = 0 {
+        didSet {
+            let position = getOrdinalPosition(self.currentPosition)
+            self.talkToUser("You are now in \(position) position")
+            self.positionLabel.text = position
+        }
+    }
+    var durationString: String = ""
+    var duration: Double = 0.0
+    var myLocationManager: SharedLocationManager? = nil
     var logTimer: NSTimer?
-    var raceName:String = ""
-    var managedObjectContext:NSManagedObjectContext?
+    var raceName: String = ""
+    var managedObjectContext: NSManagedObjectContext?
     var bLocationsReceived = false
-    var runDetailObject:RunDetail?
+    var runDetailObject: RunDetail?
     var userPositions = [String: Double]()
-    var activityManager:CMMotionActivityManager?
-    var pedoMeter:CMPedometer?
-    var stepsTaken:Int = 0
-    var activity:String = ""
+    var activityManager: CMMotionActivityManager?
+    var pedoMeter: CMPedometer?
+    var stepsTaken: Int = 0
+    var activity: String = ""
     var pedDistance = 0.0
     var currentPace = 0.0
     var currentCadence = 0.0
     var floorsAscended = 0.0
     var floorsDescended = 0.0
-    var altitude:Double = 0.0
-    var pressure:Double = 0.0
+    var altitude: Double = 0.0
+    var pressure: Double = 0.0
 
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
@@ -180,12 +187,26 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let data = data as? NSDictionary, let currentIndex = data["index"] as? Int, let id = data["id"] as? String, let newIndex = self.competitors?.index(id) {
             
-            let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
-            let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
-            
-            self.competitorsTableView.beginUpdates()
-            self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
-            self.competitorsTableView.endUpdates()
+            if newIndex != currentIndex {
+                
+                let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
+                let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
+                
+                self.competitorsTableView.beginUpdates()
+                self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
+                self.competitorsTableView.endUpdates()
+                
+                if let userId = self.currentUserId, let userIndex = self.competitors?.index(userId) {
+                    
+                    if userIndex == newIndex {
+                    
+                        self.currentPosition = newIndex
+                        
+                    }
+                    
+                }
+                
+            }
                 
             for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
                 
@@ -267,6 +288,19 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.willStopRace()
             
         }
+        
+    }
+    
+    func talkToUser(speech: String) {
+        
+        let voice = AVSpeechSynthesizer()
+        let myUtterance = AVSpeechUtterance(string: speech)
+        
+        myUtterance.voice = AVSpeechSynthesisVoice(language: "en-UK")
+        myUtterance.rate = 0.525
+        myUtterance.volume = 0.75
+        
+        voice.speakUtterance(myUtterance)
         
     }
     
@@ -365,7 +399,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
                 let fields = [
                     "distance": self.distance,
-                    "pace": self.currentPace
+                    "pace": self.currentPace,
+                    "position": self.currentPosition
                 ]
                 
                 self.competitors?.update(id, fields: fields)
@@ -469,10 +504,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         setupMotionManage()
         logError("Race Started")
-        
-//        let voice = AVSpeechSynthesizer()
-//        let myUtterance = AVSpeechUtterance(string: "Your race has begun")
-//        voice.speakUtterance(myUtterance)
         
         UIView.animateKeyframesWithDuration(0.25, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 0.5 }, completion: nil)
         self.joinRaceButton.enabled = false
