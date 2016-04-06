@@ -178,15 +178,20 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let data = data as? NSDictionary, let currentIndex = data["index"] as? Int, let id = data["id"] as? String, let newIndex = self.competitors?.index(id) {
             
+            self.competitorsTableView.beginUpdates()
             let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
             let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
+            self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
+            self.competitorsTableView.endUpdates()
                 
-            self.competitorsTableView.reloadData()
-            
-            if newIndex != currentIndex {
-                self.competitorsTableView.beginUpdates()
-                self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
-                self.competitorsTableView.endUpdates()
+            for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
+                
+                let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
+                let competitor = self.competitors?.list[indexPath.row]
+                
+                cell.positionLabel.text = competitor?.getPosition(indexPath.row)
+                cell.distancePaceLabel.text = String(format: "%6.2f km", competitor?.distance ?? 0.00)
+                
             }
             
         }
@@ -202,6 +207,15 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.competitorsTableView.beginUpdates()
             self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             self.competitorsTableView.endUpdates()
+            
+            for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
+                
+                let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
+                let competitor = self.competitors?.list[indexPath.row]
+                
+                cell.positionLabel.text = competitor?.getPosition(indexPath.row)
+                
+            }
             
             self.updateJoinRaceButton(0.5)
             
