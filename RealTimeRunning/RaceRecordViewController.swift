@@ -129,21 +129,15 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - Table view data source
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
         return 1
-        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return self.competitors?.list.count ?? 0
-        
     }
     
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        
         return true
-        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -152,11 +146,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! CompetitorsTableViewCell
             
-        if var competitor = self.competitors?.list[indexPath.row] {
+        if let competitor = self.competitors?.list[indexPath.row] {
             
-            competitor.setPosition(indexPath.row)
-            
-            cell.positionLabel.text = competitor.position
+            cell.positionLabel.text = getOrdinalPosition(indexPath.row)
             cell.nameLabel.text = competitor.username?.uppercaseString
             cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
             cell.profileImage.image = competitor.image
@@ -212,11 +204,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
                 let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
                 
-                if var competitor = self.competitors?.list[indexPath.row] {
-                
-                    competitor.setPosition(indexPath.row)
+                if let competitor = self.competitors?.list[indexPath.row] {
                     
-                    cell.positionLabel.text = competitor.position
+                    cell.positionLabel.text = getOrdinalPosition(indexPath.row)
                     cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
                     
                 }
@@ -240,14 +230,8 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
                 
                 let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
-                
-                if var competitor = self.competitors?.list[indexPath.row] {
-                
-                    competitor.setPosition(indexPath.row)
                     
-                    cell.positionLabel.text = competitor.position
-                    
-                }
+                cell.positionLabel.text = getOrdinalPosition(indexPath.row)
                 
             }
             
