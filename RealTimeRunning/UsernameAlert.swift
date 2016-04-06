@@ -1,35 +1,34 @@
 //
-//  SCLAlertView.swift
-//  SCLAlertView Example
+//  UsernameAlert.swift
+//  RealTimeRunning
 //
-//  Created by Viktor Radchenko on 6/5/14.
-//  Copyright (c) 2014 Viktor Radchenko. All rights reserved.
+//  Created by Scott Ashmore on 5/04/2016.
+//  Copyright © 2016 Scott Ashmore. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-public class UsernameAlert: UIViewController {
+public class UsernameAlert: UIViewController, UITextFieldDelegate {
     
     let window = UIApplication.sharedApplication().keyWindow! as UIWindow
     
     var alertWidth: CGFloat!
-    let titleTop: CGFloat = 30.0
+    let topPadding: CGFloat = 5.0
     let titleHeight: CGFloat = 40.0
     var textHeight: CGFloat = 90.0
     let textFieldHeight: CGFloat = 50.0
     let buttonHeight: CGFloat = 65.0
-    let bottomPadding: CGFloat = 14.0
-    
-    // Colour
-    var viewColor = UIColor.blackColor()
+    let bottomPadding: CGFloat = 25.0
     
     var baseView = UIView()
-    var labelTitle = UILabel()
-    var viewText = UITextView()
+    var titleLabel = UILabel()
+    var subTitleLabel = UITextView()
     var contentView = UIView()
     var textField = UITextField()
     var button = UIButton()
+    
+    var viewColor = UIColor.blackColor()
     
     var tmpContentViewFrameOrigin: CGPoint?
     var keyboardHasBeenShown: Bool = false
@@ -63,25 +62,26 @@ public class UsernameAlert: UIViewController {
         self.contentView.layer.cornerRadius = 5.0
         self.contentView.layer.masksToBounds = true
         self.contentView.layer.borderWidth = 0.5
-        self.contentView.addSubview(self.labelTitle)
-        self.contentView.addSubview(self.viewText)
+        self.contentView.addSubview(self.titleLabel)
+        self.contentView.addSubview(self.subTitleLabel)
         self.contentView.addSubview(self.textField)
         self.contentView.addSubview(self.button)
         
         // Title
-        self.labelTitle.numberOfLines = 1
-        self.labelTitle.textAlignment = .Center
-        self.labelTitle.font = UIFont(name: "Oswald-Regular", size: 20)
-        self.labelTitle.frame = CGRect(x:12, y: self.titleTop, width: self.alertWidth - 24, height: self.titleHeight + 10)
+        self.titleLabel.numberOfLines = 1
+        self.titleLabel.textAlignment = .Center
+        self.titleLabel.font = UIFont(name: "Oswald-Regular", size: 20)
+        self.titleLabel.frame = CGRect(x:12, y: self.topPadding, width: self.alertWidth - 24, height: self.titleHeight + 10)
         
         // Sub Title
-        self.viewText.editable = false
-        self.viewText.textAlignment = .Center
-        self.viewText.textContainerInset = UIEdgeInsetsZero
-        self.viewText.textContainer.lineFragmentPadding = 0;
-        self.viewText.font = UIFont(name: "Oswald-Regular", size: 14)
+        self.subTitleLabel.editable = false
+        self.subTitleLabel.textAlignment = .Center
+        self.subTitleLabel.textContainerInset = UIEdgeInsetsZero
+        self.subTitleLabel.textContainer.lineFragmentPadding = 0
+        self.subTitleLabel.font = UIFont(name: "Oswald-Regular", size: 14)
         
         // Text Field
+        self.textField.delegate = self
         self.textField.borderStyle = .RoundedRect
         self.textField.font = UIFont(name: "Oswald-Regular", size: 14)
         self.textField.autocapitalizationType = .AllCharacters
@@ -104,8 +104,8 @@ public class UsernameAlert: UIViewController {
         
         // Colours
         self.contentView.backgroundColor = UIColorFromRGB(0xFFFFFF)
-        self.labelTitle.textColor = UIColorFromRGB(0x4D4D4D)
-        self.viewText.textColor = UIColorFromRGB(0x4D4D4D)
+        self.titleLabel.textColor = UIColorFromRGB(0x4D4D4D)
+        self.subTitleLabel.textColor = UIColorFromRGB(0x4D4D4D)
         self.contentView.layer.borderColor = UIColorFromRGB(0xCCCCCC).CGColor
         
     }
@@ -118,34 +118,26 @@ public class UsernameAlert: UIViewController {
         
         self.view.frame.size = windowSize
         
-        let heights: [CGFloat] = [self.titleTop, self.titleHeight, self.buttonHeight, self.textFieldHeight, self.bottomPadding]
-        let consumedHeight = heights.reduce(0, combine: { $0 + $1 })
-        
-        let viewTextWidth = self.alertWidth - 24
-        let viewTextHeight = self.viewText.sizeThatFits(CGSizeMake(viewTextWidth, CGFloat.max)).height
-        let alertHeight = consumedHeight + viewTextHeight
+        let subTitleHeight = self.subTitleLabel.sizeThatFits(CGSizeMake(self.alertWidth - 24, CGFloat.max)).height
+        let heights: [CGFloat] = [self.topPadding, self.titleHeight, subTitleHeight, self.buttonHeight, self.textFieldHeight, self.bottomPadding]
+        let alertHeight = heights.reduce(0, combine: { $0 + $1 })
         
         // Set frames
         let x = (windowSize.width - self.alertWidth) / 2
         var y = (windowSize.height - alertHeight) / 2
         self.contentView.frame = CGRect(x: x, y: y, width: self.alertWidth, height: alertHeight)
         
-        // Adjust Title frame based on circularIcon show/hide flag
-        let titleOffset: CGFloat = -12.0
-        self.labelTitle.frame = self.labelTitle.frame.offsetBy(dx: 0, dy: titleOffset)
-        
-        // Subtitle
-        y = self.titleTop + self.titleHeight + titleOffset
-        self.viewText.frame = CGRect(x: 12, y: y, width: self.alertWidth - 24, height: self.textHeight)
-        self.viewText.frame = CGRect(x: 12, y: y, width: viewTextWidth, height: viewTextHeight)
-        y += viewTextHeight + 24.0
+        // Sub Title
+        y = self.topPadding + self.titleHeight
+        self.subTitleLabel.frame = CGRect(x: 12, y: y, width: self.alertWidth - 24, height: subTitleHeight)
         
         // Text fields
+        y += subTitleHeight + 20
         self.textField.frame = CGRect(x: 16, y: y, width: self.alertWidth - 32, height: 40)
-        y += self.textFieldHeight
         
         // Buttons
-        self.button.frame = CGRect(x: 16, y: y, width: self.alertWidth - 32, height: 50)
+        y += self.textFieldHeight
+        self.button.frame = CGRect(x: 16, y: y, width: self.alertWidth - 32, height: 40)
         
     }
     
@@ -164,6 +156,16 @@ public class UsernameAlert: UIViewController {
         
         NSNotificationCenter.defaultCenter().removeObserver(UIKeyboardWillShowNotification)
         NSNotificationCenter.defaultCenter().removeObserver(UIKeyboardWillHideNotification)
+        
+    }
+    
+    public func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        guard let text = textField.text else { return true }
+        
+        let newLength = text.characters.count + string.characters.count - range.length
+        
+        return newLength <= 16
         
     }
     
@@ -204,14 +206,14 @@ public class UsernameAlert: UIViewController {
         
     }
     
-    public func show(title: String, subTitle: String) {
+    public func showView(title: String, subTitleLabel: String) {
         
         self.view.alpha = 0
         
         self.window.addSubview(self.view)
         
-        self.labelTitle.text = title
-        self.viewText.text = subTitle
+        self.titleLabel.text = title
+        self.subTitleLabel.text = subTitleLabel
         
         self.baseView.frame.origin.y = -400
         UIView.animateWithDuration(0.2, animations: {

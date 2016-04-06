@@ -50,8 +50,8 @@ class CurrentUser {
             self.id = id
         }
         
-        if let firstName = (data.objectForKey("first_name") as? String), lastName = (data.objectForKey("last_name") as? String) {
-            self.name = firstName + " " + lastName
+        if let firstName = (data.objectForKey("first_name") as? String) {
+            self.name = firstName
         }
         
         if let imageURL = (data.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {

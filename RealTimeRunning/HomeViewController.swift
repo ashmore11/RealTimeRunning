@@ -129,47 +129,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    func showUsernameAlert(completionHandler: (username: String) -> Void) {
-        
-        let alert = UsernameAlert()
-        
-        alert.events.listenTo("buttonTapped", action: {
-            
-            if let username = alert.textField.text {
-                
-                if self.users.list.indexOf({ $0.username == username }) != nil || username.characters.count < 4 {
-                    
-                    alert.errorHappened("USERNAME ALREADY EXISTS")
-                
-                } else {
-                    
-                    completionHandler(username: username)
-                    
-                    alert.hideView()
-                    
-                }
-                
-            }
-            
-        })
-        
-        let title = "CREATE YOUR USERNAME"
-        let subTitle = "Create a username that is greater than 4 characters and less than 16. Username's must only contain letters and numbers."
-        
-        alert.show(title, subTitle: subTitle)
-        
-    }
-    
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        guard let text = textField.text else { return true }
-        
-        let newLength = text.characters.count + string.characters.count - range.length
-        
-        return newLength <= 16
-        
-    }
-    
     func getData() {
             
         self.currentUser.sendRequest()
@@ -201,6 +160,41 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                         }
                     
                     }
+                    
+                }
+                
+            }
+            
+        })
+        
+    }
+    
+    func showUsernameAlert(completionHandler: (username: String) -> Void) {
+        
+        let alert = UsernameAlert()
+        
+        let title = "HELLO \(self.currentUser.name!.uppercaseString)!"
+        let subTitle = "Create a username that is greater than 3 characters and less than 17. Username's must only contain letters and numbers."
+        
+        alert.showView(title, subTitleLabel: subTitle)
+        
+        alert.events.listenTo("buttonTapped", action: {
+            
+            if let username = alert.textField.text {
+                
+                if self.users.list.indexOf({ $0.username == username }) != nil {
+                    
+                    alert.errorHappened("USERNAME ALREADY EXISTS")
+                    
+                } else if username.characters.count < 4 {
+                    
+                    alert.errorHappened("USERNAME TOO SHORT")
+                    
+                } else {
+                    
+                    completionHandler(username: username)
+                    
+                    alert.hideView()
                     
                 }
                 

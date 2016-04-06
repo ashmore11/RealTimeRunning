@@ -178,9 +178,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let data = data as? NSDictionary, let currentIndex = data["index"] as? Int, let id = data["id"] as? String, let newIndex = self.competitors?.index(id) {
             
-            self.competitorsTableView.beginUpdates()
             let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
             let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
+            
+            self.competitorsTableView.beginUpdates()
             self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
             self.competitorsTableView.endUpdates()
                 
