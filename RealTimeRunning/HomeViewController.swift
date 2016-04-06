@@ -10,7 +10,7 @@ import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Properties
     
@@ -18,8 +18,8 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var topViewArea: UIView!
     @IBOutlet weak var racesButton: UIButton!
     @IBOutlet weak var fbLoginButton: UIButton!
-    @IBOutlet weak var userNameField: UITextField!
     
+    let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
     let currentUser = CurrentUser.sharedInstance
     let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
     let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
@@ -30,12 +30,12 @@ class HomeViewController: UIViewController {
         
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HomeViewController.racesSubscriptionReady), name: "racesSubscriptionReady", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(HomeViewController.usersSubscriptionReady), name: "usersSubscriptionReady", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.racesSubscriptionReady), name: "racesSubscriptionReady", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.usersSubscriptionReady), name: "usersSubscriptionReady", object: nil)
         
         self.navigationItem.title = "REAL TIME RUNNING"
         
-        self.addToolbarOnKeyboard(userNameField, action: #selector(HomeViewController.addedUserName), buttonText: "Add User")
+        self.topViewArea.alpha = 0
         
         self.setupLayout()
         
@@ -46,19 +46,21 @@ class HomeViewController: UIViewController {
         self.currentUser.sendRequest()
         self.currentUser.events.listenTo("userLoaded", action: {
             
-            if let id = self.currentUser.id {
+            if let id = self.currentUser.id, let user = self.users.findOne(id) {
+                    
+                self.currentUser.username = user.username
                 
-                if self.users.findOne(id) != nil {
-                    
-                    let token = FBSDKAccessToken.currentAccessToken().tokenString
-                    
-                    self.users.authenticateUser(token) {
-                    
-                        self.userLoggedIn()
-                    
-                    }
+                let token = FBSDKAccessToken.currentAccessToken().tokenString
+                
+                self.users.authenticateUser(token) {
+                
+                    self.userLoggedIn()
                 
                 }
+            
+            } else {
+                    
+                self.fbLoginManager.logOut()
                 
             }
         
@@ -69,18 +71,6 @@ class HomeViewController: UIViewController {
     func racesSubscriptionReady(notification: NSNotification) {
         
         self.racesReady = true
-        
-    }
-    
-    func addedUserName() {
-        
-        self.userNameField.resignFirstResponder()
-        
-        if let userName = self.userNameField.text {
-            
-            print("Added a username \(userName)")
-            
-        }
         
     }
     
@@ -102,21 +92,17 @@ class HomeViewController: UIViewController {
         
     }
     
-    // MARK: - Facebook Delegate Methods
-    
     @IBAction func fbLoginButtonPushed(sender: UIButton) {
-    
-        let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
         
         if self.currentUser.loggedIn == true {
             
-            fbLoginManager.logOut()
+            self.fbLoginManager.logOut()
             
             self.userLoggedOut()
             
         } else {
             
-            fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) in
+            self.fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) in
                 
                 if error != nil {
                     print("Error in fbLoginManager.logInWithReadPermissionserror:\(error)")
@@ -144,29 +130,71 @@ class HomeViewController: UIViewController {
     }
     
     func getData() {
-        
+            
         self.currentUser.sendRequest()
         self.currentUser.events.listenTo("userLoaded", action: {
-            
+                
             if let id = self.currentUser.id, let name = self.currentUser.name, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
                 
-                if self.users.findOne(id) == nil {
-                
-                    let parameters = [
-                        "name": name,
-                        "email": email,
-                        "image": imageURL
-                    ]
+                if self.users.findOne(id) != nil {
                     
-                    self.users.insert(id, fields: parameters) {
-                        
-                        self.userLoggedIn()
-                    
-                    }
+                    self.userLoggedIn()
                     
                 } else {
                     
-                    self.userLoggedIn()
+                    self.showUsernameAlert { username in
+                        
+                        self.currentUser.username = username
+                        
+                        let parameters = [
+                            "username": username,
+                            "name": name,
+                            "email": email,
+                            "image": imageURL
+                        ]
+                        
+                        self.users.insert(id, fields: parameters) {
+                            
+                            self.userLoggedIn()
+                            
+                        }
+                    
+                    }
+                    
+                }
+                
+            }
+            
+        })
+        
+    }
+    
+    func showUsernameAlert(completionHandler: (username: String) -> Void) {
+        
+        let alert = UsernameAlert()
+        
+        let title = "HELLO \(self.currentUser.name!.uppercaseString)!"
+        let subTitle = "Create a username that is greater than 3 characters and less than 17. Username's must only contain letters and numbers."
+        
+        alert.showView(title, subTitleLabel: subTitle)
+        
+        alert.events.listenTo("buttonTapped", action: {
+            
+            if let username = alert.textField.text {
+                
+                if self.users.list.indexOf({ $0.username == username }) != nil {
+                    
+                    alert.errorHappened("USERNAME ALREADY EXISTS")
+                    
+                } else if username.characters.count < 4 {
+                    
+                    alert.errorHappened("USERNAME TOO SHORT")
+                    
+                } else {
+                    
+                    completionHandler(username: username)
+                    
+                    alert.hideView()
                     
                 }
                 
@@ -177,6 +205,8 @@ class HomeViewController: UIViewController {
     }
     
     func userLoggedOut() {
+        
+        UIView.animateWithDuration(0.25, delay: 0, options: [.CurveLinear], animations: { self.topViewArea.alpha = 0 }, completion: nil)
         
         self.navigationItem.title = "REAL TIME RUNNING"
         self.fbProfileImage.image = nil
@@ -189,9 +219,9 @@ class HomeViewController: UIViewController {
     
     func userLoggedIn() {
         
-        hideActivityIndicator(self.view)
+        UIView.animateWithDuration(0.25, delay: 0, options: [.CurveLinear], animations: { self.topViewArea.alpha = 1 }, completion: nil)
         
-        self.navigationItem.title = self.currentUser.name!.uppercaseString
+        self.navigationItem.title = self.currentUser.username!.uppercaseString
         self.fbProfileImage.image = self.currentUser.image
         self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
         self.racesButton.enabled = true
@@ -215,27 +245,6 @@ class HomeViewController: UIViewController {
             
             racesButton.enabled = true
             
-        }
-        
-    }
-    
-    func addToolbarOnKeyboard(view: UIView?, action:Selector, buttonText:String) {
-        
-        let toolbar: UIToolbar = UIToolbar(frame: CGRectMake(0, 0, 320, 50))
-        toolbar.barStyle = UIBarStyle.BlackTranslucent
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: buttonText, style: UIBarButtonItemStyle.Plain, target: self, action: action)
-        let cancel: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: view, action:  #selector(UIResponder.resignFirstResponder))
-        
-        toolbar.items = [flexSpace,cancel,done]
-        toolbar.sizeToFit()
-        
-        if let accessorizedView = view as? UITextView {
-            accessorizedView.inputAccessoryView = toolbar
-            accessorizedView.inputAccessoryView = toolbar
-        } else if let accessorizedView = view as? UITextField {
-            accessorizedView.inputAccessoryView = toolbar
-            accessorizedView.inputAccessoryView = toolbar
         }
         
     }

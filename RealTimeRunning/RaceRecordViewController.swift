@@ -148,7 +148,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         if let competitor = self.competitors?.list[indexPath.row] {
             
             cell.positionLabel.text = competitor.getPosition(indexPath.row)
-            cell.nameLabel.text = competitor.name?.uppercaseString
+            cell.nameLabel.text = competitor.username?.uppercaseString
             cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
             cell.profileImage.image = competitor.image
             
@@ -168,9 +168,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.competitorsTableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             self.competitorsTableView.endUpdates()
             
+            self.updateJoinRaceButton(0.5)
+            
         }
-        
-        self.updateJoinRaceButton(0.5)
         
     }
     
@@ -180,13 +180,19 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
             let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
             let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
-                
-            self.competitorsTableView.reloadData()
             
-            if newIndex != currentIndex {
-                self.competitorsTableView.beginUpdates()
-                self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
-                self.competitorsTableView.endUpdates()
+            self.competitorsTableView.beginUpdates()
+            self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
+            self.competitorsTableView.endUpdates()
+                
+            for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
+                
+                let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
+                let competitor = self.competitors?.list[indexPath.row]
+                
+                cell.positionLabel.text = competitor?.getPosition(indexPath.row)
+                cell.distancePaceLabel.text = String(format: "%6.2f km", competitor?.distance ?? 0.00)
+                
             }
             
         }
@@ -203,9 +209,18 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             self.competitorsTableView.endUpdates()
             
+            for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
+                
+                let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
+                let competitor = self.competitors?.list[indexPath.row]
+                
+                cell.positionLabel.text = competitor?.getPosition(indexPath.row)
+                
+            }
+            
+            self.updateJoinRaceButton(0.5)
+            
         }
-        
-        self.updateJoinRaceButton(0.5)
         
     }
     
@@ -442,6 +457,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
 //        let voice = AVSpeechSynthesizer()
 //        let myUtterance = AVSpeechUtterance(string: "Your race has begun")
 //        voice.speakUtterance(myUtterance)
+        
+        UIView.animateKeyframesWithDuration(0.25, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 0.5 }, completion: nil)
+        self.joinRaceButton.enabled = false
 
         // Hide the back button incase the user accidently hits it
         self.navigationItem.setHidesBackButton(true, animated: true)
@@ -481,6 +499,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         alert.addAction(cancelAction)
 
         let finishRaceAction = UIAlertAction(title: "Finish Race", style: .Default) { _ in
+            
+            UIView.animateKeyframesWithDuration(0.25, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 1 }, completion: nil)
+            self.joinRaceButton.enabled = true
             
             self.bLocationsReceived = false
             

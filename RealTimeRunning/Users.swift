@@ -13,7 +13,7 @@ import SwiftyJSON
 class Users {
     
     var ref = Firebase(url:"https://real-time-running.firebaseio.com/users")
-    var users = [User]()
+    var list = [User]()
     
     init() {
         
@@ -69,7 +69,7 @@ class Users {
     
     func index(id: String) -> Int? {
         
-        return self.users.indexOf({ $0.id == id })
+        return self.list.indexOf({ $0.id == id })
         
     }
     
@@ -77,7 +77,7 @@ class Users {
         
         if let index = self.index(id) {
             
-            return self.users[index]
+            return self.list[index]
             
         } else {
             
@@ -91,7 +91,7 @@ class Users {
         
         let user = User(id: id, fields: fields)
         
-        self.users.append(user)
+        self.list.append(user)
         
     }
     
@@ -99,11 +99,11 @@ class Users {
         
         if let index = self.index(id) {
             
-            var user = self.users[index]
+            var user = self.list[index]
             
             user.update(fields)
             
-            self.users[index] = user
+            self.list[index] = user
             
         }
 
@@ -113,7 +113,7 @@ class Users {
         
         if let index = self.index(id) {
             
-            self.users.removeAtIndex(index)
+            self.list.removeAtIndex(index)
             
         }
         
@@ -121,9 +121,10 @@ class Users {
     
     func insert(id: String, fields: NSDictionary?, callback: () -> Void) {
         
-        if let name = fields?["name"], let email = fields?["email"], let image = fields?["image"] {
+        if let username = fields?["username"], let name = fields?["name"], let email = fields?["email"], let image = fields?["image"] {
             
             let parameters = [
+                "username": username,
                 "name": name,
                 "email": email,
                 "image": image
