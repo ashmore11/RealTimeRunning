@@ -131,19 +131,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     
     func showUsernameAlert(completionHandler: (username: String) -> Void) {
         
-        let alert = SCLAlertView()
-        alert.showCloseButton = false
+        let alert = UsernameAlert()
         
-        let textField = alert.addTextField("USERNAME")
-        
-        textField.delegate = self
-        
-        textField.textAlignment = .Center
-        textField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
-        
-        alert.addButton("CREATE") {
+        alert.events.listenTo("buttonTapped", action: {
             
-            if let username = textField.text {
+            if let username = alert.textField.text {
                 
                 if self.users.list.indexOf({ $0.username == username }) != nil || username.characters.count < 4 {
                     
@@ -159,7 +151,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                 
             }
             
-        }
+        })
         
         let title = "CREATE YOUR USERNAME"
         let subTitle = "Create a username that is greater than 4 characters and less than 16. Username's must only contain letters and numbers."
