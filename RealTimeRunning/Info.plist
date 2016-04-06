@@ -38,12 +38,13 @@
 	<key>FacebookAppID</key>
 	<string>1603566783252297</string>
 	<key>FacebookDisplayName</key>
-	<string>racer</string>
+	<string>RealTimeRunning</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbauth2</string>
+		<string>fbapi</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

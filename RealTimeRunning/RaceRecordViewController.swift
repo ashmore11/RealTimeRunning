@@ -145,9 +145,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! CompetitorsTableViewCell
             
-        if let competitor = self.competitors?.list[indexPath.row] {
+        if var competitor = self.competitors?.list[indexPath.row] {
             
-            cell.positionLabel.text = competitor.getPosition(indexPath.row)
+            competitor.setPosition(indexPath.row)
+            
+            cell.positionLabel.text = competitor.position
             cell.nameLabel.text = competitor.username?.uppercaseString
             cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
             cell.profileImage.image = competitor.image
@@ -188,10 +190,15 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
                 
                 let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
-                let competitor = self.competitors?.list[indexPath.row]
                 
-                cell.positionLabel.text = competitor?.getPosition(indexPath.row)
-                cell.distancePaceLabel.text = String(format: "%6.2f km", competitor?.distance ?? 0.00)
+                if var competitor = self.competitors?.list[indexPath.row] {
+                
+                    competitor.setPosition(indexPath.row)
+                    
+                    cell.positionLabel.text = competitor.position
+                    cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
+                    
+                }
                 
             }
             
@@ -212,9 +219,14 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
                 
                 let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
-                let competitor = self.competitors?.list[indexPath.row]
                 
-                cell.positionLabel.text = competitor?.getPosition(indexPath.row)
+                if var competitor = self.competitors?.list[indexPath.row] {
+                
+                    competitor.setPosition(indexPath.row)
+                    
+                    cell.positionLabel.text = competitor.position
+                    
+                }
                 
             }
             
@@ -247,9 +259,13 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBAction func startStopPressed(sender: AnyObject) {
         
         if myLocationManager == nil {
+            
             self.willStartRace()
+            
         } else {
+            
             self.willStopRace()
+            
         }
         
     }
@@ -304,7 +320,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func receiveAltimeterNotification(notification:NSNotification) {
+    func receiveAltimeterNotification(notification: NSNotification) {
         
         let userInfo:NSDictionary = notification.userInfo!
         let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData

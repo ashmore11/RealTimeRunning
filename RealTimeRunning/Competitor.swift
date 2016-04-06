@@ -13,8 +13,9 @@ struct Competitor {
     var id: String
     var username: String?
     var imageURL: String?
-    var distance: Double?
-    var pace: String?
+    var distance: Double = 0.0
+    var position: String = ""
+    var pace: String = ""
     var image: UIImage? {
         if let string = self.imageURL, let nsurl = NSURL(string: string), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
             return image
@@ -69,18 +70,14 @@ struct Competitor {
         
     }
     
-    func getPosition(index: Int) -> String {
+    mutating func setPosition(index: Int) {
         
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .OrdinalStyle
         
         if let position = formatter.stringFromNumber(index + 1) {
-        
-            return self.distance > 0 ? position : ""
             
-        } else {
-            
-            return ""
+            self.position = self.distance > 0 ? position : ""
             
         }
         
