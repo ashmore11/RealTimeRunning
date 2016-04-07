@@ -34,7 +34,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.positionLabel.text = position
         }
     }
-    var raceComplete: Bool = false
     var durationString: String = ""
     var duration: Double = 0.0
     var myLocationManager: SharedLocationManager? = nil
@@ -279,11 +278,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             ]
             self.competitors?.update(id, fields: fields)
             
-            if self.raceComplete { return }
-            
             if let distance = self.race?.distance {
                 if self.distance >= Double(distance) {
-                    self.raceComplete = true
+                    self.willStopRace()
                     let points = self.getPoints(self.currentPosition)
                     self.users.update(id, fields: ["points": points])
                 }

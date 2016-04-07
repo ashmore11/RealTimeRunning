@@ -166,7 +166,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         self.fbProfileImage.image = nil
         self.racesButton.enabled = false
         self.navigationItem.title = "REAL TIME RUNNING"
-        self.fbLoginButton.setTitle("SIGN IN" , forState: .Normal)
+        self.fbLoginButton.setTitle("SIGN IN", forState: .Normal)
         self.fadeRacesButton(0.5, delay: 0)
         
     }
@@ -176,16 +176,18 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         UIView.animateWithDuration(0.25, delay: 0, options: [.CurveLinear], animations: { self.topViewArea.alpha = 1 }, completion: nil)
         
         self.navigationItem.title = self.currentUser.username!.uppercaseString
-        if let imageURL = self.currentUser.imageURL {
+        
+        if let imageURL = self.currentUser.imageURL, let rank = self.currentUser.rank, points = self.currentUser.points {
             self.fbProfileImage.image = imageFromString(imageURL)
+            self.rankLabel.text = "\(rank)"
+            self.pointsLabel.text = "\(points)"
         }
-        self.rankLabel.text = "\(self.currentUser.rank!)"
-        self.pointsLabel.text = "\(self.currentUser.points!)"
-        self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
+        
         self.racesButton.enabled = true
+        self.fbLoginButton.setTitle("SIGN OUT", forState: .Normal)
         self.fadeRacesButton(1, delay: 1)
         
-        self.users.events.listenTo("currentUserUpdated") {
+        self.users.events.listenTo("usersUpdated") {
             if let rank = self.currentUser.rank, let points = self.currentUser.points {
                 self.rankLabel.text = "\(rank)"
                 self.pointsLabel.text = "\(points)"

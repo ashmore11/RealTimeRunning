@@ -1150,7 +1150,7 @@
         <scene sceneID="9Py-fg-V40">
             <objects>
                 <navigationController title="My History" automaticallyAdjustsScrollViewInsets="NO" id="Nd6-u9-bTx" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="My History" image="history" id="pl9-cP-kwC"/>
+                    <tabBarItem key="tabBarItem" title="Activity" image="history" id="pl9-cP-kwC"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="6LP-Vx-p3I">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

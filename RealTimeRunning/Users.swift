@@ -103,12 +103,8 @@ class Users {
             user.update(fields)
             self.list[index] = user
             self.sort()
-            
-            if let userId = CurrentUser.sharedInstance.id {
-                if userId == id {
-                    self.events.trigger("currentUserUpdated")
-                }
-            }
+
+            self.events.trigger("usersUpdated")
             
         }
 
