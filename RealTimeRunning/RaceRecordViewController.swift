@@ -283,6 +283,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     self.willStopRace()
                     let points = self.getPoints(self.currentPosition)
                     self.users.update(id, fields: ["points": points])
+                    
+                    let alert = AlertViewController()
+                    alert.show("CONGRATULATIONS!", subTitleLabel: "You came in \(getOrdinalPosition(self.currentPosition)) position and earned yourself \(points) points. Keep up the good work and don't stop racing!")
+                    alert.events.listenTo("doneButtonPushed") {
+                        alert.hide()
+                    }
                 }
             }
         }

@@ -61,6 +61,8 @@
 		D2830BD91C73D52B00B1B1A8 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */; };
 		D2830BDB1C73D53500B1B1A8 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */; };
 		D28993F81CB3E5FF0042E9B7 /* UsernameAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28993F71CB3E5FF0042E9B7 /* UsernameAlert.swift */; };
+		D292792A1CB6BFE70079E0FD /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29279281CB6BFE70079E0FD /* AlertViewController.swift */; };
+		D292792B1CB6BFE70079E0FD /* AlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D29279291CB6BFE70079E0FD /* AlertViewController.xib */; };
 		D299ABF21C8DD76500FE219C /* CompetitorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299ABF01C8DD76500FE219C /* CompetitorsTableViewCell.swift */; };
 		D299ABF51C91756000FE219C /* Competitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299ABF41C91755F00FE219C /* Competitor.swift */; };
 		D299AC031C9BF30D00FE219C /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299AC021C9BF30D00FE219C /* CurrentUser.swift */; };
@@ -165,6 +167,8 @@
 		D2830BD81C73D52B00B1B1A8 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		D2830BDA1C73D53500B1B1A8 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		D28993F71CB3E5FF0042E9B7 /* UsernameAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameAlert.swift; sourceTree = "<group>"; };
+		D29279281CB6BFE70079E0FD /* AlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
+		D29279291CB6BFE70079E0FD /* AlertViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertViewController.xib; sourceTree = "<group>"; };
 		D299ABF01C8DD76500FE219C /* CompetitorsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompetitorsTableViewCell.swift; sourceTree = "<group>"; };
 		D299ABF41C91755F00FE219C /* Competitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Competitor.swift; sourceTree = "<group>"; };
 		D299AC021C9BF30D00FE219C /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
@@ -328,6 +332,8 @@
 				C4EC42FF1C7F5ABC00A458E3 /* RaceGraphViewController.swift */,
 				C4EC43071C7F77AD00A458E3 /* settingsTableViewController.swift */,
 				D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */,
+				D29279281CB6BFE70079E0FD /* AlertViewController.swift */,
+				D29279291CB6BFE70079E0FD /* AlertViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -496,6 +502,7 @@
 				C454E7131C94617B0095C077 /* realtimeruner80.png in Resources */,
 				D226B4AF1C73B28400366800 /* Main.storyboard in Resources */,
 				C454E7161C94617B0095C077 /* realtimeruner180.png in Resources */,
+				D292792B1CB6BFE70079E0FD /* AlertViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -645,6 +652,7 @@
 				C4EC43061C7F5FF600A458E3 /* UIGraphView.swift in Sources */,
 				D299ABF51C91756000FE219C /* Competitor.swift in Sources */,
 				C496BC6F1C93190B00DF2187 /* Settings+CoreDataProperties.swift in Sources */,
+				D292792A1CB6BFE70079E0FD /* AlertViewController.swift in Sources */,
 				C4DEF2A61C95B6BA00CE1413 /* LaunchScreenViewController.swift in Sources */,
 				D28993F81CB3E5FF0042E9B7 /* UsernameAlert.swift in Sources */,
 				C42839EE1C8DB18300049B7C /* UIPanelView.swift in Sources */,
