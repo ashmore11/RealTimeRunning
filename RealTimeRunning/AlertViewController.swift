@@ -30,7 +30,6 @@ public class AlertViewController: UIViewController {
         
         // Main View
         self.view.frame = UIScreen.mainScreen().bounds
-        self.view.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
         self.view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.7)
         
         // Content View
@@ -60,6 +59,11 @@ public class AlertViewController: UIViewController {
         
         super.viewWillLayoutSubviews()
         
+        let contentSize = self.subTitleLabel.sizeThatFits(self.subTitleLabel.bounds.size)
+        var frame = self.subTitleLabel.frame
+        frame.size.height = contentSize.height
+        self.subTitleLabel.frame = frame
+        
     }
     
     @IBAction func doneButtonPushed(sender: UIButton) {
@@ -77,15 +81,17 @@ public class AlertViewController: UIViewController {
         self.titleLabel.text = title
         self.subTitleLabel.text = subTitleLabel
         
+        print(self.window.center.y + 15, self.window.center.y)
+        
         self.contentView.frame.origin.y = -400
-        UIView.animateWithDuration(0.2, animations: {
+        UIView.animateWithDuration(1, animations: {
             
             self.contentView.center.y = self.window.center.y + 15
             self.view.alpha = 1
             
             }, completion: { finished in
                 
-                UIView.animateWithDuration(0.2, animations: {
+                UIView.animateWithDuration(1, animations: {
                     
                     self.contentView.center = self.window.center
                     

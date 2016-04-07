@@ -284,13 +284,25 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                     let points = self.getPoints(self.currentPosition)
                     self.users.update(id, fields: ["points": points])
                     
-                    let alert = AlertViewController()
-                    alert.show("CONGRATULATIONS!", subTitleLabel: "You came in \(getOrdinalPosition(self.currentPosition)) position and earned yourself \(points) points. Keep up the good work and don't stop racing!")
-                    alert.events.listenTo("doneButtonPushed") {
-                        alert.hide()
-                    }
+                    NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.showAlert), userInfo: points, repeats: false)
                 }
             }
+        }
+        
+    }
+    
+    func showAlert(timer: NSTimer) {
+        
+        if let points = timer.userInfo as? Int, let rank = self.currentUser.rank, let name = self.currentUser.name {
+        
+            let alert = AlertViewController()
+            
+            alert.show("CONGRATULATIONS!", subTitleLabel: "You came in \(getOrdinalPosition(self.currentPosition)) position and earned yourself \(points) points. You are now ranked in \(getOrdinalPosition(rank)) position, globally. Keep up the good work \(name) and don't stop racing!")
+            
+            alert.events.listenTo("doneButtonPushed") {
+                alert.hide()
+            }
+            
         }
         
     }
