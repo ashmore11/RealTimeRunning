@@ -33,27 +33,19 @@ struct Competitor {
     mutating func update(fields: NSDictionary?) {
         
         if let username = fields?.valueForKey("username") as? String {
-            
             self.username = username
-            
         }
         
         if let image = fields?.valueForKey("image") as? String {
-            
             self.imageURL = image
-            
         }
         
         if let distance = fields?.valueForKey("distance") as? Double {
-            
             self.distance = distance
-            
         }
         
         if let pace = fields?.valueForKey("pace") as? Double {
-            
             self.setPace(pace)
-            
         }
         
     }

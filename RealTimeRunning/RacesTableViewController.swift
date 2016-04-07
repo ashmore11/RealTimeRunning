@@ -11,9 +11,7 @@ import UIKit
 class RacesTableViewController: UITableViewController {
     
     // MARK: Properties
-    
-    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
-    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    let races: Races = Races.sharedInstance
     var competitors: Competitors?
     
     override func viewDidLoad() {
@@ -73,12 +71,12 @@ class RacesTableViewController: UITableViewController {
                 
             if let index = self.races.index(id) {
                 
-                dispatch_async(dispatch_get_main_queue()) {
-                    
-                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
-                    
-                }
+                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                
+                self.tableView.beginUpdates()
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                self.tableView.endUpdates()
+                
             }
         }
     }

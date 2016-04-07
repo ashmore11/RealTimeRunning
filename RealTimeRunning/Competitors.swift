@@ -12,7 +12,7 @@ import FBSDKCoreKit
 
 class Competitors {
     
-    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    let users: Users = Users.sharedInstance
     var ref: Firebase
     var list = [Competitor]()
     let events = EventManager()
@@ -40,23 +40,6 @@ class Competitors {
         } else {
             
             return nil
-            
-        }
-        
-    }
-    
-    func getPosition(id: String) -> String {
-        
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .OrdinalStyle
-        
-        if let competitor = self.findOne(id), let index = self.index(id), let position = formatter.stringFromNumber(index + 1) {
-            
-            return competitor.distance > 0 ? position : ""
-            
-        } else {
-            
-            return ""
             
         }
         
@@ -163,10 +146,11 @@ class Competitors {
     
     func update(id: String, fields: NSDictionary?) {
         
-        if let distance = fields?.valueForKey("distance"), let pace = fields?.valueForKey("pace") {
+        if let distance = fields?.valueForKey("distance"), let pace = fields?.valueForKey("pace"), let position = fields?.valueForKey("position") {
             
             self.ref.childByAppendingPath("\(id)/distance").setValue(distance)
             self.ref.childByAppendingPath("\(id)/pace").setValue(pace)
+            self.ref.childByAppendingPath("\(id)/position").setValue(position)
             
         }
         

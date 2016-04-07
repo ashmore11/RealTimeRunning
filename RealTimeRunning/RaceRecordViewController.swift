@@ -16,9 +16,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // MARK: Properties
     
-    var currentUserId = CurrentUser.sharedInstance.id
-    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
-    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    var currentUser = CurrentUser.sharedInstance
+    let users: Users = Users.sharedInstance
+    let races: Races = Races.sharedInstance
     var race: Race?
     var competitors: Competitors?
     var startTime: String?
@@ -34,6 +34,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.positionLabel.text = position
         }
     }
+    var raceComplete: Bool = false
     var durationString: String = ""
     var duration: Double = 0.0
     var myLocationManager: SharedLocationManager? = nil
@@ -148,7 +149,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
         if let competitor = self.competitors?.list[indexPath.row] {
             
-            cell.positionLabel.text = getOrdinalPosition(indexPath.row)
+            cell.positionLabel.text = getOrdinalPosition(indexPath.row + 1)
             cell.nameLabel.text = competitor.username?.uppercaseString
             cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
             cell.profileImage.image = competitor.image
@@ -188,11 +189,11 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
                 self.competitorsTableView.endUpdates()
                 
-                if let userId = self.currentUserId, let userIndex = self.competitors?.index(userId) {
+                if let userId = self.currentUser.id, let userIndex = self.competitors?.index(userId) {
                     
                     if userIndex == newIndex {
                     
-                        self.currentPosition = newIndex
+                        self.currentPosition = newIndex + 1
                         
                     }
                     
@@ -206,7 +207,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
                 if let competitor = self.competitors?.list[indexPath.row] {
                     
-                    cell.positionLabel.text = getOrdinalPosition(indexPath.row)
+                    cell.positionLabel.text = getOrdinalPosition(indexPath.row + 1)
                     cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
                     
                 }
@@ -231,121 +232,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
                 let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
                     
-                cell.positionLabel.text = getOrdinalPosition(indexPath.row)
+                cell.positionLabel.text = getOrdinalPosition(indexPath.row + 1)
                 
             }
             
             self.updateJoinRaceButton(0.5)
             
-        }
-        
-    }
-    
-    // MARK: Actions
-    
-    @IBAction func joinButtonPressed(sender: UIButton) {
-        
-        if let userId = self.currentUserId {
-            
-            if self.competitors?.findOne(userId) != nil {
-                
-                self.competitors?.remove(userId)
-                
-            } else {
-                
-                self.competitors?.insert(userId)
-                
-            }
-            
-        }
-        
-    }
-    
-    @IBAction func startStopPressed(sender: AnyObject) {
-        
-        if myLocationManager == nil {
-            
-            self.willStartRace()
-            
-        } else {
-            
-            self.willStopRace()
-            
-        }
-        
-    }
-    
-    func talkToUser(speech: String) {
-        
-        let voice = AVSpeechSynthesizer()
-        let myUtterance = AVSpeechUtterance(string: speech)
-        
-        myUtterance.voice = AVSpeechSynthesisVoice(language: "en-UK")
-        myUtterance.rate = 0.525
-        myUtterance.volume = 0.75
-        
-        voice.speakUtterance(myUtterance)
-        
-    }
-    
-    func updateJoinRaceButton(duration: Double) {
-        
-        dispatch_async(dispatch_get_main_queue()) {
-            
-            if let userId = self.currentUserId {
-                
-                if self.competitors?.index(userId) != nil {
-                    
-                    self.joinRaceButton.setTitle("LEAVE RACE", forState: .Normal)
-                    
-                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
-                    
-                    self.startStopButton.enabled = true
-                    
-                } else {
-                    
-                    self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
-                    
-                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
-                    
-                    self.startStopButton.enabled = false
-                    
-                }
-                
-            }
-            
-        }
-        
-    }
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-
-        if segue.identifier == "showMap" {
-
-            if let controller = segue.destinationViewController as? MapViewController {
-
-                controller.geoEvents = geoEvents
-            }
-
-        } else if segue.identifier == "showRaw" {
-
-            if let controller = segue.destinationViewController as? RawRaceDataTableViewController {
-
-                controller.runDetail = self.runDetailObject
-
-            }
-        }
-        
-    }
-    
-    func receiveAltimeterNotification(notification: NSNotification) {
-        
-        let userInfo:NSDictionary = notification.userInfo!
-        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
-        
-        if let data = altimeterData {
-            self.pressure = Double(data.pressure)
-            self.altitude = Double(data.relativeAltitude)
         }
         
     }
@@ -379,18 +271,163 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
             }
             
-            if let id = self.currentUserId {
+            self.updateCurrentUser()
+            
+        }
+        
+    }
+    
+    func updateCurrentUser() {
+        
+        if let id = self.currentUser.id {
+            
+            let fields = [
+                "distance": self.distance,
+                "pace": self.currentPace,
+                "position": self.currentPosition
+            ]
+            
+            self.competitors?.update(id, fields: fields)
+            
+            if self.raceComplete { return }
+            
+            if let distance = self.race?.distance {
+            
+                if self.distance >= Double(distance) {
+                    
+                    self.raceComplete = true
+                    
+                    let points = self.getPoints(self.currentPosition)
+                    
+                    self.users.update(id, fields: ["points": points])
+                    
+                }
+            
+            }
+            
+        }
+        
+    }
+    
+    func getPoints(position: Int) -> Int {
+        
+        switch position {
+        case 1:
+            return 5
+        case 2:
+            return 4
+        case 3:
+            return 3
+        default:
+            return 2
+        }
+        
+    }
+    
+    func talkToUser(speech: String) {
+        
+        let voice = AVSpeechSynthesizer()
+        let myUtterance = AVSpeechUtterance(string: speech)
+        
+        myUtterance.rate = 0.525
+        myUtterance.volume = 0.75
+        
+        voice.speakUtterance(myUtterance)
+        
+    }
+    
+    func updateJoinRaceButton(duration: Double) {
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            
+            if let userId = self.currentUser.id {
                 
-                let fields = [
-                    "distance": self.distance,
-                    "pace": self.currentPace,
-                    "position": self.currentPosition
-                ]
-                
-                self.competitors?.update(id, fields: fields)
+                if self.competitors?.index(userId) != nil {
+                    
+                    self.joinRaceButton.setTitle("LEAVE RACE", forState: .Normal)
+                    
+                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
+                    
+                    self.startStopButton.enabled = true
+                    
+                } else {
+                    
+                    self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
+                    
+                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
+                    
+                    self.startStopButton.enabled = false
+                    
+                }
                 
             }
             
+        }
+        
+    }
+    
+    // MARK: Actions
+    
+    @IBAction func joinButtonPressed(sender: UIButton) {
+        
+        if let userId = self.currentUser.id {
+            
+            if self.competitors?.findOne(userId) != nil {
+                
+                self.competitors?.remove(userId)
+                
+            } else {
+                
+                self.competitors?.insert(userId)
+                
+            }
+            
+        }
+        
+    }
+    
+    @IBAction func startStopPressed(sender: AnyObject) {
+        
+        if myLocationManager == nil {
+            
+            self.willStartRace()
+            
+        } else {
+            
+            self.willStopRace()
+            
+        }
+        
+    }
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+
+        if segue.identifier == "showMap" {
+
+            if let controller = segue.destinationViewController as? MapViewController {
+
+                controller.geoEvents = geoEvents
+            }
+
+        } else if segue.identifier == "showRaw" {
+
+            if let controller = segue.destinationViewController as? RawRaceDataTableViewController {
+
+                controller.runDetail = self.runDetailObject
+
+            }
+        }
+        
+    }
+    
+    func receiveAltimeterNotification(notification: NSNotification) {
+        
+        let userInfo:NSDictionary = notification.userInfo!
+        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
+        
+        if let data = altimeterData {
+            self.pressure = Double(data.pressure)
+            self.altitude = Double(data.relativeAltitude)
         }
         
     }

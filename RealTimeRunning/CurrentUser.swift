@@ -13,13 +13,37 @@ class CurrentUser {
     
     static let sharedInstance = CurrentUser()
     
+    let users: Users = Users.sharedInstance
+    
     var id: String?
-    var username: String?
     var name: String?
-    var email: String?
     var imageURL: String?
-    var image: UIImage?
+    var email: String?
+    
+    var username: String? {
+        if let id = self.id, let user = self.users.findOne(id) {
+            return user.username
+        } else {
+            return nil
+        }
+    }
+    var rank: Int? {
+        if let id = self.id, let index = self.users.index(id) {
+            return index + 1
+        } else {
+            return nil
+        }
+    }
+    var points: Int? {
+        if let id = self.id, let user = self.users.findOne(id) {
+            return user.points
+        } else {
+            return nil
+        }
+    }
+    
     var loggedIn: Bool = false
+    
     let events = EventManager()
         
     func sendRequest() {
@@ -46,20 +70,19 @@ class CurrentUser {
     
     func getData(data: AnyObject) {
         
-        if let id = (data.objectForKey("id") as? String) {
-            self.id = id
-        }
+        guard let id = data.objectForKey("id") as? String else { return }
         
-        if let firstName = (data.objectForKey("first_name") as? String) {
+        self.id = id
+        
+        if let firstName = data.objectForKey("first_name") as? String {
             self.name = firstName
         }
         
-        if let imageURL = (data.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String), let nsurl = NSURL(string: imageURL), let data = NSData(contentsOfURL:nsurl), let image = UIImage(data:data) {
+        if let imageURL = data.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String {
             self.imageURL = imageURL
-            self.image = image
         }
         
-        if let email = (data.objectForKey("email") as? String) {
+        if let email = data.objectForKey("email") as? String {
             self.email = email
         }
         

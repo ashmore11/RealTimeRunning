@@ -26,35 +26,25 @@ struct Race {
     mutating func update(fields: NSDictionary?) {
         
         if let createdAt = fields?.valueForKey("createdAt") as? String {
-            
             let formatter = NSDateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
             let date = formatter.dateFromString(createdAt)
             
             self.createdAt = date
-            
         }
         
         if let competitors = fields?.valueForKey("competitors") as? [String: AnyObject] {
-            
             self.competitors = competitors
-            
         } else {
-            
             self.competitors = [String: AnyObject]()
-            
         }
         
         if let distance = fields?.valueForKey("distance") as? Int {
-            
             self.distance = distance
-            
         }
         
         if let live = fields?.valueForKey("live") as? Bool {
-            
             self.live = live
-            
         }
         
     }

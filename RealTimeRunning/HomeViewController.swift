@@ -16,13 +16,15 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var fbProfileImage: UIImageView!
     @IBOutlet weak var topViewArea: UIView!
+    @IBOutlet weak var rankLabel: UILabel!
+    @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var racesButton: UIButton!
     @IBOutlet weak var fbLoginButton: UIButton!
     
     let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
-    let currentUser = CurrentUser.sharedInstance
-    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
-    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    var currentUser: CurrentUser = CurrentUser.sharedInstance
+    var users: Users = Users.sharedInstance
+    let races: Races = Races.sharedInstance
     var racesButtonPushed = false
     var racesReady = false
     
@@ -30,11 +32,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.racesSubscriptionReady), name: "racesSubscriptionReady", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.usersSubscriptionReady), name: "usersSubscriptionReady", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.racesSubscriptionReady), name: "racesSubscriptionReady", object: nil)
         
         self.navigationItem.title = "REAL TIME RUNNING"
-        
         self.topViewArea.alpha = 0
         
         self.setupLayout()
@@ -46,22 +47,24 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         self.currentUser.sendRequest()
         self.currentUser.events.listenTo("userLoaded", action: {
             
-            if let id = self.currentUser.id, let user = self.users.findOne(id) {
+            if let id = self.currentUser.id {
+            
+                if self.users.findOne(id) != nil {
                     
-                self.currentUser.username = user.username
+                    let token = FBSDKAccessToken.currentAccessToken().tokenString
+                    
+                    self.users.authenticateUser(token) {
+                    
+                        self.userLoggedIn()
+                    
+                    }
                 
-                let token = FBSDKAccessToken.currentAccessToken().tokenString
-                
-                self.users.authenticateUser(token) {
-                
-                    self.userLoggedIn()
-                
+                } else {
+                        
+                    self.fbLoginManager.logOut()
+                    
                 }
             
-            } else {
-                    
-                self.fbLoginManager.logOut()
-                
             }
         
         })
@@ -80,7 +83,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         setButtonGradient(self.racesButton, self.fbLoginButton)
         
         self.topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
-        self.fbProfileImage.layer.cornerRadius = fbProfileImage.frame.size.width / 2
+        self.fbProfileImage.layer.cornerRadius = 10
         self.fbProfileImage.clipsToBounds = true
         self.racesButton.alpha = 0.5
         
@@ -144,13 +147,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                     
                     self.showUsernameAlert { username in
                         
-                        self.currentUser.username = username
-                        
                         let parameters = [
                             "username": username,
                             "name": name,
                             "email": email,
-                            "image": imageURL
+                            "image": imageURL,
+                            "points": 0
                         ]
                         
                         self.users.insert(id, fields: parameters) {
@@ -208,12 +210,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         UIView.animateWithDuration(0.25, delay: 0, options: [.CurveLinear], animations: { self.topViewArea.alpha = 0 }, completion: nil)
         
-        self.navigationItem.title = "REAL TIME RUNNING"
-        self.fbProfileImage.image = nil
-        self.fbLoginButton.setTitle("SIGN IN" , forState: .Normal)
-        self.racesButton.enabled = false
-        self.fadeRacesButton(0.5, delay: 0)
         self.currentUser.loggedIn = false
+        self.fbProfileImage.image = nil
+        self.racesButton.enabled = false
+        self.navigationItem.title = "REAL TIME RUNNING"
+        self.fbLoginButton.setTitle("SIGN IN" , forState: .Normal)
+        self.fadeRacesButton(0.5, delay: 0)
         
     }
     
@@ -222,10 +224,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         UIView.animateWithDuration(0.25, delay: 0, options: [.CurveLinear], animations: { self.topViewArea.alpha = 1 }, completion: nil)
         
         self.navigationItem.title = self.currentUser.username!.uppercaseString
-        self.fbProfileImage.image = self.currentUser.image
+        if let imageURL = self.currentUser.imageURL {
+            self.fbProfileImage.image = imageFromString(imageURL)
+        }
+        self.rankLabel.text = "\(self.currentUser.rank!)"
+        self.pointsLabel.text = "\(self.currentUser.points!)"
         self.fbLoginButton.setTitle("SIGN OUT" , forState: .Normal)
         self.racesButton.enabled = true
         self.fadeRacesButton(1, delay: 1)
+        
+        self.users.events.listenTo("currentUserUpdated") {
+            
+            if let rank = self.currentUser.rank, let points = self.currentUser.points {
+                
+                self.rankLabel.text = "\(rank)"
+                self.pointsLabel.text = "\(points)"
+                
+            }
+            
+        }
         
     }
     
