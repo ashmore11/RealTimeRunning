@@ -14,6 +14,8 @@ class CurrentUser {
     static let sharedInstance = CurrentUser()
     
     let users: Users = Users.sharedInstance
+    let events: EventManager = EventManager()
+    var loggedIn: Bool = false
     
     var id: String?
     var name: String?
@@ -41,10 +43,6 @@ class CurrentUser {
             return nil
         }
     }
-    
-    var loggedIn: Bool = false
-    
-    let events = EventManager()
         
     func sendRequest() {
         

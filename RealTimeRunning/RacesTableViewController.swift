@@ -25,8 +25,7 @@ class RacesTableViewController: UITableViewController {
         
     }
 
-    // MARK: - Table view data source
-
+    // MARK: Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
     
         return 1
@@ -42,11 +41,9 @@ class RacesTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
         let cellIdentifier = "RaceTableViewCell"
-        
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! RaceTableViewCell
         
         setTableViewBackgroundGradient(cell, topColor: UIColor(red: 0.100, green: 0.100, blue: 0.100, alpha: 1), bottomColor: UIColor.blackColor())
-        
         cell.backgroundColor = UIColor.clearColor()
         
         let race = self.races.sorted[indexPath.row]
@@ -68,17 +65,14 @@ class RacesTableViewController: UITableViewController {
     func reloadTableViewCell(notification: NSNotification) {
         
         if let id = notification.object as? String {
-                
             if let index = self.races.index(id) {
-                
                 let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                
                 self.tableView.beginUpdates()
                 self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
                 self.tableView.endUpdates()
-                
             }
         }
+        
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -86,16 +80,12 @@ class RacesTableViewController: UITableViewController {
         let race = self.races.sorted[indexPath.row]
         
         if let id = race.id {
-            
             self.competitors = Competitors(raceId: id)
-        
             self.competitors?.events.listenTo("competitorsReady", action: {
-                
                 self.performSegueWithIdentifier("raceRecord", sender: nil)
-                
             })
-            
         }
+    
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -110,11 +100,9 @@ class RacesTableViewController: UITableViewController {
                 let startTime = race.getStartTime(indexPath.row)
                 
                 if let controller = segue.destinationViewController as? RaceRecordViewController {
-                    
                     controller.race = race
                     controller.startTime = startTime
                     controller.competitors = self.competitors
-                    
                 }
             }
         }

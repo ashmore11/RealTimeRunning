@@ -13,7 +13,6 @@ import FBSDKLoginKit
 class HomeViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Properties
-    
     @IBOutlet weak var fbProfileImage: UIImageView!
     @IBOutlet weak var topViewArea: UIView!
     @IBOutlet weak var rankLabel: UILabel!
@@ -48,25 +47,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         self.currentUser.events.listenTo("userLoaded", action: {
             
             if let id = self.currentUser.id {
-            
                 if self.users.findOne(id) != nil {
-                    
                     let token = FBSDKAccessToken.currentAccessToken().tokenString
-                    
                     self.users.authenticateUser(token) {
-                    
                         self.userLoggedIn()
-                    
                     }
-                
                 } else {
-                        
                     self.fbLoginManager.logOut()
-                    
                 }
-            
             }
-        
+            
         })
         
     }
@@ -98,36 +88,22 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     @IBAction func fbLoginButtonPushed(sender: UIButton) {
         
         if self.currentUser.loggedIn == true {
-            
             self.fbLoginManager.logOut()
-            
             self.userLoggedOut()
-            
         } else {
-            
             self.fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) in
-                
                 if error != nil {
                     print("Error in fbLoginManager.logInWithReadPermissionserror:\(error)")
                     return
                 }
-                
                 let fbloginresult: FBSDKLoginManagerLoginResult = result
-                
                 if(fbloginresult.grantedPermissions.contains("email")) {
-                    
                     let token = FBSDKAccessToken.currentAccessToken().tokenString
-                    
                     self.users.authenticateUser(token) {
-                     
                         self.getData()
-                        
                     }
-                    
                 }
-                
             })
-            
         }
         
     }
@@ -136,17 +112,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             
         self.currentUser.sendRequest()
         self.currentUser.events.listenTo("userLoaded", action: {
-                
             if let id = self.currentUser.id, let name = self.currentUser.name, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
-                
                 if self.users.findOne(id) != nil {
-                    
                     self.userLoggedIn()
-                    
                 } else {
-                    
                     self.showUsernameAlert { username in
-                        
                         let parameters = [
                             "username": username,
                             "name": name,
@@ -154,19 +124,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                             "image": imageURL,
                             "points": 0
                         ]
-                        
                         self.users.insert(id, fields: parameters) {
-                            
                             self.userLoggedIn()
-                            
                         }
-                    
                     }
-                    
                 }
-                
             }
-            
         })
         
     }
@@ -181,27 +144,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         alert.showView(title, subTitleLabel: subTitle)
         
         alert.events.listenTo("buttonTapped", action: {
-            
             if let username = alert.textField.text {
-                
                 if self.users.list.indexOf({ $0.username == username }) != nil {
-                    
                     alert.errorHappened("USERNAME ALREADY EXISTS")
-                    
                 } else if username.characters.count < 4 {
-                    
                     alert.errorHappened("USERNAME TOO SHORT")
-                    
                 } else {
-                    
                     completionHandler(username: username)
-                    
                     alert.hideView()
-                    
                 }
-                
             }
-            
         })
         
     }
@@ -234,14 +186,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         self.fadeRacesButton(1, delay: 1)
         
         self.users.events.listenTo("currentUserUpdated") {
-            
             if let rank = self.currentUser.rank, let points = self.currentUser.points {
-                
                 self.rankLabel.text = "\(rank)"
                 self.pointsLabel.text = "\(points)"
-                
             }
-            
         }
         
     }
@@ -249,19 +197,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     @IBAction func racesButtonPushed(sender: UIButton) {
         
         if self.racesReady == true {
-         
             self.performSegueWithIdentifier("showRaces", sender: sender)
-            
-        }
-        
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if segue.identifier == "showRaces" {
-            
-            racesButton.enabled = true
-            
         }
         
     }

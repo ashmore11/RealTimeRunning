@@ -13,14 +13,13 @@ import FBSDKCoreKit
 class Competitors {
     
     let users: Users = Users.sharedInstance
+    let events: EventManager = EventManager()
     var ref: Firebase
     var list = [Competitor]()
-    let events = EventManager()
     
     init(raceId: String) {
         
         self.ref = Firebase(url: "https://real-time-running.firebaseio.com/races/\(raceId)/competitors")
-        
         self.observeEvents()
         
     }
@@ -34,13 +33,9 @@ class Competitors {
     func findOne(id: String) -> Competitor? {
         
         if let index = self.index(id) {
-            
             return self.list[index]
-            
         } else {
-            
             return nil
-            
         }
         
     }
@@ -85,9 +80,7 @@ class Competitors {
         self.list.append(competitor)
         
         if let index = self.index(id) {
-            
             self.events.trigger("competitorAdded", information: index)
-        
         }
         
     }
@@ -99,9 +92,7 @@ class Competitors {
             var competitor = self.list[index]
             
             competitor.update(fields)
-            
             self.list[index] = competitor
-            
             self.sort()
             
             let fields = [
@@ -118,11 +109,8 @@ class Competitors {
     private func documentWasRemoved(id: String, fields: NSDictionary?) {
         
         if let index = self.index(id) {
-            
             self.list.removeAtIndex(index)
-            
             self.events.trigger("competitorRemoved", information: index)
-            
         }
         
     }
