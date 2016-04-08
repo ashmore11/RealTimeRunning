@@ -18,7 +18,7 @@ public class UsernameAlert: UIViewController, UITextFieldDelegate {
     let titleHeight: CGFloat = 40.0
     var textHeight: CGFloat = 90.0
     let textFieldHeight: CGFloat = 50.0
-    let buttonHeight: CGFloat = 65.0
+    let buttonHeight: CGFloat = 55.0
     let bottomPadding: CGFloat = 25.0
     
     var baseView = UIView()

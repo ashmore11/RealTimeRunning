@@ -16,37 +16,44 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // MARK: Properties
     
-    var currentUserId = CurrentUser.sharedInstance.id
-    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
-    let races: Races = (UIApplication.sharedApplication().delegate as! AppDelegate).races
+    var currentUser = CurrentUser.sharedInstance
+    let users: Users = Users.sharedInstance
+    let races: Races = Races.sharedInstance
     var race: Race?
     var competitors: Competitors?
     var startTime: String?
-    var geoEvents:[CLLocationCoordinate2D] = []
-    var lat:Double = 0.0
-    var lon:Double = 0.0
-    var speed:Double = 0.0
-    var distance:Double = 0.0
-    var durationString:String = ""
-    var duration:Double = 0.0
-    var myLocationManager:SharedLocationManager? = nil
+    var geoEvents: [CLLocationCoordinate2D] = []
+    var lat: Double = 0.0
+    var lon: Double = 0.0
+    var speed: Double = 0.0
+    var distance: Double = 0.0
+    var currentPosition: Int = 0 {
+        didSet {
+            let position = getOrdinalPosition(self.currentPosition)
+            self.talkToUser("You are now in \(position) position")
+            self.positionLabel.text = position
+        }
+    }
+    var durationString: String = ""
+    var duration: Double = 0.0
+    var myLocationManager: SharedLocationManager? = nil
     var logTimer: NSTimer?
-    var raceName:String = ""
-    var managedObjectContext:NSManagedObjectContext?
+    var raceName: String = ""
+    var managedObjectContext: NSManagedObjectContext?
     var bLocationsReceived = false
-    var runDetailObject:RunDetail?
+    var runDetailObject: RunDetail?
     var userPositions = [String: Double]()
-    var activityManager:CMMotionActivityManager?
-    var pedoMeter:CMPedometer?
-    var stepsTaken:Int = 0
-    var activity:String = ""
+    var activityManager: CMMotionActivityManager?
+    var pedoMeter: CMPedometer?
+    var stepsTaken: Int = 0
+    var activity: String = ""
     var pedDistance = 0.0
     var currentPace = 0.0
     var currentCadence = 0.0
     var floorsAscended = 0.0
     var floorsDescended = 0.0
-    var altitude:Double = 0.0
-    var pressure:Double = 0.0
+    var altitude: Double = 0.0
+    var pressure: Double = 0.0
 
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
@@ -113,11 +120,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewDidDisappear(animated)
         UIApplication.sharedApplication().idleTimerDisabled = false
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     // MARK: - Table view data source
     
@@ -130,13 +132,13 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return self.competitors?.list.count ?? 0
-        
+    
     }
     
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        
+    
         return true
-        
+    
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -147,7 +149,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             
         if let competitor = self.competitors?.list[indexPath.row] {
             
-            cell.positionLabel.text = competitor.getPosition(indexPath.row)
+            cell.positionLabel.text = getOrdinalPosition(indexPath.row + 1)
             cell.nameLabel.text = competitor.username?.uppercaseString
             cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
             cell.profileImage.image = competitor.image
@@ -178,20 +180,31 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if let data = data as? NSDictionary, let currentIndex = data["index"] as? Int, let id = data["id"] as? String, let newIndex = self.competitors?.index(id) {
             
-            let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
-            let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
-            
-            self.competitorsTableView.beginUpdates()
-            self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
-            self.competitorsTableView.endUpdates()
+            if newIndex != currentIndex {
+                
+                let currentIndexPath = NSIndexPath(forRow: currentIndex, inSection: 0)
+                let newIndexPath = NSIndexPath(forRow: newIndex, inSection: 0)
+                
+                self.competitorsTableView.beginUpdates()
+                self.competitorsTableView.moveRowAtIndexPath(currentIndexPath, toIndexPath: newIndexPath)
+                self.competitorsTableView.endUpdates()
+                
+                if let userId = self.currentUser.id, let userIndex = self.competitors?.index(userId) {
+                    if userIndex == newIndex {
+                        self.currentPosition = newIndex + 1
+                    }
+                }
+                
+            }
                 
             for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
                 
                 let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
-                let competitor = self.competitors?.list[indexPath.row]
                 
-                cell.positionLabel.text = competitor?.getPosition(indexPath.row)
-                cell.distancePaceLabel.text = String(format: "%6.2f km", competitor?.distance ?? 0.00)
+                if let competitor = self.competitors?.list[indexPath.row] {
+                    cell.positionLabel.text = getOrdinalPosition(indexPath.row + 1)
+                    cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
+                }
                 
             }
             
@@ -210,108 +223,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.competitorsTableView.endUpdates()
             
             for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
-                
                 let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
-                let competitor = self.competitors?.list[indexPath.row]
-                
-                cell.positionLabel.text = competitor?.getPosition(indexPath.row)
-                
+                cell.positionLabel.text = getOrdinalPosition(indexPath.row + 1)
             }
             
             self.updateJoinRaceButton(0.5)
             
-        }
-        
-    }
-    
-    // MARK: Actions
-    
-    @IBAction func joinButtonPressed(sender: UIButton) {
-        
-        if let userId = self.currentUserId {
-            
-            if self.competitors?.findOne(userId) != nil {
-                
-                self.competitors?.remove(userId)
-                
-            } else {
-                
-                self.competitors?.insert(userId)
-                
-            }
-            
-        }
-        
-    }
-    
-    @IBAction func startStopPressed(sender: AnyObject) {
-        
-        if myLocationManager == nil {
-            self.willStartRace()
-        } else {
-            self.willStopRace()
-        }
-        
-    }
-    
-    func updateJoinRaceButton(duration: Double) {
-        
-        dispatch_async(dispatch_get_main_queue()) {
-            
-            if let userId = self.currentUserId {
-                
-                if self.competitors?.index(userId) != nil {
-                    
-                    self.joinRaceButton.setTitle("LEAVE RACE", forState: .Normal)
-                    
-                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
-                    
-                    self.startStopButton.enabled = true
-                    
-                } else {
-                    
-                    self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
-                    
-                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
-                    
-                    self.startStopButton.enabled = false
-                    
-                }
-                
-            }
-            
-        }
-        
-    }
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-
-        if segue.identifier == "showMap" {
-
-            if let controller = segue.destinationViewController as? MapViewController {
-
-                controller.geoEvents = geoEvents
-            }
-
-        } else if segue.identifier == "showRaw" {
-
-            if let controller = segue.destinationViewController as? RawRaceDataTableViewController {
-
-                controller.runDetail = self.runDetailObject
-
-            }
-        }
-        
-    }
-    
-    func receiveAltimeterNotification(notification:NSNotification) {
-        
-        let userInfo:NSDictionary = notification.userInfo!
-        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
-        
-        if let data = altimeterData {
-            self.pressure = Double(data.pressure)
-            self.altitude = Double(data.relativeAltitude)
         }
         
     }
@@ -345,17 +262,142 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 
             }
             
-            if let id = self.currentUserId {
-                
-                let fields = [
-                    "distance": self.distance,
-                    "pace": self.currentPace
-                ]
-                
-                self.competitors?.update(id, fields: fields)
-                
+            self.updateCurrentUser()
+            
+        }
+        
+    }
+    
+    func updateCurrentUser() {
+        
+        if let id = self.currentUser.id {
+            let fields = [
+                "distance": self.distance,
+                "pace": self.currentPace,
+                "position": self.currentPosition
+            ]
+            self.competitors?.update(id, fields: fields)
+            
+            if let distance = self.race?.distance {
+                if self.distance >= Double(distance) {
+                    self.willStopRace()
+                    let points = self.getPoints(self.currentPosition)
+                    self.users.update(id, fields: ["points": points])
+                    
+                    NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.showAlert), userInfo: points, repeats: false)
+                }
+            }
+        }
+        
+    }
+    
+    func showAlert(timer: NSTimer) {
+        
+        if let points = timer.userInfo as? Int, let rank = self.currentUser.rank, let name = self.currentUser.name {
+        
+            let alert = AlertViewController()
+            
+            alert.show("CONGRATULATIONS!", subTitleLabel: "You came in \(getOrdinalPosition(self.currentPosition)) position and earned yourself \(points) points. You are now ranked in \(getOrdinalPosition(rank)) position, globally. Keep up the good work \(name) and don't stop racing!")
+            
+            alert.events.listenTo("doneButtonPushed") {
+                alert.hide()
             }
             
+        }
+        
+    }
+    
+    func getPoints(position: Int) -> Int {
+        
+        switch position {
+        case 1:
+            return 5
+        case 2:
+            return 4
+        case 3:
+            return 3
+        default:
+            return 2
+        }
+        
+    }
+    
+    func talkToUser(speech: String) {
+        
+        let voice = AVSpeechSynthesizer()
+        let myUtterance = AVSpeechUtterance(string: speech)
+        
+        myUtterance.rate = 0.525
+        myUtterance.volume = 0.75
+        
+        voice.speakUtterance(myUtterance)
+        
+    }
+    
+    func updateJoinRaceButton(duration: Double) {
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            if let userId = self.currentUser.id {
+                if self.competitors?.index(userId) != nil {
+                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 1 }, completion: nil)
+                    self.joinRaceButton.setTitle("LEAVE RACE", forState: .Normal)
+                    self.startStopButton.enabled = true
+                } else {
+                    UIView.animateKeyframesWithDuration(duration, delay: 0, options: [], animations: { self.startStopButton.alpha = 0.5 }, completion: nil)
+                    self.joinRaceButton.setTitle("JOIN RACE", forState: .Normal)
+                    self.startStopButton.enabled = false
+                }
+            }
+        }
+        
+    }
+    
+    // MARK: Actions
+    
+    @IBAction func joinButtonPressed(sender: UIButton) {
+        
+        if let userId = self.currentUser.id {
+            if self.competitors?.findOne(userId) != nil {
+                self.competitors?.remove(userId)
+            } else {
+                self.competitors?.insert(userId)
+            }
+        }
+        
+    }
+    
+    @IBAction func startStopPressed(sender: AnyObject) {
+        
+        if myLocationManager == nil {
+            self.willStartRace()
+        } else {
+            self.willStopRace()
+        }
+        
+    }
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+
+        if segue.identifier == "showMap" {
+            if let controller = segue.destinationViewController as? MapViewController {
+                controller.geoEvents = geoEvents
+            }
+        } else if segue.identifier == "showRaw" {
+            if let controller = segue.destinationViewController as? RawRaceDataTableViewController {
+                controller.runDetail = self.runDetailObject
+            }
+        }
+        
+    }
+    
+    func receiveAltimeterNotification(notification: NSNotification) {
+        
+        let userInfo:NSDictionary = notification.userInfo!
+        let altimeterData:CMAltitudeData? = userInfo.objectForKey("Altimeter") as? CMAltitudeData
+        
+        if let data = altimeterData {
+            self.pressure = Double(data.pressure)
+            self.altitude = Double(data.relativeAltitude)
         }
         
     }
@@ -366,10 +408,6 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         self.writeRaceData()
         let x = CLLocationCoordinate2DMake(self.lat, self.lon)
         geoEvents.append(x)
-        
-        //print("Logging lat: \(self.lat) lon: \(self.lon) distance: \(self.distance) duration: \(self.duration) speed: \(self.speed)")
-        //print("Logging Relative Altitude: \(altitude) Pressure: \(pressure)")
-        //print("Logging Heading: \(self.heading)")
         
     }
 
@@ -451,15 +489,12 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
 
     func willStartRace() {
         
-        setupMotionManage()
         logError("Race Started")
-        
-//        let voice = AVSpeechSynthesizer()
-//        let myUtterance = AVSpeechUtterance(string: "Your race has begun")
-//        voice.speakUtterance(myUtterance)
         
         UIView.animateKeyframesWithDuration(0.25, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 0.5 }, completion: nil)
         self.joinRaceButton.enabled = false
+        
+        self.setupMotionManage()
 
         // Hide the back button incase the user accidently hits it
         self.navigationItem.setHidesBackButton(true, animated: true)
@@ -468,10 +503,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RaceRecordViewController.receiveLocationNotification), name: "locationNotification", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RaceRecordViewController.receiveAltimeterNotification), name: "altimeterNotification", object: nil)
 
-        geoEvents = []
-        myLocationManager = SharedLocationManager.sharedInstance
-        myLocationManager?.workInBackground(true)
-        myLocationManager?.resetDistance()
+        self.geoEvents = []
+        self.myLocationManager = SharedLocationManager.sharedInstance
+        self.myLocationManager?.workInBackground(true)
+        self.myLocationManager?.resetDistance()
         
         self.runDetailObject = writeRaceDetail()
         
@@ -484,101 +519,76 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     func willStopRace() {
         
         logError("Race Stoped")
+            
+        UIView.animateKeyframesWithDuration(0.25, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 1 }, completion: nil)
+        self.joinRaceButton.enabled = true
+        
+        self.bLocationsReceived = false
         
         if let ped = self.pedoMeter {
             ped.stopPedometerUpdates()
         }
         
-        let title = NSLocalizedString("Finished Race", comment: "")
-
-        let message = NSLocalizedString("By pressing OK you will finish the current race and logging will stop.", comment: "")
-
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        alert.addAction(cancelAction)
-
-        let finishRaceAction = UIAlertAction(title: "Finish Race", style: .Default) { _ in
-            
-            UIView.animateKeyframesWithDuration(0.25, delay: 0, options: [], animations: { self.joinRaceButton.alpha = 1 }, completion: nil)
-            self.joinRaceButton.enabled = true
-            
-            self.bLocationsReceived = false
-            
-            if self.logTimer != nil {
-                
-                self.logTimer!.invalidate()
-                self.logTimer = nil
-                
-            }
-            
-            NSNotificationCenter.defaultCenter().removeObserver(self, name:"locationNotification", object:nil)
-            NSNotificationCenter.defaultCenter().removeObserver(self, name:"altimeterNotification", object:nil)
-            
-            self.startStopButton.setTitle("START", forState: .Normal)
-            self.myLocationManager?.workInBackground(false)
-            self.myLocationManager = nil
-            
-            self.navigationItem.setHidesBackButton(false, animated: true)
-            
+        if self.logTimer != nil {
+            self.logTimer!.invalidate()
+            self.logTimer = nil
         }
-
-        alert.addAction(finishRaceAction)
-
-        dispatch_async(dispatch_get_main_queue()) {
-            
-            self.presentViewController(alert, animated: true, completion:nil)
-            
-        }
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "locationNotification", object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "altimeterNotification", object: nil)
+        
+        self.startStopButton.setTitle("START", forState: .Normal)
+        self.myLocationManager?.workInBackground(false)
+        self.myLocationManager = nil
+        
+        self.navigationItem.setHidesBackButton(false, animated: true)
         
     }
     
     // This sets up the motion manager to return step data
     func setupMotionManage() {
         
-        if(CMPedometer.isStepCountingAvailable()){
+        if(CMPedometer.isStepCountingAvailable()) {
             
             if let ped = self.pedoMeter {
                 
-                ped.startPedometerUpdatesFromDate(NSDate()) { (data, error) -> Void in
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                ped.startPedometerUpdatesFromDate(NSDate()) { (data, error) in
                         
-                        if(error == nil) {
+                    if(error == nil) {
+                        
+                        if let stepData = data {
                             
-                            if let stepData = data {
+                            self.stepsTaken = Int(stepData.numberOfSteps)
+                            
+                            if let dst = stepData.distance {
+                                self.pedDistance = Double(dst)
+                            }
+                            
+                            if let pce = stepData.currentPace {
+                                self.currentPace = Double(pce)
+                            }
+                            
+                            if let cad = stepData.currentCadence {
+                                self.currentCadence = Double(cad)
+                            }
+                            
+                            dispatch_async(dispatch_get_main_queue()) {
                                 
-                                self.stepsTaken = Int(stepData.numberOfSteps)
+                                let paceStr = String(self.currentPace * 16.6667)
+                                let paceArr = paceStr.componentsSeparatedByString(".")
+                                let minutes = Int(paceArr[0])
+                                let seconds = Int(paceArr[1])
                                 
-                                if let dst = stepData.distance {
-                                    self.pedDistance = Double(dst)
-                                }
+                                self.paceLabel.text = String(format:"%02d' %02d\"", minutes!, seconds!)
                                 
-                                if let pce = stepData.currentPace {
-                                    self.currentPace = Double(pce)
-                                }
-                                
-                                if let cad = stepData.currentCadence {
-                                    self.currentCadence = Double(cad)
-                                }
-                                
-                                dispatch_async(dispatch_get_main_queue()) {
-                                    
-                                    let paceStr = String(self.currentPace * 16.6667)
-                                    let paceArr = paceStr.componentsSeparatedByString(".")
-                                    let minutes = Int(paceArr[0])
-                                    let seconds = Int(paceArr[1])
-                                    
-                                    self.paceLabel.text = String(format:"%02d' %02d\"", minutes!, seconds!)
-                                    
-                                }
                             }
                         }
-                            
-                        else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
-                            self.didEncounterAuthorizationError()
-                        }
-                    })
+                        
+                    } else if (Int(error!.code) == Int(CMErrorMotionActivityNotAuthorized.rawValue)) {
+                        
+                        self.didEncounterAuthorizationError()
+                        
+                    }
                 }
             }
         }

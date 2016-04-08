@@ -12,15 +12,14 @@ import FBSDKCoreKit
 
 class Competitors {
     
-    let users: Users = (UIApplication.sharedApplication().delegate as! AppDelegate).users
+    let users: Users = Users.sharedInstance
+    let events: EventManager = EventManager()
     var ref: Firebase
     var list = [Competitor]()
-    let events = EventManager()
     
     init(raceId: String) {
         
         self.ref = Firebase(url: "https://real-time-running.firebaseio.com/races/\(raceId)/competitors")
-        
         self.observeEvents()
         
     }
@@ -34,30 +33,9 @@ class Competitors {
     func findOne(id: String) -> Competitor? {
         
         if let index = self.index(id) {
-            
             return self.list[index]
-            
         } else {
-            
             return nil
-            
-        }
-        
-    }
-    
-    func getPosition(id: String) -> String {
-        
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .OrdinalStyle
-        
-        if let competitor = self.findOne(id), let index = self.index(id), let position = formatter.stringFromNumber(index + 1) {
-            
-            return competitor.distance > 0 ? position : ""
-            
-        } else {
-            
-            return ""
-            
         }
         
     }
@@ -102,9 +80,7 @@ class Competitors {
         self.list.append(competitor)
         
         if let index = self.index(id) {
-            
             self.events.trigger("competitorAdded", information: index)
-        
         }
         
     }
@@ -116,9 +92,7 @@ class Competitors {
             var competitor = self.list[index]
             
             competitor.update(fields)
-            
             self.list[index] = competitor
-            
             self.sort()
             
             let fields = [
@@ -135,11 +109,8 @@ class Competitors {
     private func documentWasRemoved(id: String, fields: NSDictionary?) {
         
         if let index = self.index(id) {
-            
             self.list.removeAtIndex(index)
-            
             self.events.trigger("competitorRemoved", information: index)
-            
         }
         
     }
@@ -163,10 +134,11 @@ class Competitors {
     
     func update(id: String, fields: NSDictionary?) {
         
-        if let distance = fields?.valueForKey("distance"), let pace = fields?.valueForKey("pace") {
+        if let distance = fields?.valueForKey("distance"), let pace = fields?.valueForKey("pace"), let position = fields?.valueForKey("position") {
             
             self.ref.childByAppendingPath("\(id)/distance").setValue(distance)
             self.ref.childByAppendingPath("\(id)/pace").setValue(pace)
+            self.ref.childByAppendingPath("\(id)/position").setValue(position)
             
         }
         

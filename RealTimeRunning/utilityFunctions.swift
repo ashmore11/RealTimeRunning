@@ -27,6 +27,20 @@ func radiansToDegrees(x: Double) -> Double {
     return (180.0 * x / M_PI)
 }
 
+func imageFromString(string: String) -> UIImage? {
+
+    if let nsurl = NSURL(string: string), let data = NSData(contentsOfURL: nsurl), let image = UIImage(data: data) {
+    
+        return image
+    
+    } else {
+    
+        return nil
+    
+    }
+    
+}
+
 func getDocumentsDirectory() -> NSString {
     let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
     let documentsDirectory = paths[0]
@@ -264,6 +278,17 @@ func UIColorFromRGB(rgbValue: UInt) -> UIColor {
         blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
         alpha: CGFloat(1.0)
     )
+    
+}
+
+func getOrdinalPosition(index: Int) -> String {
+    
+    let formatter = NSNumberFormatter()
+    formatter.numberStyle = .OrdinalStyle
+    
+    guard let position = formatter.stringFromNumber(index) else { return "" }
+        
+    return position
     
 }
 

@@ -12,6 +12,8 @@ import FBSDKCoreKit
 
 class Races {
     
+    static let sharedInstance = Races()
+    
     var ref = Firebase(url:"https://real-time-running.firebaseio.com/races")
     var races = [Race]()
     var sorted: [Race] {
@@ -62,13 +64,9 @@ class Races {
     func findOne(id: String) -> Race? {
     
         if let index = self.index(id) {
-        
             return self.races[index]
-        
         } else {
-            
             return nil
-            
         }
     
     }
@@ -76,7 +74,6 @@ class Races {
     private func documentWasAdded(id: String, fields: NSDictionary?) {
         
         let race = Race(id: id, fields: fields)
-        
         self.races.append(race)
         
     }
@@ -86,13 +83,11 @@ class Races {
         if let index = self.index(id) {
             
             var race = self.races[index]
-            
             race.update(fields)
-            
             self.races[index] = race
             
             NSNotificationCenter.defaultCenter().postNotificationName("raceUpdated", object: race.id)
-            
+        
         }
         
     }
@@ -100,11 +95,8 @@ class Races {
     private func documentWasRemoved(id: String, fields: NSDictionary?) {
         
         if let index = self.index(id) {
-            
             self.races.removeAtIndex(index)
-            
         }
-        
         NSNotificationCenter.defaultCenter().postNotificationName("reloadRaces", object: nil)
         
     }
