@@ -174,8 +174,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     func userLoggedIn() {
         
         UIView.animateWithDuration(0.25, delay: 0, options: [.CurveLinear], animations: { self.topViewArea.alpha = 1 }, completion: nil)
+        // ERROR optional username was nil fixed by Bob
         
-        self.navigationItem.title = self.currentUser.username!.uppercaseString
+        if let userName = self.currentUser.username {
+            self.navigationItem.title = userName.uppercaseString
+        }
         
         if let imageURL = self.currentUser.imageURL, let rank = self.currentUser.rank, points = self.currentUser.points {
             self.fbProfileImage.image = imageFromString(imageURL)
