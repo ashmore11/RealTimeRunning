@@ -196,7 +196,9 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
                 
             }
-                
+            
+            UpdateVisibleRowsOfCompetitorsTable()
+            /*
             for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
                 
                 let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
@@ -207,9 +209,24 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
                 
             }
+             */
             
         }
         
+    }
+    
+    func UpdateVisibleRowsOfCompetitorsTable() {
+        
+        if let vizRows = self.competitorsTableView.indexPathsForVisibleRows {
+            for indexPath in vizRows {
+                if let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as? CompetitorsTableViewCell  {
+                    if let competitor = self.competitors?.list[indexPath.row] {
+                        cell.positionLabel.text = getOrdinalPosition(indexPath.row + 1)
+                        cell.distancePaceLabel.text = String(format: "%6.2f km", competitor.distance ?? 0.00)
+                    }
+                }
+            }
+        }
     }
     
     func competitorRemoved(data: Any?) {
@@ -222,11 +239,13 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
             self.competitorsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Middle)
             self.competitorsTableView.endUpdates()
             
+            UpdateVisibleRowsOfCompetitorsTable()
+            /*
             for indexPath in self.competitorsTableView.indexPathsForVisibleRows! {
                 let cell = self.competitorsTableView.cellForRowAtIndexPath(indexPath) as! CompetitorsTableViewCell
                 cell.positionLabel.text = getOrdinalPosition(indexPath.row + 1)
             }
-            
+            */
             self.updateJoinRaceButton(0.5)
             
         }

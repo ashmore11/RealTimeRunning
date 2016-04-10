@@ -37,7 +37,7 @@ class UIGraphView: UIView {
     override func drawRect(rect: CGRect) {
         // Drawing code
         if let context = UIGraphicsGetCurrentContext() {
-            processGradient(context, startColor: startColor, endColor: endColor, gradient: faceGradient)
+            processGradient(context, startColor: startColor, endColor: endColor)
 
             self.layer.borderWidth = 2
             self.layer.cornerRadius = 12
@@ -50,14 +50,14 @@ class UIGraphView: UIView {
         }
     }
     
-    func processGradient(context: CGContextRef, startColor: UIColor, endColor: UIColor, gradient:CGGradientRef?) {
-        if(gradient == nil) {
+    func processGradient(context: CGContextRef, startColor: UIColor, endColor: UIColor) {
+        if(faceGradient == nil) {
             let gradientColors: [AnyObject] = [startColor.CGColor, endColor.CGColor]
             let flocations: [CGFloat] = [ 0.0, 1.0 ]
             let rgbColorspace = CGColorSpaceCreateDeviceRGB()
-            let gradient = CGGradientCreateWithColors(rgbColorspace, gradientColors, flocations)
+            faceGradient = CGGradientCreateWithColors(rgbColorspace, gradientColors, flocations)
         }
-        if let grad = gradient {
+        if let grad = faceGradient {
             CGContextDrawLinearGradient(context, grad, CGPointMake(self.bounds.size.width/2.0, 0), CGPointMake(self.bounds.size.width/2.0, self.bounds.size.height),[])
         }
     }
