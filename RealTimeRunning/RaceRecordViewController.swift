@@ -297,7 +297,10 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
         
             let alert = AlertViewController()
             
-            alert.show("CONGRATULATIONS!", subTitleLabel: "You came in \(getOrdinalPosition(self.currentPosition)) position and earned yourself \(points) points. You are now ranked in \(getOrdinalPosition(rank)) position, globally. Keep up the good work \(name) and don't stop racing!")
+            let title = "CONGRATULATIONS!"
+            let subTitle = "You came in \(getOrdinalPosition(self.currentPosition)) position and earned yourself \(points) points. You are now ranked in \(getOrdinalPosition(rank)) position, globally. Keep up the good work \(name) and don't stop racing!"
+            
+            alert.show(title, subTitle: subTitle)
             
             alert.events.listenTo("doneButtonPushed") {
                 alert.hide()

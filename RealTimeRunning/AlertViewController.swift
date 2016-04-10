@@ -72,26 +72,26 @@ public class AlertViewController: UIViewController {
     
     }
     
-    func show(title: String, subTitleLabel: String) {
+    func show(title: String, subTitle: String) {
         
         self.view.alpha = 0
         
         self.window.addSubview(self.view)
         
         self.titleLabel.text = title
-        self.subTitleLabel.text = subTitleLabel
+        self.subTitleLabel.text = subTitle
         
         print(self.window.center.y + 15, self.window.center.y)
         
         self.contentView.frame.origin.y = -400
-        UIView.animateWithDuration(1, animations: {
+        UIView.animateWithDuration(0.2, animations: {
             
             self.contentView.center.y = self.window.center.y + 15
             self.view.alpha = 1
             
             }, completion: { finished in
                 
-                UIView.animateWithDuration(1, animations: {
+                UIView.animateWithDuration(0.2, animations: {
                     
                     self.contentView.center = self.window.center
                     

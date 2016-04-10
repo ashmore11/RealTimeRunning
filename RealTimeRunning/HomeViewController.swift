@@ -175,9 +175,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         UIView.animateWithDuration(0.25, delay: 0, options: [.CurveLinear], animations: { self.topViewArea.alpha = 1 }, completion: nil)
         
-        self.navigationItem.title = self.currentUser.username!.uppercaseString
-        
-        if let imageURL = self.currentUser.imageURL, let rank = self.currentUser.rank, points = self.currentUser.points {
+        if let username = self.currentUser.username, let imageURL = self.currentUser.imageURL, let rank = self.currentUser.rank, points = self.currentUser.points {
+            self.navigationItem.title = username
             self.fbProfileImage.image = imageFromString(imageURL)
             self.rankLabel.text = "\(rank)"
             self.pointsLabel.text = "\(points)"
