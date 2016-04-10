@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import FBSDKCoreKit
 import FBSDKLoginKit
 
-class HomeViewController: UIViewController, UITextFieldDelegate {
+class HomeViewController: UIViewController {
     
     // MARK: Properties
     @IBOutlet weak var fbProfileImage: UIImageView!
@@ -18,9 +17,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var rankLabel: UILabel!
     @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var racesButton: UIButton!
-    @IBOutlet weak var fbLoginButton: UIButton!
+    @IBOutlet weak var logoutButton: UIButton!
     
-    let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
+    var loginView: LoginViewController!
     var currentUser: CurrentUser = CurrentUser.sharedInstance
     var users: Users = Users.sharedInstance
     let races: Races = Races.sharedInstance
@@ -31,11 +30,18 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         super.viewDidLoad()
         
+        self.loginView = LoginViewController()
+        
+        if FBSDKAccessToken.currentAccessToken() === nil {
+            self.performSegueWithIdentifier("showLogin", sender: nil)
+        }
+        
+        self.loginView.events.listenTo("loginComplete", action: self.getData)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.usersSubscriptionReady), name: "usersSubscriptionReady", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.racesSubscriptionReady), name: "racesSubscriptionReady", object: nil)
         
         self.navigationItem.title = "REAL TIME RUNNING"
-        self.topViewArea.alpha = 0
         
         self.setupLayout()
         
@@ -45,18 +51,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         self.currentUser.sendRequest()
         self.currentUser.events.listenTo("userLoaded", action: {
-            
             if let id = self.currentUser.id {
                 if self.users.findOne(id) != nil {
                     let token = FBSDKAccessToken.currentAccessToken().tokenString
                     self.users.authenticateUser(token) {
                         self.userLoggedIn()
                     }
-                } else {
-                    self.fbLoginManager.logOut()
                 }
             }
-            
         })
         
     }
@@ -70,46 +72,23 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     func setupLayout() {
     
         setViewGradient(self.view)
-        setButtonGradient(self.racesButton, self.fbLoginButton)
+        setButtonGradient(self.racesButton, self.logoutButton)
         
         self.topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
         self.fbProfileImage.layer.cornerRadius = 10
         self.fbProfileImage.clipsToBounds = true
-        self.racesButton.alpha = 0.5
         
     }
     
-    func fadeRacesButton(alpha: CGFloat, delay: NSTimeInterval) {
+    @IBAction func logoutButtonPushed(sender: UIButton) {
         
-        UIView.animateWithDuration(0.3, delay: delay, options: [.CurveEaseInOut], animations: { self.racesButton.alpha = alpha }, completion: nil)
-        
-    }
-    
-    @IBAction func fbLoginButtonPushed(sender: UIButton) {
-        
-        if self.currentUser.loggedIn == true {
-            self.fbLoginManager.logOut()
-            self.userLoggedOut()
-        } else {
-            self.fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) in
-                if error != nil {
-                    print("Error in fbLoginManager.logInWithReadPermissionserror:\(error)")
-                    return
-                }
-                let fbloginresult: FBSDKLoginManagerLoginResult = result
-                if(fbloginresult.grantedPermissions.contains("email")) {
-                    let token = FBSDKAccessToken.currentAccessToken().tokenString
-                    self.users.authenticateUser(token) {
-                        self.getData()
-                    }
-                }
-            })
-        }
+        self.loginView.logout()
+        self.userLoggedOut()
         
     }
     
     func getData() {
-            
+        
         self.currentUser.sendRequest()
         self.currentUser.events.listenTo("userLoaded", action: {
             if let id = self.currentUser.id, let name = self.currentUser.name, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
@@ -132,6 +111,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             }
         })
         
+    }
+    
+    @IBAction func unwindToHome(segue: UIStoryboardSegue) {
+        print("unwinding")
     }
     
     func showUsernameAlert(completionHandler: (username: String) -> Void) {
@@ -160,20 +143,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     
     func userLoggedOut() {
         
-        UIView.animateWithDuration(0.25, delay: 0, options: [.CurveLinear], animations: { self.topViewArea.alpha = 0 }, completion: nil)
+        self.performSegueWithIdentifier("showLogin", sender: nil)
         
         self.currentUser.loggedIn = false
         self.fbProfileImage.image = nil
         self.racesButton.enabled = false
         self.navigationItem.title = "REAL TIME RUNNING"
-        self.fbLoginButton.setTitle("SIGN IN", forState: .Normal)
-        self.fadeRacesButton(0.5, delay: 0)
         
     }
     
     func userLoggedIn() {
-        
-        UIView.animateWithDuration(0.25, delay: 0, options: [.CurveLinear], animations: { self.topViewArea.alpha = 1 }, completion: nil)
         
         if let userName = self.currentUser.username, let imageURL = self.currentUser.imageURL, let rank = self.currentUser.rank, points = self.currentUser.points {
             self.navigationItem.title = userName.uppercaseString
@@ -183,8 +162,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         }
         
         self.racesButton.enabled = true
-        self.fbLoginButton.setTitle("SIGN OUT", forState: .Normal)
-        self.fadeRacesButton(1, delay: 1)
         
         self.users.events.listenTo("usersUpdated") {
             if let rank = self.currentUser.rank, let points = self.currentUser.points {
@@ -192,6 +169,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                 self.pointsLabel.text = "\(points)"
             }
         }
+        
+        self.loginView.performSegueWithIdentifier("unwindToHome", sender: self)
         
     }
     

@@ -63,6 +63,7 @@
 		D28993F81CB3E5FF0042E9B7 /* UsernameAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28993F71CB3E5FF0042E9B7 /* UsernameAlert.swift */; };
 		D292792A1CB6BFE70079E0FD /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29279281CB6BFE70079E0FD /* AlertViewController.swift */; };
 		D292792B1CB6BFE70079E0FD /* AlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D29279291CB6BFE70079E0FD /* AlertViewController.xib */; };
+		D2979C4B1CBA5225008B05FC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2979C491CBA5225008B05FC /* LoginViewController.swift */; };
 		D299ABF21C8DD76500FE219C /* CompetitorsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299ABF01C8DD76500FE219C /* CompetitorsTableViewCell.swift */; };
 		D299ABF51C91756000FE219C /* Competitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299ABF41C91755F00FE219C /* Competitor.swift */; };
 		D299AC031C9BF30D00FE219C /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D299AC021C9BF30D00FE219C /* CurrentUser.swift */; };
@@ -169,6 +170,7 @@
 		D28993F71CB3E5FF0042E9B7 /* UsernameAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameAlert.swift; sourceTree = "<group>"; };
 		D29279281CB6BFE70079E0FD /* AlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
 		D29279291CB6BFE70079E0FD /* AlertViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertViewController.xib; sourceTree = "<group>"; };
+		D2979C491CBA5225008B05FC /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D299ABF01C8DD76500FE219C /* CompetitorsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompetitorsTableViewCell.swift; sourceTree = "<group>"; };
 		D299ABF41C91755F00FE219C /* Competitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Competitor.swift; sourceTree = "<group>"; };
 		D299AC021C9BF30D00FE219C /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 				D2AFE2011C75F42B009750A8 /* RacesTableViewController.swift */,
 				D29279281CB6BFE70079E0FD /* AlertViewController.swift */,
 				D29279291CB6BFE70079E0FD /* AlertViewController.xib */,
+				D2979C491CBA5225008B05FC /* LoginViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -645,6 +648,7 @@
 				C4EC42FA1C7F2D5600A458E3 /* raceHistoryTableViewCell.swift in Sources */,
 				D299AC031C9BF30D00FE219C /* CurrentUser.swift in Sources */,
 				D2AFE1FE1C75EA06009750A8 /* Race.swift in Sources */,
+				D2979C4B1CBA5225008B05FC /* LoginViewController.swift in Sources */,
 				C4EC43001C7F5ABC00A458E3 /* RaceGraphViewController.swift in Sources */,
 				D240E52E1CA17D8000B2A4CE /* Users.swift in Sources */,
 				C4E24C4D1C88E082006F5712 /* ErrorLogTableViewController.swift in Sources */,
