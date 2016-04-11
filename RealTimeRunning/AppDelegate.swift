@@ -9,6 +9,9 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
+import Fabric
+import TwitterKit
+import DigitsKit
 import CoreData
 import Firebase
 
@@ -37,9 +40,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSFontAttributeName: UIFont(name: "Oswald-Regular", size: 20)!
         ]
         
-        // Override point for customization after application launch.
-//        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-//        print("app dir: %@",documentsPath)
+        Twitter.sharedInstance().startWithConsumerKey("L4vXxR4dqKmgD8fwKMlm1EwnX", consumerSecret: "QO2Gu4jsVDk01VVXOkFeMoaT1QJ9Pq8agcOe6YoHQqZzy6YY91")
+        
+        Fabric.with([Twitter.self, Digits.self])
         
         let notificationSettings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
