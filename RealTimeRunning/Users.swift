@@ -38,27 +38,27 @@ class Users {
         
     }
     
-    func authenticateUserUsingEmail(email: String, password: String, callback: () -> Void) {
+    func authenticateUserUsingEmail(email: String, password: String, callback: (data: NSDictionary) -> Void) {
         
         ref.authUser(email, password: password, withCompletionBlock: { error, authData in
             if error != nil {
                 print("Authentication Failed! \(error.localizedDescription)")
             } else {
                 print("User Authenticated!", authData.uid)
-                callback()
+                callback(data: authData.providerData)
             }
         })
         
     }
     
-    func authenticateUserUsingFacebook(token: String, callback: (id: NSDictionary) -> Void) {
+    func authenticateUserUsingFacebook(token: String, callback: (data: NSDictionary) -> Void) {
         
         ref.authWithOAuthProvider("facebook", token: token, withCompletionBlock: { error, authData in
             if error != nil {
                 print("Authentication Failed! \(error.description)")
             } else {
                 print("User Authenticated!", authData.providerData["id"]!)
-                callback(id: authData.providerData)
+                callback(data: authData.providerData)
             }
         })
         

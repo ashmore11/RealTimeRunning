@@ -81,30 +81,8 @@ class LoginViewController: UIViewController {
                     
                     } else {
                         
-                        self.showUsernameAlert { username in
-                            
-                            if let name = data["displayName"] as? String, let email = data["email"] as? String, let imageURL = data["profileImageURL"] as? String {
-                            
-                                let parameters = [
-                                    "username": username,
-                                    "firstName": name.characters.split{$0 == " "}.map(String.init)[0],
-                                    "email": email,
-                                    "image": imageURL,
-                                    "points": 0
-                                ]
-                                
-                                Users.sharedInstance.insert(id, fields: parameters) { user in
-                                    
-                                    if let user = Users.sharedInstance.findOne(id) {
-                                
-                                        CurrentUser.sharedInstance.setCurrentUser(user)
-                                        
-                                        self.performSegueWithIdentifier("unwindToHome", sender: self)
-                                        
-                                    }
-                                }
-                            }
-                        }
+                        self.createUser(id, data: data)
+                        
                     }
                 }
             }
@@ -117,11 +95,40 @@ class LoginViewController: UIViewController {
         self.dismissKeyboard()
         
         if let email = self.emailTextField.text, let password = self.passwordTextField.text {
-            Users.sharedInstance.authenticateUserUsingEmail(email, password: password) {
-                
+            Users.sharedInstance.authenticateUserUsingEmail(email, password: password) { data in
+                print(data)
             }
         }
     
+    }
+    
+    func createUser(id: String, data: NSDictionary) {
+        
+        self.showUsernameAlert { username in
+            
+            if let name = data["displayName"] as? String, let email = data["email"] as? String, let imageURL = data["profileImageURL"] as? String {
+                
+                let parameters = [
+                    "username": username,
+                    "firstName": name.characters.split{$0 == " "}.map(String.init)[0],
+                    "email": email,
+                    "image": imageURL,
+                    "points": 0
+                ]
+                
+                Users.sharedInstance.insert(id, fields: parameters) { user in
+                    
+                    if let user = Users.sharedInstance.findOne(id) {
+                        
+                        CurrentUser.sharedInstance.setCurrentUser(user)
+                        
+                        self.performSegueWithIdentifier("unwindToHome", sender: self)
+                        
+                    }
+                }
+            }
+        }
+        
     }
     
     func showUsernameAlert(completionHandler: (username: String) -> Void) {
