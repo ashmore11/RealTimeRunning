@@ -312,7 +312,7 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func showAlert(timer: NSTimer) {
         
-        if let points = timer.userInfo as? Int, let rank = self.currentUser.rank, let name = self.currentUser.name {
+        if let points = timer.userInfo as? Int, let rank = self.currentUser.rank, let name = self.currentUser.firstName {
         
             let alert = AlertViewController()
             

@@ -12,8 +12,9 @@ struct User {
     
     var id: String?
     var username: String?
-    var name: String?
+    var firstName: String?
     var image: String?
+    var email: String?
     var rank: Int?
     var points: Int?
     
@@ -30,12 +31,16 @@ struct User {
             self.username = username
         }
         
-        if let name = fields?.valueForKey("name") as? String {
-            self.name = name
+        if let firstName = fields?.valueForKey("firstName") as? String {
+            self.firstName = firstName
         }
         
         if let image = fields?.valueForKey("image") as? String {
             self.image = image
+        }
+        
+        if let email = fields?.valueForKey("email") as? String {
+            self.email = email
         }
         
         if let rank = fields?.valueForKey("rank") as? Int {

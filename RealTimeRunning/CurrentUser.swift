@@ -18,7 +18,7 @@ class CurrentUser {
     var loggedIn: Bool = false
     
     var id: String?
-    var name: String?
+    var firstName: String?
     var imageURL: String?
     var email: String?
     
@@ -43,37 +43,29 @@ class CurrentUser {
             return nil
         }
     }
+    
+    func setCurrentUser(user: User) {
         
-    func sendRequest() {
-        
-        if let accessToken = FBSDKAccessToken.currentAccessToken() {
-            
-            let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
-            let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: parameters, tokenString: accessToken.tokenString, version: nil, HTTPMethod: "GET")
-            
-            graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
-                
-                if error != nil {
-                    logError(error.localizedDescription)
-                    return
-                }
-                
-                self.getData(result)
-                
-            }
-            
+        if let id = user.id, let firstName = user.firstName, let imageURL = user.image, let email = user.email {
+            self.id = id
+            self.firstName = firstName
+            self.imageURL = imageURL
+            self.email = email
         }
         
     }
     
-    func getData(data: AnyObject) {
+    func setData(data: AnyObject) {
         
         guard let id = data.objectForKey("id") as? String else { return }
         
         self.id = id
         
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(id, forKey: "userId")
+        
         if let firstName = data.objectForKey("first_name") as? String {
-            self.name = firstName
+            self.firstName = firstName
         }
         
         if let imageURL = data.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as? String {

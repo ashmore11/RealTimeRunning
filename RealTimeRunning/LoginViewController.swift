@@ -8,16 +8,15 @@
 
 import UIKit
 import FBSDKLoginKit
-import TwitterKit
-import DigitsKit
 
 class LoginViewController: UIViewController {
     
     let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
 
     @IBOutlet weak var facebookButton: UIButton!
-    @IBOutlet weak var twitterButton: UIButton!
-    @IBOutlet weak var digitsButton: UIButton!
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var signInButton: UIButton!
     
     override func viewDidLoad() {
         
@@ -27,21 +26,33 @@ class LoginViewController: UIViewController {
 
         setViewGradient(self.view)
         
-        let cornerRadius = 5
+        let cornerRadius: CGFloat = 5
         
         var rectShape = CAShapeLayer()
-        rectShape.bounds = self.facebookButton.frame
-        rectShape.position = self.facebookButton.center
-        rectShape.path = UIBezierPath(roundedRect: self.facebookButton.bounds, byRoundingCorners: [.TopLeft, .TopRight], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)).CGPath
+        rectShape.bounds = self.emailTextField.frame
+        rectShape.position = self.emailTextField.center
+        rectShape.path = UIBezierPath(roundedRect: self.emailTextField.bounds, byRoundingCorners: [.TopLeft, .TopRight], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)).CGPath
         
-        self.facebookButton.layer.mask = rectShape
+        self.emailTextField.borderStyle = .None
+        self.emailTextField.layer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8).CGColor
+        self.emailTextField.layer.mask = rectShape
+        self.emailTextField.alpha = 0.8
+        
+        self.passwordTextField.borderStyle = .None
+        self.passwordTextField.layer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8).CGColor
+        self.passwordTextField.alpha = 0.8
         
         rectShape = CAShapeLayer()
-        rectShape.bounds = self.digitsButton.frame
-        rectShape.position = self.digitsButton.center
-        rectShape.path = UIBezierPath(roundedRect: self.digitsButton.bounds, byRoundingCorners: [.BottomLeft, .BottomRight], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)).CGPath
+        rectShape.bounds = self.signInButton.frame
+        rectShape.position = self.signInButton.center
+        rectShape.path = UIBezierPath(roundedRect: self.signInButton.bounds, byRoundingCorners: [.BottomLeft, .BottomRight], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)).CGPath
         
-        self.digitsButton.layer.mask = rectShape
+        self.signInButton.layer.mask = rectShape
+        
+        self.facebookButton.layer.cornerRadius = cornerRadius
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         
     }
     
@@ -55,38 +66,43 @@ class LoginViewController: UIViewController {
             let fbloginresult: FBSDKLoginManagerLoginResult = result
             if(fbloginresult.grantedPermissions.contains("email")) {
                 let token = FBSDKAccessToken.currentAccessToken().tokenString
-                Users.sharedInstance.authenticateUser(token) {
-                    CurrentUser.sharedInstance.sendRequest()
-                    self.performSegueWithIdentifier("unwindToHome", sender: self)
+                Users.sharedInstance.authenticateUserUsingFacebook(token) {
+                    
+                    let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
+                    let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: parameters, tokenString: token, version: nil, HTTPMethod: "GET")
+                    
+                    graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
+                        
+                        if error != nil {
+                            logError(error.localizedDescription)
+                            return
+                        }
+                        
+                        CurrentUser.sharedInstance.setData(result)
+                        self.performSegueWithIdentifier("unwindToHome", sender: self)
+                        
+                    }
                 }
             }
         })
     
     }
     
-    @IBAction func twitterButtonPushed(sender: UIButton) {
+    @IBAction func signInButtonPushed(sender: UIButton) {
+    
+        self.dismissKeyboard()
         
-        Twitter.sharedInstance().logInWithCompletion { session, error in
-            if (session != nil) {
-                print("signed in as \(session?.userName)");
-            } else {
-                print("error: \(error?.localizedDescription)");
+        if let email = self.emailTextField.text, let password = self.passwordTextField.text {
+            Users.sharedInstance.authenticateUserUsingEmail(email, password: password) {
+                
             }
         }
-//        self.performSegueWithIdentifier("unwindToHome", sender: self)
     
     }
     
-    @IBAction func digitsButtonPushed(sender: UIButton) {
+    func dismissKeyboard() {
         
-        let digits = Digits.sharedInstance()
-        digits.authenticateWithCompletion { (session, error) in
-            if (session != nil) {
-                print("signed in as \(session.phoneNumber)");
-            } else {
-                print("error: \(error?.localizedDescription)");
-            }
-        }
+        self.view.endEditing(false)
         
     }
     

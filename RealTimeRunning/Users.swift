@@ -24,13 +24,40 @@ class Users {
         
     }
     
-    func authenticateUser(token: String, callback: () -> Void) {
+    func createUser(email: String, password: String) {
+        
+        ref.createUser(email, password: password, withValueCompletionBlock: { error, result in
+            if error != nil {
+                print(error)
+            } else {
+                let uid = result["uid"] as? String
+                print(result)
+                print("Successfully created user account with uid: \(uid)")
+            }
+        })
+        
+    }
+    
+    func authenticateUserUsingEmail(email: String, password: String, callback: () -> Void) {
+        
+        ref.authUser(email, password: password, withCompletionBlock: { error, authData in
+            if error != nil {
+                print("Authentication Failed! \(error.localizedDescription)")
+            } else {
+                print("User Authenticated!", authData.uid)
+                callback()
+            }
+        })
+        
+    }
+    
+    func authenticateUserUsingFacebook(token: String, callback: () -> Void) {
         
         ref.authWithOAuthProvider("facebook", token: token, withCompletionBlock: { error, authData in
             if error != nil {
-                print("Authentication Failed! \(error)")
+                print("Authentication Failed! \(error.description)")
             } else {
-                print("User Authenticated!")
+                print("User Authenticated!", authData.providerData["id"]!)
                 callback()
             }
         })
@@ -120,11 +147,11 @@ class Users {
     
     func insert(id: String, fields: NSDictionary?, callback: () -> Void) {
         
-        if let username = fields?["username"], let name = fields?["name"], let email = fields?["email"], let image = fields?["image"], let points = fields?["points"] {
+        if let username = fields?["username"], let firstName = fields?["firstName"], let email = fields?["email"], let image = fields?["image"], let points = fields?["points"] {
             
             let parameters = [
                 "username": username,
-                "name": name,
+                "firstName": firstName,
                 "email": email,
                 "image": image,
                 "points": points

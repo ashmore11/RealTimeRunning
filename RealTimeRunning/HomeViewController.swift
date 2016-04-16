@@ -40,21 +40,22 @@ class HomeViewController: UIViewController {
     
     func usersSubscriptionReady(notification: NSNotification) {
         
-        if FBSDKAccessToken.currentAccessToken() === nil {
-            self.performSegueWithIdentifier("showLogin", sender: nil)
+        if let id = NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String, let user = self.users.findOne(id) {
+            self.currentUser.setCurrentUser(user)
+            self.userLoggedIn()
         } else {
-            self.currentUser.sendRequest()
+            self.performSegueWithIdentifier("showLogin", sender: nil)
         }
         
         self.currentUser.events.listenTo("userLoaded", action: {
-            if let id = self.currentUser.id, let name = self.currentUser.name, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
+            if let id = self.currentUser.id, let firstName = self.currentUser.firstName, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
                 if self.users.findOne(id) != nil {
                     self.userLoggedIn()
                 } else {
                     self.showUsernameAlert { username in
                         let parameters = [
                             "username": username,
-                            "name": name,
+                            "firstName": firstName,
                             "email": email,
                             "image": imageURL,
                             "points": 0
@@ -73,7 +74,7 @@ class HomeViewController: UIViewController {
         
         let alert = UsernameAlert()
         
-        let title = "HELLO \(self.currentUser.name!.uppercaseString)!"
+        let title = "HELLO \(self.currentUser.firstName!.uppercaseString)!"
         let subTitle = "Create a username that is greater than 3 characters and less than 17. Username's must only contain letters and numbers."
         
         alert.showView(title, subTitleLabel: subTitle)
@@ -123,12 +124,14 @@ class HomeViewController: UIViewController {
     
     func userLoggedOut() {
         
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("userId")
+        
         self.performSegueWithIdentifier("showLogin", sender: nil)
         
+        self.navigationItem.title = "REAL TIME RUNNING"
         self.currentUser.loggedIn = false
         self.fbProfileImage.image = nil
         self.racesButton.enabled = false
-        self.navigationItem.title = "REAL TIME RUNNING"
         
     }
     

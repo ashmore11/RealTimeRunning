@@ -407,7 +407,6 @@
 				C4FA10471C7CDB7400C390B3 /* Embed Frameworks */,
 				8F96CB215D198A0FA588D6B3 /* Embed Pods Frameworks */,
 				50DAE67E80A6D9BAE4F1545E /* Copy Pods Resources */,
-				D2979C4D1CBBA339008B05FC /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -594,19 +593,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RealTimeRunning/Pods-RealTimeRunning-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		D2979C4D1CBBA339008B05FC /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" 21d155190e8fdb3beb01681383511ffa77cd5544 71d77332eb02ae9b375e4639f38aee97a5f0042eeea314fa6d825d55e9c42de8";
 		};
 		EBA1EE22E06C01B94BC7D558 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
