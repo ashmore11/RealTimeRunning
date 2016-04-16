@@ -59,28 +59,52 @@ class LoginViewController: UIViewController {
     @IBAction func facebookButtonPushed(sender: UIButton) {
         
         self.fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) in
+            
             if error != nil {
                 print("Error in fbLoginManager.logInWithReadPermissionserror:\(error)")
                 return
             }
-            let fbloginresult: FBSDKLoginManagerLoginResult = result
-            if(fbloginresult.grantedPermissions.contains("email")) {
+            
+            if(result.grantedPermissions.contains("email")) {
+                
                 let token = FBSDKAccessToken.currentAccessToken().tokenString
-                Users.sharedInstance.authenticateUserUsingFacebook(token) {
+                
+                Users.sharedInstance.authenticateUserUsingFacebook(token) { data in
                     
-                    let parameters = ["fields": "email, first_name, last_name, picture.type(large)"]
-                    let graphRequest = FBSDKGraphRequest(graphPath: "me", parameters: parameters, tokenString: token, version: nil, HTTPMethod: "GET")
+                    guard let id = data["id"] as? String else { return }
                     
-                    graphRequest.startWithCompletionHandler { (connection, result, error) -> Void in
+                    if let user = Users.sharedInstance.findOne(id) {
                         
-                        if error != nil {
-                            logError(error.localizedDescription)
-                            return
-                        }
-                        
-                        CurrentUser.sharedInstance.setData(result)
+                        CurrentUser.sharedInstance.setCurrentUser(user)
+                    
                         self.performSegueWithIdentifier("unwindToHome", sender: self)
+                    
+                    } else {
                         
+                        self.showUsernameAlert { username in
+                            
+                            if let name = data["displayName"] as? String, let email = data["email"] as? String, let imageURL = data["profileImageURL"] as? String {
+                            
+                                let parameters = [
+                                    "username": username,
+                                    "firstName": name.characters.split{$0 == " "}.map(String.init)[0],
+                                    "email": email,
+                                    "image": imageURL,
+                                    "points": 0
+                                ]
+                                
+                                Users.sharedInstance.insert(id, fields: parameters) { user in
+                                    
+                                    if let user = Users.sharedInstance.findOne(id) {
+                                
+                                        CurrentUser.sharedInstance.setCurrentUser(user)
+                                        
+                                        self.performSegueWithIdentifier("unwindToHome", sender: self)
+                                        
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -98,6 +122,30 @@ class LoginViewController: UIViewController {
             }
         }
     
+    }
+    
+    func showUsernameAlert(completionHandler: (username: String) -> Void) {
+        
+        let alert = UsernameAlert()
+        
+        let title = "HELLO \(CurrentUser.sharedInstance.firstName!.uppercaseString)!"
+        let subTitle = "Create a username that is greater than 3 characters and less than 17. Username's must only contain letters and numbers."
+        
+        alert.showView(title, subTitleLabel: subTitle)
+        
+        alert.events.listenTo("buttonTapped", action: {
+            if let username = alert.textField.text {
+                if Users.sharedInstance.list.indexOf({ $0.username == username }) != nil {
+                    alert.errorHappened("USERNAME ALREADY EXISTS")
+                } else if username.characters.count < 4 {
+                    alert.errorHappened("USERNAME TOO SHORT")
+                } else {
+                    completionHandler(username: username)
+                    alert.hideView()
+                }
+            }
+        })
+        
     }
     
     func dismissKeyboard() {

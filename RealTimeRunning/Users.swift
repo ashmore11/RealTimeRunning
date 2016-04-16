@@ -51,14 +51,14 @@ class Users {
         
     }
     
-    func authenticateUserUsingFacebook(token: String, callback: () -> Void) {
+    func authenticateUserUsingFacebook(token: String, callback: (id: NSDictionary) -> Void) {
         
         ref.authWithOAuthProvider("facebook", token: token, withCompletionBlock: { error, authData in
             if error != nil {
                 print("Authentication Failed! \(error.description)")
             } else {
                 print("User Authenticated!", authData.providerData["id"]!)
-                callback()
+                callback(id: authData.providerData)
             }
         })
         

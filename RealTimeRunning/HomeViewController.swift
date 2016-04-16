@@ -47,51 +47,6 @@ class HomeViewController: UIViewController {
             self.performSegueWithIdentifier("showLogin", sender: nil)
         }
         
-        self.currentUser.events.listenTo("userLoaded", action: {
-            if let id = self.currentUser.id, let firstName = self.currentUser.firstName, let email = self.currentUser.email, let imageURL = self.currentUser.imageURL {
-                if self.users.findOne(id) != nil {
-                    self.userLoggedIn()
-                } else {
-                    self.showUsernameAlert { username in
-                        let parameters = [
-                            "username": username,
-                            "firstName": firstName,
-                            "email": email,
-                            "image": imageURL,
-                            "points": 0
-                        ]
-                        self.users.insert(id, fields: parameters) {
-                            self.userLoggedIn()
-                        }
-                    }
-                }
-            }
-        })
-        
-    }
-    
-    func showUsernameAlert(completionHandler: (username: String) -> Void) {
-        
-        let alert = UsernameAlert()
-        
-        let title = "HELLO \(self.currentUser.firstName!.uppercaseString)!"
-        let subTitle = "Create a username that is greater than 3 characters and less than 17. Username's must only contain letters and numbers."
-        
-        alert.showView(title, subTitleLabel: subTitle)
-        
-        alert.events.listenTo("buttonTapped", action: {
-            if let username = alert.textField.text {
-                if self.users.list.indexOf({ $0.username == username }) != nil {
-                    alert.errorHappened("USERNAME ALREADY EXISTS")
-                } else if username.characters.count < 4 {
-                    alert.errorHappened("USERNAME TOO SHORT")
-                } else {
-                    completionHandler(username: username)
-                    alert.hideView()
-                }
-            }
-        })
-        
     }
     
     func racesSubscriptionReady(notification: NSNotification) {
@@ -119,7 +74,7 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func unwindToHome(segue: UIStoryboardSegue) {
-//        print("unwinding from login screen")
+        self.userLoggedIn()
     }
     
     func userLoggedOut() {
