@@ -1,16 +1,22 @@
 PODS:
+  - Cloudinary (1.0.15)
   - Firebase (2.5.1)
   - MBProgressHUD (0.9.2)
   - SwiftyJSON (2.3.2)
+  - Toucan (0.5.0)
 
 DEPENDENCIES:
+  - Cloudinary
   - Firebase (~> 2.5.0)
   - MBProgressHUD (~> 0.9.2)
   - SwiftyJSON
+  - Toucan
 
 SPEC CHECKSUMS:
+  Cloudinary: f80af4565ec08c521d5e58cb56d9fbe1e4595e40
   Firebase: 3565ea88b830f28f2c77ecc524622bc71a20d085
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  Toucan: 0519c341148252ae114c5a657d2a85bb9ada9e40
 
 COCOAPODS: 0.39.0

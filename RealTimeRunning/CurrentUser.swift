@@ -17,9 +17,21 @@ class CurrentUser {
     var loggedIn: Bool = false
     
     var id: String?
-    var imageURL: String?
-    var email: String?
     
+    var imageURL: String? {
+        if let id = self.id, let user = self.users.findOne(id) {
+            return user.image
+        } else {
+            return nil
+        }
+    }
+    var email: String? {
+        if let id = self.id, let user = self.users.findOne(id) {
+            return user.email
+        } else {
+            return nil
+        }
+    }
     var username: String? {
         if let id = self.id, let user = self.users.findOne(id) {
             return user.username
@@ -44,10 +56,8 @@ class CurrentUser {
     
     func setCurrentUser(user: User) {
         
-        if let id = user.id, let imageURL = user.image, let email = user.email {
+        if let id = user.id {
             self.id = id
-            self.imageURL = imageURL
-            self.email = email
             self.loggedIn = true
             
             let defaults = NSUserDefaults.standardUserDefaults()

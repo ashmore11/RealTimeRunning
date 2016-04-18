@@ -122,7 +122,7 @@ func showActivityIndicator(view: UIView, text: String?) {
     dispatch_async(dispatch_get_main_queue()) {
         
         let loadingNotification = MBProgressHUD.showHUDAddedTo(view, animated: true)
-        loadingNotification.mode = MBProgressHUDMode.Indeterminate
+        loadingNotification.mode = .Indeterminate
         loadingNotification.dimBackground = true
         
         if text != nil {

@@ -171,6 +171,10 @@ class Users {
     
     func update(id: String, fields: NSDictionary?) {
         
+        if let imageURL = fields?.valueForKey("imageURL") as? String {
+            self.ref.childByAppendingPath("\(id)/image").setValue(imageURL)
+        }
+        
         if let rank = fields?.valueForKey("rank") as? Int {
             self.ref.childByAppendingPath("\(id)/rank").setValue(rank)
         }

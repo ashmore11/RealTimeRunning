@@ -732,7 +732,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DAO-0v-oIZ">
                                                 <rect key="frame" x="130" y="0.0" width="130" height="130"/>
                                                 <subviews>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0oc-bL-rm4">
+                                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0oc-bL-rm4">
                                                         <rect key="frame" x="0.0" y="0.0" width="130" height="130"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="130" id="9pE-hM-JDe"/>
@@ -834,9 +834,9 @@
                     </view>
                     <navigationItem key="navigationItem" title="REAL TIME RUNNING" id="Fem-3k-9mf"/>
                     <connections>
-                        <outlet property="fbProfileImage" destination="0oc-bL-rm4" id="jPr-En-tXr"/>
                         <outlet property="logoutButton" destination="yio-Kp-maW" id="yef-ii-D5c"/>
                         <outlet property="pointsLabel" destination="FEy-OY-Ktr" id="0sq-sa-gds"/>
+                        <outlet property="profileImage" destination="0oc-bL-rm4" id="pQT-7M-CGf"/>
                         <outlet property="racesButton" destination="hVW-DM-h8V" id="Fpe-JN-cx8"/>
                         <outlet property="rankLabel" destination="wRK-Pl-lrK" id="Hok-Tx-OhT"/>
                         <outlet property="topViewArea" destination="rcw-25-dI8" id="3Ib-hu-bzc"/>

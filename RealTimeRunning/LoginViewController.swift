@@ -67,34 +67,21 @@ class LoginViewController: UIViewController {
     @IBAction func facebookButtonPushed(sender: UIButton) {
         
         self.fbLoginManager.logInWithReadPermissions(["public_profile", "email"], fromViewController: self, handler: { (result, error) in
-            
             if error != nil {
                 print("Error in fbLoginManager.logInWithReadPermissionserror:\(error)")
                 return
             }
-            
             if(result.grantedPermissions.contains("email")) {
-                
                 let token = FBSDKAccessToken.currentAccessToken().tokenString
-                
                 Users.sharedInstance.authenticateUserUsingFacebook(token) { data in
-                    
                     guard let id = data["id"] as? String else { return }
-                    
                     if let user = Users.sharedInstance.findOne(id) {
-                        
                         CurrentUser.sharedInstance.setCurrentUser(user)
-                    
                         self.performSegueWithIdentifier("unwindToHome", sender: self)
-                    
                     } else {
-                        
                         self.showUsernameAlert { username in
-                        
                             self.createUser(id, username: username, data: data)
-                        
                         }
-                        
                     }
                 }
             }
@@ -124,52 +111,30 @@ class LoginViewController: UIViewController {
     @IBAction func signInButtonPushed(sender: UIButton) {
     
         self.dismissKeyboard()
-        
         showActivityIndicator(self.view, text: nil)
         
         if let email = self.emailTextField.text, let password = self.passwordTextField.text {
-            
             if self.userSigningIn {
-                
                 Users.sharedInstance.authenticateUserUsingEmail(email, password: password) { data in
-                    
                     guard let id = data["id"] as? String else { return }
-                    
                     if let user = Users.sharedInstance.findOne(id) {
-                        
-                        CurrentUser.sharedInstance.setCurrentUser(user)
-                        
                         hideActivityIndicator(self.view)
-                        
+                        CurrentUser.sharedInstance.setCurrentUser(user)
                         self.performSegueWithIdentifier("unwindToHome", sender: self)
-                        
                     } else {
-                        
                         print("user not found...")
-                        
                     }
                 }
-            
             } else {
-                
                 if let username = self.usernameTextField.text {
-
                     Users.sharedInstance.createUser(email, password: password) { data in
-
                         Users.sharedInstance.authenticateUserUsingEmail(email, password: password) { data in
-                            
                             guard let id = data["id"] as? String else { return }
-                            
                             self.createUser(id, username: username, data: data)
-                            
                         }
-                    
                     }
-                    
                 }
-                
             }
-            
         }
     
     }
@@ -177,24 +142,17 @@ class LoginViewController: UIViewController {
     func createUser(id: String, username: String, data: NSDictionary) {
             
         if let email = data["email"] as? String, let imageURL = data["profileImageURL"] as? String {
-            
             let parameters = [
                 "username": username,
                 "email": email,
                 "image": imageURL,
                 "points": 0
             ]
-            
             Users.sharedInstance.insert(id, fields: parameters) {
-                
                 if let user = Users.sharedInstance.findOne(id) {
-                    
                     hideActivityIndicator(self.view)
-                    
                     CurrentUser.sharedInstance.setCurrentUser(user)
-                    
                     self.performSegueWithIdentifier("unwindToHome", sender: self)
-                    
                 }
             }
         }
