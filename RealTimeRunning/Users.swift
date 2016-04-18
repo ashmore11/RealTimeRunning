@@ -45,7 +45,9 @@ class Users {
                 print("Authentication Failed! \(error.localizedDescription)")
             } else {
                 print("User Authenticated!", authData.uid)
-                callback(data: authData.providerData)
+                var data = authData.providerData
+                data["id"] = authData.uid
+                callback(data: data)
             }
         })
         

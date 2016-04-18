@@ -15,8 +15,11 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var facebookButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var usernameHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var usernameMarginConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         
@@ -37,6 +40,12 @@ class LoginViewController: UIViewController {
         self.emailTextField.layer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8).CGColor
         self.emailTextField.layer.mask = rectShape
         self.emailTextField.alpha = 0.8
+        
+        self.usernameTextField.borderStyle = .None
+        self.usernameTextField.layer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8).CGColor
+        self.usernameTextField.alpha = 0.8
+        self.usernameHeightConstraint.constant = 0
+        self.usernameMarginConstraint.constant = 0
         
         self.passwordTextField.borderStyle = .None
         self.passwordTextField.layer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8).CGColor
@@ -95,8 +104,22 @@ class LoginViewController: UIViewController {
         self.dismissKeyboard()
         
         if let email = self.emailTextField.text, let password = self.passwordTextField.text {
+            
             Users.sharedInstance.authenticateUserUsingEmail(email, password: password) { data in
-                print(data)
+                
+                guard let id = data["id"] as? String else { return }
+                
+                if let user = Users.sharedInstance.findOne(id) {
+                    
+                    CurrentUser.sharedInstance.setCurrentUser(user)
+                    
+                    self.performSegueWithIdentifier("unwindToHome", sender: self)
+                    
+                } else {
+                    
+                    print("user not found...")
+                    
+                }
             }
         }
     
@@ -106,11 +129,10 @@ class LoginViewController: UIViewController {
         
         self.showUsernameAlert { username in
             
-            if let name = data["displayName"] as? String, let email = data["email"] as? String, let imageURL = data["profileImageURL"] as? String {
+            if let email = data["email"] as? String, let imageURL = data["profileImageURL"] as? String {
                 
                 let parameters = [
                     "username": username,
-                    "firstName": name.characters.split{$0 == " "}.map(String.init)[0],
                     "email": email,
                     "image": imageURL,
                     "points": 0
@@ -159,11 +181,12 @@ class LoginViewController: UIViewController {
         
         self.view.endEditing(false)
         
-    }
-    
-    func logout() {
-        
-        self.fbLoginManager.logOut()
+        self.view.layoutIfNeeded()
+        UIView.animateWithDuration(0.5, animations: {
+            self.usernameHeightConstraint.constant = 50
+            self.usernameMarginConstraint.constant = 1
+            self.view.layoutIfNeeded()
+        })
         
     }
 
