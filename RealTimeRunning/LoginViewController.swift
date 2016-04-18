@@ -12,6 +12,7 @@ import FBSDKLoginKit
 class LoginViewController: UIViewController {
     
     let fbLoginManager: FBSDKLoginManager = FBSDKLoginManager()
+    var userSigningIn = false
 
     @IBOutlet weak var facebookButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
@@ -44,8 +45,6 @@ class LoginViewController: UIViewController {
         self.usernameTextField.borderStyle = .None
         self.usernameTextField.layer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8).CGColor
         self.usernameTextField.alpha = 0.8
-        self.usernameHeightConstraint.constant = 0
-        self.usernameMarginConstraint.constant = 0
         
         self.passwordTextField.borderStyle = .None
         self.passwordTextField.layer.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8).CGColor
@@ -90,7 +89,11 @@ class LoginViewController: UIViewController {
                     
                     } else {
                         
-                        self.createUser(id, data: data)
+                        self.showUsernameAlert { username in
+                        
+                            self.createUser(id, username: username, data: data)
+                        
+                        }
                         
                     }
                 }
@@ -99,54 +102,99 @@ class LoginViewController: UIViewController {
     
     }
     
+    @IBAction func switchToSignInButtonPushed(sender: UIButton) {
+        
+        self.userSigningIn = true
+        self.signInButton.titleLabel?.text = "Sign In"
+        self.facebookButton.titleLabel?.text = "Sign in with facebook"
+    
+        UIView.animateWithDuration(0.25, animations: {
+            self.usernameTextField.alpha = 0
+            }, completion: { complete in
+                self.view.layoutIfNeeded()
+                UIView.animateWithDuration(0.25, animations: {
+                    self.usernameHeightConstraint.constant = 0
+                    self.usernameMarginConstraint.constant = 0
+                    self.view.layoutIfNeeded()
+                })
+        })
+        
+    }
+    
     @IBAction func signInButtonPushed(sender: UIButton) {
     
         self.dismissKeyboard()
         
+        showActivityIndicator(self.view, text: nil)
+        
         if let email = self.emailTextField.text, let password = self.passwordTextField.text {
             
-            Users.sharedInstance.authenticateUserUsingEmail(email, password: password) { data in
+            if self.userSigningIn {
                 
-                guard let id = data["id"] as? String else { return }
-                
-                if let user = Users.sharedInstance.findOne(id) {
+                Users.sharedInstance.authenticateUserUsingEmail(email, password: password) { data in
                     
-                    CurrentUser.sharedInstance.setCurrentUser(user)
-                    
-                    self.performSegueWithIdentifier("unwindToHome", sender: self)
-                    
-                } else {
-                    
-                    print("user not found...")
-                    
-                }
-            }
-        }
-    
-    }
-    
-    func createUser(id: String, data: NSDictionary) {
-        
-        self.showUsernameAlert { username in
-            
-            if let email = data["email"] as? String, let imageURL = data["profileImageURL"] as? String {
-                
-                let parameters = [
-                    "username": username,
-                    "email": email,
-                    "image": imageURL,
-                    "points": 0
-                ]
-                
-                Users.sharedInstance.insert(id, fields: parameters) { user in
+                    guard let id = data["id"] as? String else { return }
                     
                     if let user = Users.sharedInstance.findOne(id) {
                         
                         CurrentUser.sharedInstance.setCurrentUser(user)
                         
+                        hideActivityIndicator(self.view)
+                        
                         self.performSegueWithIdentifier("unwindToHome", sender: self)
                         
+                    } else {
+                        
+                        print("user not found...")
+                        
                     }
+                }
+            
+            } else {
+                
+                if let username = self.usernameTextField.text {
+
+                    Users.sharedInstance.createUser(email, password: password) { data in
+
+                        Users.sharedInstance.authenticateUserUsingEmail(email, password: password) { data in
+                            
+                            guard let id = data["id"] as? String else { return }
+                            
+                            self.createUser(id, username: username, data: data)
+                            
+                        }
+                    
+                    }
+                    
+                }
+                
+            }
+            
+        }
+    
+    }
+    
+    func createUser(id: String, username: String, data: NSDictionary) {
+            
+        if let email = data["email"] as? String, let imageURL = data["profileImageURL"] as? String {
+            
+            let parameters = [
+                "username": username,
+                "email": email,
+                "image": imageURL,
+                "points": 0
+            ]
+            
+            Users.sharedInstance.insert(id, fields: parameters) {
+                
+                if let user = Users.sharedInstance.findOne(id) {
+                    
+                    hideActivityIndicator(self.view)
+                    
+                    CurrentUser.sharedInstance.setCurrentUser(user)
+                    
+                    self.performSegueWithIdentifier("unwindToHome", sender: self)
+                    
                 }
             }
         }
@@ -157,7 +205,7 @@ class LoginViewController: UIViewController {
         
         let alert = UsernameAlert()
         
-        let title = "HELLO \(CurrentUser.sharedInstance.firstName!.uppercaseString)!"
+        let title = "HELLO!"
         let subTitle = "Create a username that is greater than 3 characters and less than 17. Username's must only contain letters and numbers."
         
         alert.showView(title, subTitleLabel: subTitle)
@@ -180,13 +228,6 @@ class LoginViewController: UIViewController {
     func dismissKeyboard() {
         
         self.view.endEditing(false)
-        
-        self.view.layoutIfNeeded()
-        UIView.animateWithDuration(0.5, animations: {
-            self.usernameHeightConstraint.constant = 50
-            self.usernameMarginConstraint.constant = 1
-            self.view.layoutIfNeeded()
-        })
         
     }
 

@@ -68,13 +68,14 @@ class HomeViewController: UIViewController {
     
     @IBAction func logoutButtonPushed(sender: UIButton) {
         
-        FBSDKLoginManager().logOut()
         self.userLoggedOut()
         
     }
     
     @IBAction func unwindToHome(segue: UIStoryboardSegue) {
+        
         self.userLoggedIn()
+        
     }
     
     func userLoggedOut() {
@@ -99,14 +100,14 @@ class HomeViewController: UIViewController {
             self.pointsLabel.text = "\(points)"
         }
         
-        self.racesButton.enabled = true
-        
         self.users.events.listenTo("usersUpdated") {
             if let rank = self.currentUser.rank, let points = self.currentUser.points {
                 self.rankLabel.text = "\(rank)"
                 self.pointsLabel.text = "\(points)"
             }
         }
+        
+        self.racesButton.enabled = true
         
     }
     

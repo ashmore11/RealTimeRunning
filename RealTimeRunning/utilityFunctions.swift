@@ -123,6 +123,7 @@ func showActivityIndicator(view: UIView, text: String?) {
         
         let loadingNotification = MBProgressHUD.showHUDAddedTo(view, animated: true)
         loadingNotification.mode = MBProgressHUDMode.Indeterminate
+        loadingNotification.dimBackground = true
         
         if text != nil {
             loadingNotification.labelText = text

@@ -47,6 +47,9 @@
             <string>Oswald-Regular</string>
             <string>Oswald-Regular</string>
             <string>Oswald-Regular</string>
+            <string>Oswald-Regular</string>
+            <string>Oswald-Regular</string>
+            <string>Oswald-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -196,11 +199,11 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Sh-Q2-OEU">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="165"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Sh-Q2-OEU">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="155"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="PGp-aQ-sVC">
-                                        <rect key="frame" x="20" y="19" width="560" height="115"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="PGp-aQ-sVC">
+                                        <rect key="frame" x="20" y="20" width="560" height="115"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="qfa-sW-1ip">
                                                 <rect key="frame" x="0.0" y="0.0" width="560" height="115"/>
@@ -309,8 +312,8 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ujl-nA-Kfu">
-                                <rect key="frame" x="5" y="170" width="590" height="202"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ujl-nA-Kfu">
+                                <rect key="frame" x="5" y="160" width="590" height="212"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CompetitorsTableViewCell" rowHeight="60" id="Ums-KK-fMv" customClass="CompetitorsTableViewCell" customModule="RealTimeRunning" customModuleProvider="target">
@@ -549,19 +552,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REAL TIME RUNNING" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GMh-TH-tkr">
-                                <rect key="frame" x="189" y="95" width="223" height="41"/>
+                                <rect key="frame" x="189" y="40" width="223" height="41"/>
                                 <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="30"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login or sign up below" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B8H-ew-sHC">
-                                <rect key="frame" x="244" y="241" width="113" height="20"/>
-                                <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Dia-cp-qsB">
-                                <rect key="frame" x="175" y="136" width="250" height="95"/>
+                                <rect key="frame" x="175" y="81" width="250" height="95"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="95" id="0aP-zo-STd"/>
                                     <constraint firstAttribute="width" constant="250" id="HoA-7S-dKJ"/>
@@ -571,7 +568,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ego-ZF-uPc">
-                                <rect key="frame" x="160" y="281" width="280" height="50"/>
+                                <rect key="frame" x="160" y="246" width="280" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="bin-sL-8b1"/>
                                     <constraint firstAttribute="height" constant="50" id="cP1-SD-lGB"/>
@@ -580,7 +577,7 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zDb-mF-ZGZ">
-                                <rect key="frame" x="160" y="332" width="280" height="50"/>
+                                <rect key="frame" x="160" y="348" width="280" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="6Sl-1P-zfs"/>
                                     <constraint firstAttribute="height" constant="50" id="hYR-ld-hjK"/>
@@ -589,63 +586,96 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gf5-hT-u1t">
-                                <rect key="frame" x="160" y="434" width="280" height="50"/>
+                                <rect key="frame" x="160" y="399" width="280" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="GuT-FC-loW"/>
                                     <constraint firstAttribute="height" constant="50" id="apy-zp-0XR"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
-                                <state key="normal" title="Sign In">
+                                <state key="normal" title="Sign up">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="signInButtonPushed:" destination="HLJ-lE-nq9" eventType="touchUpInside" id="ueF-Qy-h5o"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9mw-RK-Kvd">
-                                <rect key="frame" x="160" y="383" width="280" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="280" id="cU9-JA-ZV1"/>
-                                    <constraint firstAttribute="height" constant="50" id="n8D-Oz-FNf"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QeX-PM-Z6o">
-                                <rect key="frame" x="160" y="504" width="280" height="50"/>
+                                <rect key="frame" x="160" y="469" width="280" height="50"/>
                                 <color key="backgroundColor" red="0.23137254900000001" green="0.34901960780000002" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="8r3-K5-Dlo"/>
                                     <constraint firstAttribute="height" constant="50" id="nb9-KU-L3V"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
-                                <state key="normal" title="Sign in with Facebook">
+                                <state key="normal" title="Sign up with Facebook">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="facebookButtonPushed:" destination="HLJ-lE-nq9" eventType="touchUpInside" id="31T-mj-znz"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9mw-RK-Kvd">
+                                <rect key="frame" x="160" y="297" width="280" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="280" id="cU9-JA-ZV1"/>
+                                    <constraint firstAttribute="height" constant="50" id="n8D-Oz-FNf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                            </textField>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rxU-ID-KJu">
+                                <rect key="frame" x="192" y="176" width="217" height="30"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already have an account? click" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z3C-Kp-q9j">
+                                        <rect key="frame" x="0.0" y="0.0" width="146" height="30"/>
+                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="13"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jBU-Bf-lEa">
+                                        <rect key="frame" x="146" y="0.0" width="30" height="30"/>
+                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="13"/>
+                                        <state key="normal" title="here"/>
+                                        <connections>
+                                            <action selector="switchToSignInButtonPushed:" destination="HLJ-lE-nq9" eventType="touchUpInside" id="wtJ-KE-Fi0"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="to log in." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoK-PQ-tBg">
+                                        <rect key="frame" x="176" y="0.0" width="41" height="30"/>
+                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="13"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign up below" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B8H-ew-sHC">
+                                <rect key="frame" x="257" y="206" width="86" height="24"/>
+                                <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="B8H-ew-sHC" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="2zq-9G-iSj"/>
-                            <constraint firstItem="ego-ZF-uPc" firstAttribute="top" secondItem="B8H-ew-sHC" secondAttribute="bottom" constant="20" id="4h6-YT-CQC"/>
-                            <constraint firstItem="9mw-RK-Kvd" firstAttribute="top" secondItem="zDb-mF-ZGZ" secondAttribute="bottom" constant="1" id="5Gh-7C-Am8"/>
+                            <constraint firstItem="ego-ZF-uPc" firstAttribute="top" secondItem="B8H-ew-sHC" secondAttribute="bottom" constant="16" id="5Iv-L0-TG7"/>
                             <constraint firstItem="gf5-hT-u1t" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="8hK-QQ-Fsr"/>
-                            <constraint firstItem="GMh-TH-tkr" firstAttribute="top" secondItem="gZ3-Im-Wzb" secondAttribute="bottom" constant="75" id="Bif-DY-Mw3"/>
-                            <constraint firstItem="zDb-mF-ZGZ" firstAttribute="top" secondItem="ego-ZF-uPc" secondAttribute="bottom" constant="1" id="F6F-xE-ikb"/>
-                            <constraint firstItem="B8H-ew-sHC" firstAttribute="top" secondItem="Dia-cp-qsB" secondAttribute="bottom" constant="10" id="P3P-Kn-Ofs"/>
+                            <constraint firstItem="GMh-TH-tkr" firstAttribute="top" secondItem="gZ3-Im-Wzb" secondAttribute="bottom" constant="20" id="Bif-DY-Mw3"/>
+                            <constraint firstItem="rxU-ID-KJu" firstAttribute="top" secondItem="Dia-cp-qsB" secondAttribute="bottom" id="E2q-ee-sv2"/>
+                            <constraint firstItem="B8H-ew-sHC" firstAttribute="top" secondItem="rxU-ID-KJu" secondAttribute="bottom" id="Kf7-oy-lJN"/>
                             <constraint firstItem="Dia-cp-qsB" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="Tq9-7n-4Lm"/>
                             <constraint firstItem="9mw-RK-Kvd" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="YaX-iU-YF9"/>
                             <constraint firstItem="GMh-TH-tkr" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="epC-6K-AkK"/>
                             <constraint firstItem="zDb-mF-ZGZ" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="fXQ-Ub-miG"/>
-                            <constraint firstItem="gf5-hT-u1t" firstAttribute="top" secondItem="9mw-RK-Kvd" secondAttribute="bottom" constant="1" id="ltv-mc-lzV"/>
+                            <constraint firstItem="zDb-mF-ZGZ" firstAttribute="top" secondItem="9mw-RK-Kvd" secondAttribute="bottom" constant="1" id="iSg-4X-TSO"/>
+                            <constraint firstItem="rxU-ID-KJu" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="k2p-X1-Qj4"/>
                             <constraint firstItem="QeX-PM-Z6o" firstAttribute="top" secondItem="gf5-hT-u1t" secondAttribute="bottom" constant="20" id="naz-oa-yDB"/>
                             <constraint firstItem="ego-ZF-uPc" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="pdo-KX-SEO"/>
                             <constraint firstItem="Dia-cp-qsB" firstAttribute="top" secondItem="GMh-TH-tkr" secondAttribute="bottom" id="qtI-vy-Nsu"/>
                             <constraint firstItem="QeX-PM-Z6o" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="r2Z-IY-cv6"/>
+                            <constraint firstItem="gf5-hT-u1t" firstAttribute="top" secondItem="zDb-mF-ZGZ" secondAttribute="bottom" constant="1" id="sTl-z2-RRQ"/>
+                            <constraint firstItem="9mw-RK-Kvd" firstAttribute="top" secondItem="ego-ZF-uPc" secondAttribute="bottom" constant="1" id="vGP-Ve-6Ch"/>
                         </constraints>
                     </view>
                     <connections>
@@ -654,7 +684,7 @@
                         <outlet property="passwordTextField" destination="zDb-mF-ZGZ" id="kbP-5E-Fr2"/>
                         <outlet property="signInButton" destination="gf5-hT-u1t" id="wNH-3G-Xyp"/>
                         <outlet property="usernameHeightConstraint" destination="n8D-Oz-FNf" id="DTa-8h-N1J"/>
-                        <outlet property="usernameMarginConstraint" destination="5Gh-7C-Am8" id="uBt-Fd-WWq"/>
+                        <outlet property="usernameMarginConstraint" destination="vGP-Ve-6Ch" id="wrn-rN-ero"/>
                         <outlet property="usernameTextField" destination="9mw-RK-Kvd" id="Dun-hO-uut"/>
                         <segue destination="LZ8-Gf-UjM" kind="unwind" identifier="unwindToHome" unwindAction="unwindToHome:" id="koP-pa-j4i"/>
                     </connections>

@@ -312,12 +312,14 @@ class RaceRecordViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func showAlert(timer: NSTimer) {
         
-        if let points = timer.userInfo as? Int, let rank = self.currentUser.rank, let name = self.currentUser.firstName {
+        if let points = timer.userInfo as? Int, let rank = self.currentUser.rank {
         
             let alert = AlertViewController()
             
             let title = "CONGRATULATIONS!"
-            let subTitle = "You came in \(getOrdinalPosition(self.currentPosition)) position and earned yourself \(points) points. You are now ranked in \(getOrdinalPosition(rank)) position, globally. Keep up the good work \(name) and don't stop racing!"
+            var subTitle = "You came in \(getOrdinalPosition(self.currentPosition)) position and "
+            subTitle += "earned yourself \(points) points. You are now ranked in \(getOrdinalPosition(rank)) "
+            subTitle += "position, globally. Keep up the good work and don't stop racing!"
             
             alert.show(title, subTitle: subTitle)
             

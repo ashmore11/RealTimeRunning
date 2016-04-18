@@ -12,7 +12,6 @@ struct User {
     
     var id: String?
     var username: String?
-    var firstName: String?
     var image: String?
     var email: String?
     var rank: Int?
@@ -29,10 +28,6 @@ struct User {
         
         if let username = fields?.valueForKey("username") as? String {
             self.username = username
-        }
-        
-        if let firstName = fields?.valueForKey("firstName") as? String {
-            self.firstName = firstName
         }
         
         if let image = fields?.valueForKey("image") as? String {

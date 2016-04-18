@@ -24,15 +24,14 @@ class Users {
         
     }
     
-    func createUser(email: String, password: String) {
+    func createUser(email: String, password: String, callback: (data: NSDictionary) -> Void) {
         
         ref.createUser(email, password: password, withValueCompletionBlock: { error, result in
             if error != nil {
                 print(error)
             } else {
-                let uid = result["uid"] as? String
-                print(result)
-                print("Successfully created user account with uid: \(uid)")
+                print("User Created!", result["uid"])
+                callback(data: result)
             }
         })
         
@@ -149,11 +148,10 @@ class Users {
     
     func insert(id: String, fields: NSDictionary?, callback: () -> Void) {
         
-        if let username = fields?["username"], let firstName = fields?["firstName"], let email = fields?["email"], let image = fields?["image"], let points = fields?["points"] {
+        if let username = fields?["username"], let email = fields?["email"], let image = fields?["image"], let points = fields?["points"] {
             
             let parameters = [
                 "username": username,
-                "firstName": firstName,
                 "email": email,
                 "image": image,
                 "points": points
