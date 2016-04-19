@@ -87,7 +87,7 @@ class Users {
         
         ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
             self.sort()
-            NSNotificationCenter.defaultCenter().postNotificationName("usersSubscriptionReady", object: nil)
+            self.events.trigger("collectionReady")
         })
         
     }

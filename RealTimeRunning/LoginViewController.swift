@@ -72,10 +72,12 @@ class LoginViewController: UIViewController {
                 return
             }
             if(result.grantedPermissions.contains("email")) {
+                showActivityIndicator(self.view, text: nil)
                 let token = FBSDKAccessToken.currentAccessToken().tokenString
                 Users.sharedInstance.authenticateUserUsingFacebook(token) { data in
                     guard let id = data["id"] as? String else { return }
                     if let user = Users.sharedInstance.findOne(id) {
+                        hideActivityIndicator(self.view)
                         CurrentUser.sharedInstance.setCurrentUser(user)
                         self.performSegueWithIdentifier("unwindToHome", sender: self)
                     } else {
@@ -91,20 +93,35 @@ class LoginViewController: UIViewController {
     
     @IBAction func switchToSignInButtonPushed(sender: UIButton) {
         
-        self.userSigningIn = true
-        self.signInButton.titleLabel?.text = "Sign In"
-        self.facebookButton.titleLabel?.text = "Sign in with facebook"
-    
-        UIView.animateWithDuration(0.25, animations: {
-            self.usernameTextField.alpha = 0
-            }, completion: { complete in
+        if self.usernameTextField.alpha == 0 && self.usernameHeightConstraint.constant == 0 && self.usernameMarginConstraint.constant == 0 {
+            
+            self.userSigningIn = false
+            self.signInButton.titleLabel?.text = "Sign Up"
+            self.facebookButton.titleLabel?.text = "Sign up with facebook"
+            
+            self.view.layoutIfNeeded()
+            UIView.animateWithDuration(0.25, animations: {
+                self.usernameTextField.alpha = 0.8
+                self.usernameHeightConstraint.constant = 50
+                self.usernameMarginConstraint.constant = 1
                 self.view.layoutIfNeeded()
-                UIView.animateWithDuration(0.25, animations: {
-                    self.usernameHeightConstraint.constant = 0
-                    self.usernameMarginConstraint.constant = 0
-                    self.view.layoutIfNeeded()
-                })
-        })
+            })
+            
+        } else {
+            
+            self.userSigningIn = true
+            self.signInButton.titleLabel?.text = "Sign In"
+            self.facebookButton.titleLabel?.text = "Sign in with facebook"
+            
+            self.view.layoutIfNeeded()
+            UIView.animateWithDuration(0.25, animations: {
+                self.usernameTextField.alpha = 0
+                self.usernameHeightConstraint.constant = 0
+                self.usernameMarginConstraint.constant = 0
+                self.view.layoutIfNeeded()
+            })
+            
+        }
         
     }
     

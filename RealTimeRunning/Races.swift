@@ -14,6 +14,7 @@ class Races {
     
     static let sharedInstance = Races()
     
+    var events = EventManager()
     var ref = Firebase(url:"https://real-time-running.firebaseio.com/races")
     var races = [Race]()
     var sorted: [Race] {
@@ -50,7 +51,7 @@ class Races {
         })
         
         ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            NSNotificationCenter.defaultCenter().postNotificationName("racesSubscriptionReady", object: nil)
+            self.events.trigger("collectionReady")
         })
         
     }

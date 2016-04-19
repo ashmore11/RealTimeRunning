@@ -23,10 +23,8 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     @IBOutlet weak var logoutButton: UIButton!
     
     let imagePicker = UIImagePickerController()
-    let Cloudinary = CLCloudinary(url: "cloudinary://634115678185717:yvgW6aX0JEje-J6j6uxOIsNMi1Y@scottashmore")
+    let cloudinary = CLCloudinary(url: "cloudinary://634115678185717:yvgW6aX0JEje-J6j6uxOIsNMi1Y@scottashmore")
     var imageLoaderProgress: MBProgressHUD!
-    var users: Users = Users.sharedInstance
-    let races: Races = Races.sharedInstance
     var racesButtonPushed = false
     var racesReady = false
     
@@ -34,37 +32,31 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
         
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.usersSubscriptionReady), name: "usersSubscriptionReady", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.racesSubscriptionReady), name: "racesSubscriptionReady", object: nil)
-        
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.profileImageTapped))
+        if let id = NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String {
+            showActivityIndicator(self.view, text: nil)
+            Users.sharedInstance.events.listenTo("collectionReady", action: {
+                if let user = Users.sharedInstance.findOne(id) {
+                    hideActivityIndicator(self.view)
+                    CurrentUser.sharedInstance.setCurrentUser(user)
+                    self.userLoggedIn()
+                }
+            })
+        } else {
+            self.performSegueWithIdentifier("showLogin", sender: self)
+        }
+
+        Races.sharedInstance.events.listenTo("collectionReady", action: { self.racesReady = true })
         
         setViewGradient(self.view)
         setButtonGradient(self.racesButton, self.logoutButton)
         
         self.imagePicker.delegate = self
-        self.profileImage.userInteractionEnabled = true
-        self.profileImage.addGestureRecognizer(tapGestureRecognizer)
         self.topViewArea.backgroundColor = UIColor.clearColor().colorWithAlphaComponent(0.6)
         self.profileImage.layer.cornerRadius = 10
         self.profileImage.clipsToBounds = true
         
-    }
-    
-    func usersSubscriptionReady(notification: NSNotification) {
-        
-        if let id = NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String, let user = self.users.findOne(id) {
-            CurrentUser.sharedInstance.setCurrentUser(user)
-            self.userLoggedIn()
-        } else {
-            self.performSegueWithIdentifier("showLogin", sender: nil)
-        }
-        
-    }
-    
-    func racesSubscriptionReady(notification: NSNotification) {
-        
-        self.racesReady = true
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.profileImageTapped))
+        self.profileImage.addGestureRecognizer(tapGestureRecognizer)
         
     }
     
@@ -78,13 +70,46 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     @IBAction func logoutButtonPushed(sender: UIButton) {
         
-        self.userLoggedOut()
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("userId")
+        self.performSegueWithIdentifier("showLogin", sender: nil)
+        self.navigationItem.title = "REAL TIME RUNNING"
+        CurrentUser.sharedInstance.loggedIn = false
+        self.racesButton.enabled = false
         
     }
     
     @IBAction func unwindToHome(segue: UIStoryboardSegue) {
         
         self.userLoggedIn()
+        
+    }
+    
+    func userLoggedIn() {
+        
+        if let userName = CurrentUser.sharedInstance.username, let imageURL = CurrentUser.sharedInstance.imageURL, let rank = CurrentUser.sharedInstance.rank, points = CurrentUser.sharedInstance.points {
+            self.navigationItem.title = userName.uppercaseString
+            self.profileImage.image = imageFromString(imageURL)
+            self.rankLabel.text = "\(rank)"
+            self.pointsLabel.text = "\(points)"
+        }
+        
+        Users.sharedInstance.events.listenTo("usersUpdated") {
+            if let rank = CurrentUser.sharedInstance.rank, let points = CurrentUser.sharedInstance.points, let imageURL = CurrentUser.sharedInstance.imageURL {
+                self.rankLabel.text = "\(rank)"
+                self.pointsLabel.text = "\(points)"
+                self.profileImage.image = imageFromString(imageURL)
+            }
+        }
+        
+        self.racesButton.enabled = true
+        
+        Races.sharedInstance.events.listenTo("collectionReady", action: {
+        
+            CurrentUser.sharedInstance.currentRaces?.forEach({ race in
+                print(race.createdAt)
+            })
+            
+        })
         
     }
     
@@ -104,7 +129,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
             
             let resizedImage = Toucan(image: pickedImage).resize(CGSize(width: 130, height: 130), fitMode: Toucan.Resize.FitMode.Crop).image
             let forUpload = UIImagePNGRepresentation(resizedImage)! as NSData
-            let uploader = CLUploader(Cloudinary, delegate: self)
+            let uploader = CLUploader(self.cloudinary, delegate: self)
             
             if let id = CurrentUser.sharedInstance.id {
                 uploader.upload(forUpload, options: ["public_id": id], withCompletion: onCloudinaryCompletion, andProgress: onCloudinaryProgress)
@@ -142,37 +167,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
         self.dismissViewControllerAnimated(true, completion: nil)
     
-    }
-    
-    func userLoggedOut() {
-        
-        NSUserDefaults.standardUserDefaults().removeObjectForKey("userId")
-        self.performSegueWithIdentifier("showLogin", sender: nil)
-        self.navigationItem.title = "REAL TIME RUNNING"
-        CurrentUser.sharedInstance.loggedIn = false
-        self.racesButton.enabled = false
-        
-    }
-    
-    func userLoggedIn() {
-        
-        if let userName = CurrentUser.sharedInstance.username, let imageURL = CurrentUser.sharedInstance.imageURL, let rank = CurrentUser.sharedInstance.rank, points = CurrentUser.sharedInstance.points {
-            self.navigationItem.title = userName.uppercaseString
-            self.profileImage.image = imageFromString(imageURL)
-            self.rankLabel.text = "\(rank)"
-            self.pointsLabel.text = "\(points)"
-        }
-        
-        self.users.events.listenTo("usersUpdated") {
-            if let rank = CurrentUser.sharedInstance.rank, let points = CurrentUser.sharedInstance.points, let imageURL = CurrentUser.sharedInstance.imageURL {
-                self.rankLabel.text = "\(rank)"
-                self.pointsLabel.text = "\(points)"
-                self.profileImage.image = imageFromString(imageURL)
-            }
-        }
-        
-        self.racesButton.enabled = true
-        
     }
     
     func setupLoader() {

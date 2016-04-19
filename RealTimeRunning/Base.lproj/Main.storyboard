@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8CI-1U-HOg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8CI-1U-HOg">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -15,7 +15,6 @@
             <string>Oswald-Medium</string>
         </mutableArray>
         <mutableArray key="Oswald-Regular.ttf">
-            <string>Oswald-Regular</string>
             <string>Oswald-Regular</string>
             <string>Oswald-Regular</string>
             <string>Oswald-Regular</string>
@@ -568,7 +567,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ego-ZF-uPc">
-                                <rect key="frame" x="160" y="246" width="280" height="50"/>
+                                <rect key="frame" x="160" y="233" width="280" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="bin-sL-8b1"/>
                                     <constraint firstAttribute="height" constant="50" id="cP1-SD-lGB"/>
@@ -577,7 +576,7 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zDb-mF-ZGZ">
-                                <rect key="frame" x="160" y="348" width="280" height="50"/>
+                                <rect key="frame" x="160" y="335" width="280" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="6Sl-1P-zfs"/>
                                     <constraint firstAttribute="height" constant="50" id="hYR-ld-hjK"/>
@@ -586,7 +585,7 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gf5-hT-u1t">
-                                <rect key="frame" x="160" y="399" width="280" height="50"/>
+                                <rect key="frame" x="160" y="386" width="280" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="GuT-FC-loW"/>
@@ -601,7 +600,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QeX-PM-Z6o">
-                                <rect key="frame" x="160" y="469" width="280" height="50"/>
+                                <rect key="frame" x="160" y="456" width="280" height="50"/>
                                 <color key="backgroundColor" red="0.23137254900000001" green="0.34901960780000002" blue="0.59607843140000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="8r3-K5-Dlo"/>
@@ -616,7 +615,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9mw-RK-Kvd">
-                                <rect key="frame" x="160" y="297" width="280" height="50"/>
+                                <rect key="frame" x="160" y="284" width="280" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="cU9-JA-ZV1"/>
                                     <constraint firstAttribute="height" constant="50" id="n8D-Oz-FNf"/>
@@ -625,51 +624,43 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                             </textField>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rxU-ID-KJu">
-                                <rect key="frame" x="192" y="176" width="217" height="30"/>
+                                <rect key="frame" x="181" y="176" width="239" height="32"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already have an account? click" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z3C-Kp-q9j">
-                                        <rect key="frame" x="0.0" y="0.0" width="146" height="30"/>
-                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="13"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already have an account? Click" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z3C-Kp-q9j">
+                                        <rect key="frame" x="0.0" y="0.0" width="159" height="32"/>
+                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jBU-Bf-lEa">
-                                        <rect key="frame" x="146" y="0.0" width="30" height="30"/>
-                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="13"/>
+                                        <rect key="frame" x="159" y="0.0" width="30" height="32"/>
+                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
                                         <state key="normal" title="here"/>
                                         <connections>
                                             <action selector="switchToSignInButtonPushed:" destination="HLJ-lE-nq9" eventType="touchUpInside" id="wtJ-KE-Fi0"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="to log in." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoK-PQ-tBg">
-                                        <rect key="frame" x="176" y="0.0" width="41" height="30"/>
-                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="13"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="to sign in." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NoK-PQ-tBg">
+                                        <rect key="frame" x="189" y="0.0" width="50" height="32"/>
+                                        <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="14"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign up below" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B8H-ew-sHC">
-                                <rect key="frame" x="257" y="206" width="86" height="24"/>
-                                <fontDescription key="fontDescription" name="Oswald-Regular" family="Oswald Regular" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="B8H-ew-sHC" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="2zq-9G-iSj"/>
-                            <constraint firstItem="ego-ZF-uPc" firstAttribute="top" secondItem="B8H-ew-sHC" secondAttribute="bottom" constant="16" id="5Iv-L0-TG7"/>
                             <constraint firstItem="gf5-hT-u1t" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="8hK-QQ-Fsr"/>
                             <constraint firstItem="GMh-TH-tkr" firstAttribute="top" secondItem="gZ3-Im-Wzb" secondAttribute="bottom" constant="20" id="Bif-DY-Mw3"/>
                             <constraint firstItem="rxU-ID-KJu" firstAttribute="top" secondItem="Dia-cp-qsB" secondAttribute="bottom" id="E2q-ee-sv2"/>
-                            <constraint firstItem="B8H-ew-sHC" firstAttribute="top" secondItem="rxU-ID-KJu" secondAttribute="bottom" id="Kf7-oy-lJN"/>
                             <constraint firstItem="Dia-cp-qsB" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="Tq9-7n-4Lm"/>
                             <constraint firstItem="9mw-RK-Kvd" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="YaX-iU-YF9"/>
                             <constraint firstItem="GMh-TH-tkr" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="epC-6K-AkK"/>
                             <constraint firstItem="zDb-mF-ZGZ" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="fXQ-Ub-miG"/>
                             <constraint firstItem="zDb-mF-ZGZ" firstAttribute="top" secondItem="9mw-RK-Kvd" secondAttribute="bottom" constant="1" id="iSg-4X-TSO"/>
                             <constraint firstItem="rxU-ID-KJu" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="k2p-X1-Qj4"/>
+                            <constraint firstItem="ego-ZF-uPc" firstAttribute="top" secondItem="rxU-ID-KJu" secondAttribute="bottom" constant="25" id="mHY-oG-JAf"/>
                             <constraint firstItem="QeX-PM-Z6o" firstAttribute="top" secondItem="gf5-hT-u1t" secondAttribute="bottom" constant="20" id="naz-oa-yDB"/>
                             <constraint firstItem="ego-ZF-uPc" firstAttribute="centerX" secondItem="I2I-Ti-xNw" secondAttribute="centerX" id="pdo-KX-SEO"/>
                             <constraint firstItem="Dia-cp-qsB" firstAttribute="top" secondItem="GMh-TH-tkr" secondAttribute="bottom" id="qtI-vy-Nsu"/>
@@ -692,7 +683,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EZe-9Z-eR6" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="LZ8-Gf-UjM" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2424" y="-215"/>
+            <point key="canvasLocation" x="2424" y="-232"/>
         </scene>
         <!--REAL TIME RUNNING-->
         <scene sceneID="tne-QT-ifu">

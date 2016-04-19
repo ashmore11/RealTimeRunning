@@ -53,6 +53,16 @@ class CurrentUser {
             return nil
         }
     }
+    var currentRaces: [Race]? {
+        if let id = self.id {
+            return Races.sharedInstance.sorted.filter({
+                guard let keys = $0.competitors?.keys else { return false }
+                return keys.contains(id)
+            })
+        } else {
+            return nil
+        }
+    }
     
     func setCurrentUser(user: User) {
         
